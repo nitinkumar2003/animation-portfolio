@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import NavBar from "../component/navbar/NavBar";
 import Hero from "../component/Hero";
 import Skills from "../component/Skills";
+import Resume from "../component/Resume";
 const Home = () => {
   const [darkMode, setDarkMode] = useState(false);
   function toggleDarkMode() {
@@ -12,6 +13,7 @@ const Home = () => {
       <NavBar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <Hero />
       <Skills />
+      <Resume />
 
       {/* <Hero darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <Skills darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
