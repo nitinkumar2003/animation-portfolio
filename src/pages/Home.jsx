@@ -3,6 +3,8 @@ import NavBar from "../component/navbar/NavBar";
 import Hero from "../component/Hero";
 import Skills from "../component/Skills";
 import Resume from "../component/Resume";
+import Contact from "../component/Contact";
+import Footer from "../component/Footer";
 const Home = () => {
   const [darkMode, setDarkMode] = useState(false);
   function toggleDarkMode() {
@@ -14,13 +16,12 @@ const Home = () => {
       <Hero />
       <Skills />
       <Resume />
+      <Contact />
+      <Footer />
 
-      {/* <Hero darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-      <Skills darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-      <Work darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-      <Resume darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      {/* <Work darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <Contact darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-      <Footer darkMode={darkMode} toggleDarkMode={toggleDarkMode} /> */}
+      <Footer darkMode={darkMode} toggleDarkMode={toggleDarkMode} /> */} 
     </>
   );
 };

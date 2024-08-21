@@ -37,6 +37,9 @@ module.exports = {
       colors: {
         "text-yellow-500": "#ffc312",
       },
+      minHeight:{
+        'container':"21rem"
+      }
     },
   },
   plugins: [],

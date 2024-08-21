@@ -17,7 +17,7 @@ const Resume = () => {
             </div>
             {/* card*/}
             <div className="card-wrapper w-[90%] sm:w-full mt-5 flex md:flex-col sm:gap-5 mx-auto ">
-                <div className="left flex-1 flex items-center justify-center">
+                <div className="left flex-1 flex justify-center">
                     <fieldset data-aos="zoom-in" className=" w-[80%] p-5 py-12 sm:py-8 sm:w-full sm:p-2">
                         <legend className=" w-auto ml-[50%] translate-x-[-50%] border-2 border-gray-200 rounded-3xl py-1 px-8 font-semibold text-xl text-yellow-500">
                             Experience
@@ -26,20 +26,21 @@ const Resume = () => {
                             return <Card key={index} heading={item.profile} insName={item.company} time={item.time} description={item.description} />
                         })}
                         <legend className=" m-5 w-auto ml-[50%] translate-x-[-50%] border-2 border-gray-200 rounded-3xl py-1 px-8 font-semibold text-xl text-yellow-500">
-                            Education
-                        </legend>
-                        {personalDataObj.education.map((item, index) => {
-                            return <Card key={index} heading={item.course} insName={item.college} time={item.time} description={item.description} />
-                        })}
-                    </fieldset>
-                </div>
-                <div className="right flex-1 flex  justify-center">
-                    <fieldset data-aos="zoom-in" className=" w-[80%] p-5 py-12 sm:py-8 sm:w-full sm:p-2">
-                        <legend className=" w-auto ml-[50%] translate-x-[-50%] border-2 border-gray-200 rounded-3xl py-1 px-8 font-semibold text-xl text-yellow-500">
                             Certificate
                         </legend>
                         {personalDataObj.certificate.map((item, index) => {
                             return <Card key={index} heading={item.cerName} insName={item.institute} time={item.time} description={item.description} />
+                        })}
+
+                    </fieldset>
+                </div>
+                <div className="right flex-1 flex justify-center">
+                    <fieldset data-aos="zoom-in" className=" w-[80%] p-5 py-12 sm:py-8 sm:w-full sm:p-2">
+                        <legend className=" w-auto ml-[50%] translate-x-[-50%] border-2 border-gray-200 rounded-3xl py-1 px-8 font-semibold text-xl text-yellow-500">
+                            Education
+                        </legend>
+                        {personalDataObj.education.map((item, index) => {
+                            return <Card key={index} heading={item.course} insName={item.college} time={item.time} description={item.description} />
                         })}
 
                     </fieldset>
@@ -53,8 +54,8 @@ const Resume = () => {
 const Card = ({ heading, insName, time, description }) => {
 
     return <>
-        <div className=" relative">
-            <div className=" flex flex-col gap-1 border-2 border-yellow-400 shadow-[0px_0px_16px_1px_rgba(0,0,0,0.1)] p-3 rounded-lg">
+        <div className="relative">
+            <div className="flex flex-col gap-1 border-2 min-h-container border-yellow-400 shadow-[0px_0px_16px_1px_rgba(0,0,0,0.1)] p-3 rounded-lg">
                 <h1 className="text-[1.4rem] font-semibold sm:text-xl">{heading}</h1>
                 <span className=" text-[.9rem] font-semibold text-gray-500 sm:text-base">{insName}</span>
                 <span className=" text-[.9rem] font-semibold text-yellow-500 sm:text-base"> {time}</span>

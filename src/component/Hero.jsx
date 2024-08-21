@@ -3,22 +3,31 @@ import { AiFillTwitterCircle, AiFillGithub, AiFillInstagram, } from "react-icons
 import { FaFacebook, FaLinkedinIn } from "react-icons/fa";
 import { FiDownload } from "react-icons/fi";
 import { FaPlay } from "react-icons/fa";
+import { SiLeetcode } from "react-icons/si";
 import { TypeAnimation } from "react-type-animation";
-// import resumePDF from "../../assets/Resume.pdf";
-
 import { personalDataObj } from "../data/data";
 const Hero = () => {
 
     const socialProfile = [
         {
             name: 'Github',
+            url:'https://github.com/nitinkumar2003',
             icon: <AiFillGithub className=" h-[1.8rem] w-[1.8rem] text-xl hover:scale-125" />
         },
         {
             name: 'Linkdin',
+            url:'https://www.linkedin.com/in/nitin-kumar-42026421b',
             icon: <FaLinkedinIn className=" h-[1.8rem] w-[1.8rem] text-xl hover:scale-125" />
         },
+        {
+            name: 'Leetcode',
+            url:'https://leetcode.com/u/Nitinjanmeda/',
+            icon: <SiLeetcode className=" h-[1.8rem] w-[1.8rem] text-xl hover:scale-125" />
+        },
     ]
+    const redirectToUrl = (item) => {
+        window.open(item.url, "_blank");
+    };
 
     return (
         <div id="home" className={` bg-gradient-to-r from-green-200 to-blue-200 `}>
@@ -30,15 +39,7 @@ const Hero = () => {
                         </h2>
                         <TypeAnimation
                             data-aos="fade-up"
-                            sequence={[
-                                "React Developer",
-                                2000,
-                                "Web Developer",
-                                2000,
-                                "Freelancer",
-                                2000,
-                                "",
-                            ]}
+                            sequence={[ "React Developer", 2000, "Web Developer", 2000, "Freelancer", 2000, "",]}
                             speed={30}
                             wrapper="h2"
                             repeat={Infinity}
@@ -65,7 +66,7 @@ const Hero = () => {
                             {socialProfile.map((item, index) => {
                                 return (
                                     <li key={index}>
-                                        <a href=""> {" "} {item.icon}   </a>
+                                        <a href="" onClick={()=>redirectToUrl(item)}> {" "} {item.icon}   </a>
                                     </li>
                                 )
                             })}
@@ -82,7 +83,6 @@ const Hero = () => {
                             data-aos="fade-up"
                             className=" h-[90%]  w-full object-cover md:h-[95%] md:m-auto sm:m-0"
                             src='https://i.postimg.cc/pTn61Gr1/Untitled-design222-modified.png'
-                            // src={mine}
                             alt="mine"
                         />
                         <div className=" absolute bottom-10 md:bottom-3 right-8 md:right-2">
