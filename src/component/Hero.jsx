@@ -49,7 +49,7 @@ const Hero = () => {
                         {/* <p className=" text-[1.1rem] font-medium w-3/4 md:w-full text-gray-600 sm:text-[.95rem]">Lorem ipsum dolor sit amet consectetur</p> */}
                     </div>
                     <div data-aos="fade-up" className="buttons flex gap-5">
-                        <a href="" className=" bg-black text-[1rem] text-white px-10 py-2 sm:px-8 rounded-lg font-bold  hover:text-yellow-500">
+                        <a  href="mailto:nitinkumarja2003@gmail.com" className=" bg-black text-[1rem] text-white px-10 py-2 sm:px-8 rounded-lg font-bold  hover:text-yellow-500">
                             <span> Hire Me</span>
                         </a>
                         <a
