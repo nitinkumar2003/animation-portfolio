@@ -6,6 +6,7 @@ import { FaPlay } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
 import { TypeAnimation } from "react-type-animation";
 import { personalDataObj } from "../data/data";
+import resumePDF from '../assets/Resume.pdf'
 const Hero = () => {
 
     const socialProfile = [
@@ -52,7 +53,7 @@ const Hero = () => {
                             <span> Hire Me</span>
                         </a>
                         <a
-                            //   href={resumePDF}
+                              href={resumePDF}
                             className="flex items-center gap-2 border- text-[1rem] bg-white border-black px-7 py-2 sm:px-6 rounded-lg font-bold  hover:text-yellow-500"
                             download
                         >
@@ -66,7 +67,7 @@ const Hero = () => {
                             {socialProfile.map((item, index) => {
                                 return (
                                     <li key={index}>
-                                        <a href="" onClick={()=>redirectToUrl(item)}> {" "} {item.icon}   </a>
+                                        <a className="cursor-pointer" onClick={()=>redirectToUrl(item)}> {" "} {item.icon}   </a>
                                     </li>
                                 )
                             })}
