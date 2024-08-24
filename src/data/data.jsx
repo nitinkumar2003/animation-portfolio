@@ -65,6 +65,14 @@ export const personalDataObj = {
             link: "https://indian-army.netlify.app/",
             git: "https://github.com/nitinkumar2003/Indian-Army",
         },
+        {
+            id: 6,
+            img: 'https://i.postimg.cc/GhBzFr2Q/Screenshot-2024-08-24-231048.png',
+            title: "Chat App React/Firebase",
+            desc: "",
+            link: "https://react-vite-chat-app.netlify.app/",
+            git: "https://github.com/nitinkumar2003/Indian-Army",
+        },
     ]
 
 }
