@@ -24,5 +24,47 @@ export const personalDataObj = {
             'time': 'September 2021 - April 2022',
             'description': 'During my 6 months as a Full Stack Developer, I gained comprehensive experience working with the MERN stack (MongoDB, Express.js, React.js, Node.js). This role allowed me to enhance my skills in building dynamic and responsive web applications. I developed a strong proficiency in HTML, CSS, and JavaScript, alongside deepening my expertise in React.js for front-end development, MongoDB for database management, Express.js for server-side operations, and jQuery for efficient DOM manipulation. My journey in Full Stack development has equipped me with a robust understanding of end-to-end web application development.'
         }
+    ],
+    projects: [
+        {
+            id: 1,
+            img: 'https://i.postimg.cc/SxxSTZBD/pgsearch.png',
+            title: "PG Website",
+            desc: "",
+            link: "https://nkpg.netlify.app/",
+            git: "https://github.com/nitinkumar2003/PG_Project_front_end",
+        },
+        {
+            id: 2,
+            img: 'https://i.postimg.cc/qMLBGf5N/solarsystem.png',
+            title: "Solar System Exploration",
+            link: "https://solarsystemexlporation.netlify.app/home",
+            git: "https://github.com/nitinkumar2003/Solar-System-Exploration",
+        },
+        {
+            id: 3,
+            img: 'https://i.postimg.cc/0yX8LYxx/gaming.png',
+            title: "Gaming Site",
+            desc: "",
+            link: "https://practice-game-site-project-reactjs.netlify.app/",
+            git: "https://github.com/nitinkumar2003/Gaming-SIte",
+        },
+        {
+            id: 4,
+            img: 'https://i.postimg.cc/rFcFWyQ6/mistore.png',
+            title: "MI Store Clone",
+            desc: "",
+            link: "https://mistoreclonebynk.netlify.app/",
+            git: "https://github.com/nitinkumar2003/Mi-Store",
+        },
+        {
+            id: 5,
+            img: 'https://i.postimg.cc/KzSy2QWX/Indian-Army.png',
+            title: "Indian Army",
+            desc: "",
+            link: "https://indian-army.netlify.app/",
+            git: "https://github.com/nitinkumar2003/Indian-Army",
+        },
     ]
+
 }

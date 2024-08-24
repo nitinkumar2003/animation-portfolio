@@ -5,6 +5,7 @@ import Skills from "../component/Skills";
 import Resume from "../component/Resume";
 import Contact from "../component/Contact";
 import Footer from "../component/Footer";
+import Project from "../component/project/Project";
 const Home = () => {
   const [darkMode, setDarkMode] = useState(false);
   function toggleDarkMode() {
@@ -14,7 +15,8 @@ const Home = () => {
     <>
       <NavBar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <Hero />
-      <Skills />
+      <Skills />  
+      <Project />
       <Resume />
       <Contact />
       <Footer />
