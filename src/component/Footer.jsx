@@ -7,7 +7,7 @@ const Footer = () => {
 
 
     const connectObj = [
-        { name: 'Telegram', value: 1, url: 'https://t.me/username"', icon: <FaTelegramPlane className=" text-black text-3xl hover:scale-125 cursor-pointer" /> },
+        { name: 'Telegram', value: 1, url: 'https://t.me/@NitinNk20"', icon: <FaTelegramPlane className=" text-black text-3xl hover:scale-125 cursor-pointer" /> },
         { name: 'WhatsApp', value: 2, url: 'https://wa.me/7078216535?text=Hello%20I%20am%20interested%20in%20your%20service', icon: <IoLogoWhatsapp className=" text-black text-3xl hover:scale-125 cursor-pointer" /> },
         { name: 'Instagram', value: 3, url: 'https://www.instagram.com/n_k__0_3?igsh=Z3ZldHE2bjJ0aWFr', icon: <RiInstagramFill className=" text-black text-3xl hover:scale-125 cursor-pointer" /> },
     ]

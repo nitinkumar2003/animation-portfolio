@@ -85,7 +85,14 @@ const Hero = () => {
                         <img
                             data-aos="fade-up"
                             className=" h-[90%]  w-full object-cover md:h-[95%] md:m-auto sm:m-0"
-                            src='https://i.postimg.cc/pTn61Gr1/Untitled-design222-modified.png'
+                            // src='https://i.postimg.cc/pTn61Gr1/Untitled-design222-modified.png'
+                            src='https://i.postimg.cc/tC4xJHQk/NK.png'
+                            // src='https://i.postimg.cc/kGyCw8w0/img.jpg'
+                            // src="https://i.postimg.cc/mZ3TbfRm/img1.jpg"
+                            // src="https://i.postimg.cc/qMk4qbv4/IMG-20230310-WA0008.jpg"
+                            // src="https://i.postimg.cc/057ybKGd/forAbout.jpg"
+                            // src='https://i.postimg.cc/ZqPf5KN9/Whats-App-Image-2024-09-24-at-9-21-12-AM.jpg'
+
                             alt="mine"
                         />
                         <div className=" absolute bottom-10 md:bottom-3 right-8 md:right-2">
@@ -95,9 +102,7 @@ const Hero = () => {
                                     src="https://ik.imagekit.io/imgkitt/tr:w-400/Full_Stack_Developer2.png?updatedAt=1683134009107"
                                     alt=""
                                 />
-                                <FaPlay
-                                    className=" text-black absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
-                                />
+                                <FaPlay  className=" text-black absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"/>
                             </div>
                         </div>
                     </div>

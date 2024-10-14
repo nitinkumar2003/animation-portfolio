@@ -28,6 +28,14 @@ export const personalDataObj = {
     projects: [
         {
             id: 1,
+            img: 'https://i.postimg.cc/8cKsMjQH/Screenshot-2024-10-14-221020.png',
+            title: "Digital Signature Maker",
+            desc: "",
+            link: "https://digitalsigntopng.netlify.app/",
+            git: "https://github.com/nitinkumar2003/signaturemaker",
+        },
+        {
+            id: 1,
             img: 'https://i.postimg.cc/SxxSTZBD/pgsearch.png',
             title: "PG Website",
             desc: "",
@@ -57,14 +65,14 @@ export const personalDataObj = {
             link: "https://mistoreclonebynk.netlify.app/",
             git: "https://github.com/nitinkumar2003/Mi-Store",
         },
-        {
-            id: 5,
-            img: 'https://i.postimg.cc/KzSy2QWX/Indian-Army.png',
-            title: "Indian Army",
-            desc: "",
-            link: "https://indian-army.netlify.app/",
-            git: "https://github.com/nitinkumar2003/Indian-Army",
-        },
+        // {
+        //     id: 5,
+        //     img: 'https://i.postimg.cc/KzSy2QWX/Indian-Army.png',
+        //     title: "Indian Army",
+        //     desc: "",
+        //     link: "https://indian-army.netlify.app/",
+        //     git: "https://github.com/nitinkumar2003/Indian-Army",
+        // },
         {
             id: 6,
             img: 'https://i.postimg.cc/GhBzFr2Q/Screenshot-2024-08-24-231048.png',
