@@ -20,10 +20,6 @@ const Home = () => {
       <Resume />
       <Contact />
       <Footer />
-
-      {/* <Work darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-      <Contact darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-      <Footer darkMode={darkMode} toggleDarkMode={toggleDarkMode} /> */} 
     </>
   );
 };
