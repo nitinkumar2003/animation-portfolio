@@ -2,21 +2,41 @@ export const personalDataObj = {
     name: "Nitin Kumar",
     about: '',
     experience: [
+
         {
-            'profile': "React Js Developer",
-            'company': "Ideahelix Pvt. Ltd.",
-            'time': 'June 2022 - Present',
-            'description': 'As a dedicated React.js developer, I have been actively managing a team of developers, ensuring the delivery of high-quality code through rigorous reviews and mentoring. My role involves integrating APIs seamlessly into user interfaces, creating intuitive and responsive UIs, and utilizing Redux for efficient state management. I thrive on collaborating with my team to build scalable, maintainable applications, continuously driving improvements in both the development process and the end-user experience.'
+            profile: "React Js Developer",
+            company: "iByte Infomatics",
+            time: "November 2024 - Present",
+            description:
+                "At iByte Infomatics, I lead the development of dynamic and reusable UI components using React.js, TypeScript, and Tailwind CSS. I integrate scalable RESTful APIs, manage global state using Redux Toolkit with Redux Persist, and build reusable hooks and HOCs to enhance modularity. I focus heavily on performance optimization through lazy loading, code-splitting, and memoization while collaborating with QA/DevOps teams to maintain code quality through CI pipelines and peer reviews."
+        },
+        {
+            profile: "React Js Developer",
+            company: "Ideahelix Pvt. Ltd.",
+            time: "June 2022 - November 2024",
+            description:
+                "At Ideahelix, I contributed to building scalable front-end architectures using React.js, Redux Toolkit, and Tailwind CSS. I developed reusable components and optimized application performance through memoization, debouncing, and render optimizations. I led code reviews, mentored junior developers, and implemented secure authentication systems, ensuring high-quality, maintainable codebases while collaborating with cross-functional teams."
         }
+
     ],
     education: [
         {
-            'course': 'Diploma Computer Science and Engineering',
-            'college': 'Government Polytechnic Saharanpur 247001',
-            'time': ' July 2018 - August 2021',
-            'description': 'I am a dedicated and passionate computer science and engineering graduate with a diploma from the Government Polytechnic Saharanpur, where I completed my studies from 2018 to 2021. Over the course of my three-year program, I have developed a strong foundation in engineering principles and honed my skills in various areas of computer science.'
+            course: "Bachelor of Engineering (B.E) in Computer Science and Engineering",
+            college: "IEMS College of Engineering, Delhi, India",
+            time: "August 2021 - July 2024",
+            description:
+                "I completed my Bachelor of Engineering in Computer Science and Engineering from IEMS College of Engineering, Delhi, from 2021 to 2024. During this period, I expanded my technical expertise, gaining hands-on experience in modern technologies, software engineering, and advanced computer science concepts.",
+        },
+        {
+            course: "Diploma Computer Science and Engineering",
+            college: "Government Polytechnic Saharanpur 247001",
+            time: "July 2018 - August 2021",
+            description:
+                "I am a dedicated and passionate computer science and engineering graduate with a diploma from the Government Polytechnic Saharanpur, where I completed my studies from 2018 to 2021. Over the course of my three-year program, I have developed a strong foundation in engineering principles and honed my skills in various areas of computer science.",
         }
-    ],
+
+    ]
+    ,
     certificate: [
         {
             "cerName": "Full Stack development using React",
@@ -42,29 +62,29 @@ export const personalDataObj = {
             link: "https://nkpg.netlify.app/",
             git: "https://github.com/nitinkumar2003/PG_Project_front_end",
         },
-        {
-            id: 2,
-            img: 'https://i.postimg.cc/qMLBGf5N/solarsystem.png',
-            title: "Solar System Exploration",
-            link: "https://solarsystemexlporation.netlify.app/home",
-            git: "https://github.com/nitinkumar2003/Solar-System-Exploration",
-        },
-        {
-            id: 3,
-            img: 'https://i.postimg.cc/0yX8LYxx/gaming.png',
-            title: "Gaming Site",
-            desc: "",
-            link: "https://practice-game-site-project-reactjs.netlify.app/",
-            git: "https://github.com/nitinkumar2003/Gaming-SIte",
-        },
-        {
-            id: 4,
-            img: 'https://i.postimg.cc/rFcFWyQ6/mistore.png',
-            title: "MI Store Clone",
-            desc: "",
-            link: "https://mistoreclonebynk.netlify.app/",
-            git: "https://github.com/nitinkumar2003/Mi-Store",
-        },
+        // {
+        //     id: 2,
+        //     img: 'https://i.postimg.cc/qMLBGf5N/solarsystem.png',
+        //     title: "Solar System Exploration",
+        //     link: "https://solarsystemexlporation.netlify.app/home",
+        //     git: "https://github.com/nitinkumar2003/Solar-System-Exploration",
+        // },
+        // {
+        //     id: 3,
+        //     img: 'https://i.postimg.cc/0yX8LYxx/gaming.png',
+        //     title: "Gaming Site",
+        //     desc: "",
+        //     link: "https://practice-game-site-project-reactjs.netlify.app/",
+        //     git: "https://github.com/nitinkumar2003/Gaming-SIte",
+        // },
+        // {
+        //     id: 4,
+        //     img: 'https://i.postimg.cc/rFcFWyQ6/mistore.png',
+        //     title: "MI Store Clone",
+        //     desc: "",
+        //     link: "https://mistoreclonebynk.netlify.app/",
+        //     git: "https://github.com/nitinkumar2003/Mi-Store",
+        // },
         // {
         //     id: 5,
         //     img: 'https://i.postimg.cc/KzSy2QWX/Indian-Army.png',
