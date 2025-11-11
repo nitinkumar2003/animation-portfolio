@@ -55,7 +55,7 @@ export const personalDataObj = {
             git: "https://github.com/nitinkumar2003/signaturemaker",
         },
         {
-            id: 1,
+            id: 2,
             img: 'https://i.postimg.cc/SxxSTZBD/pgsearch.png',
             title: "PG Website",
             desc: "",
@@ -69,14 +69,14 @@ export const personalDataObj = {
         //     link: "https://solarsystemexlporation.netlify.app/home",
         //     git: "https://github.com/nitinkumar2003/Solar-System-Exploration",
         // },
-        // {
-        //     id: 3,
-        //     img: 'https://i.postimg.cc/0yX8LYxx/gaming.png',
-        //     title: "Gaming Site",
-        //     desc: "",
-        //     link: "https://practice-game-site-project-reactjs.netlify.app/",
-        //     git: "https://github.com/nitinkumar2003/Gaming-SIte",
-        // },
+        {
+            id: 3,
+            img: 'https://i.postimg.cc/0yX8LYxx/gaming.png',
+            title: "Gaming Site",
+            desc: "",
+            link: "https://practice-game-site-project-reactjs.netlify.app/",
+            git: "https://github.com/nitinkumar2003/Gaming-SIte",
+        },
         // {
         //     id: 4,
         //     img: 'https://i.postimg.cc/rFcFWyQ6/mistore.png',
@@ -93,14 +93,14 @@ export const personalDataObj = {
         //     link: "https://indian-army.netlify.app/",
         //     git: "https://github.com/nitinkumar2003/Indian-Army",
         // },
-        {
-            id: 6,
-            img: 'https://i.postimg.cc/GhBzFr2Q/Screenshot-2024-08-24-231048.png',
-            title: "Chat App React/Firebase",
-            desc: "",
-            link: "https://react-vite-chat-app.netlify.app/",
-            git: "https://github.com/nitinkumar2003/Indian-Army",
-        },
+        // {
+        //     id: 6,
+        //     img: 'https://i.postimg.cc/GhBzFr2Q/Screenshot-2024-08-24-231048.png',
+        //     title: "Chat App React/Firebase",
+        //     desc: "",
+        //     link: "https://react-vite-chat-app.netlify.app/",
+        //     git: "https://github.com/nitinkumar2003/Indian-Army",
+        // },
     ]
 
 }
