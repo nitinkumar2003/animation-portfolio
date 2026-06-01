@@ -298,7 +298,7 @@ html.light ::-webkit-scrollbar-track {
 .btn-primary:hover::before {
   opacity: 1;
 }
-.btn-primary span {
+.btn-primary > * {
   position: relative;
   z-index: 1;
 }
@@ -388,4 +388,61 @@ html.light ::-webkit-scrollbar-track {
 .tilt-card {
   transform-style: preserve-3d;
   transition: transform 0.3s ease;
+}
+
+/* Mobile: restore natural cursor */
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+  a,
+  button,
+  [data-cursor-hover] {
+    cursor: pointer;
+  }
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
+
+/* Light-mode input override */
+html.light .premium-input {
+  background: rgba(248, 250, 252, 0.85);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #0f172a;
+}
+html.light .premium-input::placeholder {
+  color: #94a3b8;
+}
+html.light .premium-input:focus {
+  background: rgba(99, 102, 241, 0.04);
+  border-color: #6366f1;
+}
+
+/* Btn-primary box-shadow on hover */
+.btn-primary:hover {
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Loading screen premium bar */
+.loader-bar {
+  width: 180px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-top: 1.5rem;
+}
+.loader-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #6366f1, #a855f7, #06b6d4);
+  animation: loadBar 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes loadBar {
+  0%   { width: 0%; }
+  60%  { width: 72%; }
+  100% { width: 100%; }
 }
