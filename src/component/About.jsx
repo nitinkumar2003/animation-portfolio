@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { FaCode, FaServer, FaRobot, FaMobile } from "react-icons/fa";
 import { personalDataObj } from "../data/data";
 import SectionHeading from "./ui/SectionHeading";
-import { useTheme } from "../pages/Home";
+import { useTheme } from "../context/ThemeContext";
 
 const cards = [
   {

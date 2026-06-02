@@ -4,7 +4,7 @@ import {
   FaCode, FaServer, FaRobot, FaShoppingCart, FaMobile, FaChartBar,
 } from "react-icons/fa";
 import SectionHeading from "./ui/SectionHeading";
-import { useTheme } from "../pages/Home";
+import { useTheme } from "../context/ThemeContext";
 
 const services = [
   {

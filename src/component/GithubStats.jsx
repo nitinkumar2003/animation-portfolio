@@ -18,7 +18,7 @@ import {
   FaTrophy,
 } from "react-icons/fa";
 import SectionHeading from "./ui/SectionHeading";
-import { useTheme } from "../pages/Home";
+import { useTheme } from "../context/ThemeContext";
 import { personalDataObj } from "../data/data";
 
 const codingProfiles = [

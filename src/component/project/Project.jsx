@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FiChevronLeft, FiChevronRight, FiArrowRight } from "react-icons/fi";
@@ -6,76 +6,153 @@ import { personalDataObj } from "../../data/data";
 import ProjectCard from "./ProjectCard";
 import ProjectModal from "./ProjectModal";
 import SectionHeading from "../ui/SectionHeading";
-import { useTheme } from "../../pages/Home";
+import { useTheme } from "../../context/ThemeContext";
 
-const CARDS_PER_PAGE = 3;
+/* ─────────────────────────────────────────────────────────── */
 
-const filterCategories = ["All", "Frontend", "Full Stack", "AI / SaaS", "Dashboard"];
+const FILTER_CATS = ["All", "Frontend", "Full Stack", "AI / SaaS", "Dashboard"];
+const GAP = 24; // px — gap-6 equivalent
 
-const slideVariants = {
-  enter: (dir) => ({
-    opacity: 0,
-    x: dir > 0 ? 80 : -80,
-  }),
-  center: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.4, ease: "easeOut" },
-  },
-  exit: (dir) => ({
-    opacity: 0,
-    x: dir > 0 ? -80 : 80,
-    transition: { duration: 0.3 },
-  }),
+/* Breakpoints for cards-per-view */
+const getCardsPerView = (w) => {
+  if (w < 640) return 1;
+  if (w < 1024) return 2;
+  return 3;
 };
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-};
+/* ─── NavArrow button ────────────────────────────────────── */
+const NavArrow = ({ onClick, disabled, dark, children }) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    data-cursor-hover
+    className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
+    style={{
+      background: disabled
+        ? dark
+          ? "rgba(255,255,255,0.03)"
+          : "rgba(0,0,0,0.03)"
+        : dark
+        ? "rgba(255,255,255,0.06)"
+        : "rgba(0,0,0,0.06)",
+      border: dark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
+      color: disabled
+        ? dark
+          ? "rgba(255,255,255,0.2)"
+          : "rgba(0,0,0,0.2)"
+        : dark
+        ? "#e2e8f0"
+        : "#0f172a",
+      cursor: disabled ? "not-allowed" : "pointer",
+    }}
+    onMouseEnter={(e) => {
+      if (!disabled) {
+        e.currentTarget.style.background = "rgba(99,102,241,0.18)";
+        e.currentTarget.style.borderColor = "#6366f1";
+        e.currentTarget.style.color = "#6366f1";
+      }
+    }}
+    onMouseLeave={(e) => {
+      if (!disabled) {
+        e.currentTarget.style.background = dark
+          ? "rgba(255,255,255,0.06)"
+          : "rgba(0,0,0,0.06)";
+        e.currentTarget.style.borderColor = dark
+          ? "rgba(255,255,255,0.1)"
+          : "rgba(0,0,0,0.1)";
+        e.currentTarget.style.color = dark ? "#e2e8f0" : "#0f172a";
+      }
+    }}
+  >
+    {children}
+  </button>
+);
 
+/* ─── Project component ──────────────────────────────────── */
 const Project = () => {
   const { dark } = useTheme();
   const navigate = useNavigate();
-  const [filter, setFilter] = useState("All");
-  const [currentPage, setCurrentPage] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const [selected, setSelected] = useState(null);
 
+  const [filter, setFilter]         = useState("All");
+  const [startIdx, setStartIdx]     = useState(0);
+  const [selected, setSelected]     = useState(null);
+  const [cardsPerView, setCardsPerView] = useState(3);
+  const [trackW, setTrackW]         = useState(0);
+  const [ready, setReady]           = useState(false);
+
+  const wrapperRef = useRef(null);
+
+  /* responsive cardsPerView */
+  useEffect(() => {
+    const update = () => setCardsPerView(getCardsPerView(window.innerWidth));
+    update();
+    window.addEventListener("resize", update, { passive: true });
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  /* measure track width via ResizeObserver */
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setTrackW(entry.contentRect.width);
+      setReady(true);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  /* filtered list */
   const filtered =
     filter === "All"
       ? personalDataObj.projects
       : personalDataObj.projects.filter((p) => p.category === filter);
 
-  const totalPages = Math.ceil(filtered.length / CARDS_PER_PAGE);
-  const visible = filtered.slice(
-    currentPage * CARDS_PER_PAGE,
-    (currentPage + 1) * CARDS_PER_PAGE
-  );
+  const total  = filtered.length;
+  const maxIdx = Math.max(0, total - cardsPerView);
 
+  /* reset on filter / cardsPerView change */
   useEffect(() => {
-    setCurrentPage(0);
-    setDirection(1);
-  }, [filter]);
+    setStartIdx(0);
+  }, [filter, cardsPerView]);
 
-  const goPrev = () => {
-    if (currentPage > 0) {
-      setDirection(-1);
-      setCurrentPage((p) => p - 1);
-    }
-  };
+  /* clamp if maxIdx shrinks */
+  useEffect(() => {
+    setStartIdx((i) => Math.min(i, maxIdx));
+  }, [maxIdx]);
 
-  const goNext = () => {
-    if (currentPage < totalPages - 1) {
-      setDirection(1);
-      setCurrentPage((p) => p + 1);
-    }
-  };
+  /* pixel-perfect card width & translation */
+  const cardW = trackW > 0
+    ? (trackW - GAP * (cardsPerView - 1)) / cardsPerView
+    : 0;
+  const translateX = -(startIdx * (cardW + GAP));
+
+  /* nav handlers */
+  const goPrev = useCallback(() => {
+    setStartIdx((i) => Math.max(0, i - 1));
+  }, []);
+
+  const goNext = useCallback(() => {
+    setStartIdx((i) => Math.min(maxIdx, i + 1));
+  }, [maxIdx]);
+
+  /* dot page groups */
+  const totalGroups  = Math.ceil(total / cardsPerView);
+  const activeDot    = Math.floor(startIdx / cardsPerView);
+  const showDots     = totalGroups <= 6; // show dots only if ≤6 groups
+
+  /* progress bar percentage */
+  const progressPct  = maxIdx > 0 ? (startIdx / maxIdx) * 100 : 100;
+
+  /* range label  "1 – 3 of 15" */
+  const rangeStart = startIdx + 1;
+  const rangeEnd   = Math.min(startIdx + cardsPerView, total);
 
   return (
-    <section id="works" className="py-24 relative">
+    <section id="works" className="py-24 relative overflow-hidden">
+      {/* bg orb */}
       <div
-        className="absolute inset-0 opacity-[0.04]"
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
           background:
             "radial-gradient(ellipse at 80% 50%, #a855f7 0%, transparent 60%)",
@@ -86,13 +163,13 @@ const Project = () => {
         <SectionHeading
           tag="My Work"
           title="Featured Projects"
-          subtitle="A collection of projects showcasing my skills across frontend, full stack, and AI development."
+          subtitle="A curated look at projects spanning frontend, full stack, and AI — use the arrows to explore."
           dark={dark}
         />
 
-        {/* Filter tabs */}
-        <div className="flex justify-center gap-3 mb-12 flex-wrap">
-          {filterCategories.map((cat) => (
+        {/* ── Filter tabs ── */}
+        <div className="flex justify-center gap-2 mb-10 flex-wrap">
+          {FILTER_CATS.map((cat) => (
             <button
               key={cat}
               onClick={() => setFilter(cat)}
@@ -121,151 +198,131 @@ const Project = () => {
           ))}
         </div>
 
-        {/* Carousel */}
+        {/* ── Carousel ── */}
         <div
-          className="relative overflow-hidden"
-          style={{ minHeight: 420 }}
+          ref={wrapperRef}
+          className="overflow-hidden"
+          style={{
+            /* fade in only after we've measured the width */
+            opacity: ready ? 1 : 0,
+            transition: "opacity 0.2s ease",
+          }}
         >
-          <AnimatePresence custom={direction} mode="wait">
-            <motion.div
-              key={`${filter}-${currentPage}`}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6"
-            >
-              {visible.map((project) => (
+          <motion.div
+            className="flex"
+            style={{ gap: GAP }}
+            animate={{ x: translateX }}
+            transition={{ type: "spring", stiffness: 300, damping: 36, mass: 1 }}
+          >
+            {filtered.map((project) => (
+              /* Each slot: fixed pixel width, fixed total height */
+              <div
+                key={project.id}
+                style={{
+                  width: cardW,
+                  flexShrink: 0,
+                  /* 208 image + 5*12 gap + title+desc+pills+bottomRow ≈ 420 total */
+                  height: 420,
+                }}
+              >
                 <ProjectCard
-                  key={project.id}
                   project={project}
                   onDetails={() => setSelected(project)}
                 />
-              ))}
-            </motion.div>
-          </AnimatePresence>
+              </div>
+            ))}
+          </motion.div>
         </div>
 
-        {/* Navigation row */}
-        <div className="flex items-center justify-between mt-10 sm:flex-col sm:gap-6">
-          {/* Prev / Dots / Next */}
-          <div className="flex items-center gap-4">
-            {/* Prev button */}
-            <button
-              onClick={goPrev}
-              disabled={currentPage === 0}
-              data-cursor-hover
-              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
-              style={{
-                background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)",
-                border: dark
-                  ? "1px solid rgba(255,255,255,0.1)"
-                  : "1px solid rgba(0,0,0,0.1)",
-                color: dark ? "#e2e8f0" : "#0f172a",
-              }}
-              onMouseEnter={(e) => {
-                if (currentPage !== 0) {
-                  e.currentTarget.style.background = "rgba(99,102,241,0.15)";
-                  e.currentTarget.style.borderColor = "#6366f1";
-                  e.currentTarget.style.color = "#6366f1";
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = dark
-                  ? "rgba(255,255,255,0.06)"
-                  : "rgba(0,0,0,0.06)";
-                e.currentTarget.style.borderColor = dark
-                  ? "rgba(255,255,255,0.1)"
-                  : "rgba(0,0,0,0.1)";
-                e.currentTarget.style.color = dark ? "#e2e8f0" : "#0f172a";
-              }}
-            >
-              <FiChevronLeft size={18} />
-            </button>
+        {/* ── Navigation row ── */}
+        <div className="flex items-center justify-between mt-8 sm:flex-col sm:gap-5 sm:items-stretch">
 
-            {/* Dot indicators */}
-            <div className="flex items-center gap-2">
-              {Array.from({ length: totalPages }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => {
-                    setDirection(i > currentPage ? 1 : -1);
-                    setCurrentPage(i);
-                  }}
-                  data-cursor-hover
-                  className="rounded-full transition-all duration-300"
+          {/* Left cluster: prev + indicator + next + range */}
+          <div className="flex items-center gap-3 sm:justify-center">
+
+            {/* Prev */}
+            <NavArrow onClick={goPrev} disabled={startIdx === 0} dark={dark}>
+              <FiChevronLeft size={17} />
+            </NavArrow>
+
+            {/* Dots or progress bar */}
+            {showDots ? (
+              <div className="flex items-center gap-2">
+                {Array.from({ length: totalGroups }).map((_, gi) => (
+                  <button
+                    key={gi}
+                    data-cursor-hover
+                    onClick={() =>
+                      setStartIdx(Math.min(gi * cardsPerView, maxIdx))
+                    }
+                    className="rounded-full transition-all duration-300"
+                    style={{
+                      width: gi === activeDot ? 28 : 8,
+                      height: 8,
+                      background:
+                        gi === activeDot
+                          ? "linear-gradient(90deg, #6366f1, #a855f7)"
+                          : dark
+                          ? "rgba(255,255,255,0.18)"
+                          : "rgba(0,0,0,0.14)",
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              /* Progress bar (when too many groups for dots) */
+              <div
+                className="rounded-full overflow-hidden"
+                style={{
+                  width: 120,
+                  height: 6,
+                  background: dark
+                    ? "rgba(255,255,255,0.08)"
+                    : "rgba(0,0,0,0.08)",
+                }}
+              >
+                <motion.div
+                  className="h-full rounded-full"
                   style={{
-                    width: i === currentPage ? 28 : 8,
-                    height: 8,
                     background:
-                      i === currentPage
-                        ? "linear-gradient(90deg, #6366f1, #a855f7)"
-                        : dark
-                        ? "rgba(255,255,255,0.18)"
-                        : "rgba(0,0,0,0.15)",
+                      "linear-gradient(90deg, #6366f1, #a855f7)",
                   }}
+                  animate={{ width: `${progressPct}%` }}
+                  transition={{ type: "spring", stiffness: 300, damping: 36 }}
                 />
-              ))}
-            </div>
+              </div>
+            )}
 
-            {/* Next button */}
-            <button
-              onClick={goNext}
-              disabled={currentPage === totalPages - 1}
-              data-cursor-hover
-              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
-              style={{
-                background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)",
-                border: dark
-                  ? "1px solid rgba(255,255,255,0.1)"
-                  : "1px solid rgba(0,0,0,0.1)",
-                color: dark ? "#e2e8f0" : "#0f172a",
-              }}
-              onMouseEnter={(e) => {
-                if (currentPage !== totalPages - 1) {
-                  e.currentTarget.style.background = "rgba(99,102,241,0.15)";
-                  e.currentTarget.style.borderColor = "#6366f1";
-                  e.currentTarget.style.color = "#6366f1";
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = dark
-                  ? "rgba(255,255,255,0.06)"
-                  : "rgba(0,0,0,0.06)";
-                e.currentTarget.style.borderColor = dark
-                  ? "rgba(255,255,255,0.1)"
-                  : "rgba(0,0,0,0.1)";
-                e.currentTarget.style.color = dark ? "#e2e8f0" : "#0f172a";
-              }}
-            >
-              <FiChevronRight size={18} />
-            </button>
+            {/* Next */}
+            <NavArrow onClick={goNext} disabled={startIdx === maxIdx} dark={dark}>
+              <FiChevronRight size={17} />
+            </NavArrow>
 
-            {/* Page counter */}
+            {/* Range counter */}
             <span
-              className="text-sm font-medium tabular-nums"
-              style={{ color: dark ? "#64748b" : "#94a3b8" }}
+              className="text-sm tabular-nums"
+              style={{ color: dark ? "#64748b" : "#94a3b8", fontVariantNumeric: "tabular-nums" }}
             >
-              {currentPage + 1} / {totalPages}
+              {rangeStart}–{rangeEnd}{" "}
+              <span style={{ color: dark ? "#475569" : "#cbd5e1" }}>/ {total}</span>
             </span>
           </div>
 
-          {/* View All Projects button */}
+          {/* View All Projects */}
           <motion.button
             onClick={() => navigate("/projects")}
             data-cursor-hover
             whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="btn-primary flex items-center gap-2 px-7 py-3 rounded-xl font-semibold text-sm"
+            whileTap={{ scale: 0.96 }}
+            className="btn-primary flex items-center justify-center gap-2 px-7 py-3 rounded-xl font-semibold text-sm sm:w-full"
           >
             <span>View All Projects</span>
-            <FiArrowRight size={16} />
+            <FiArrowRight size={15} />
           </motion.button>
         </div>
       </div>
 
-      {/* Modal */}
+      {/* ── Modal ── */}
       <AnimatePresence>
         {selected && (
           <ProjectModal project={selected} onClose={() => setSelected(null)} />

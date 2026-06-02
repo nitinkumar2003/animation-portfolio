@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { RxCross2 } from "react-icons/rx";
 import { RxExternalLink } from "react-icons/rx";
 import { AiOutlineGithub } from "react-icons/ai";
-import { useTheme } from "../../pages/Home";
+import { useTheme } from "../../context/ThemeContext";
 
 const Pill = ({ children, color = "#6366f1" }) => (
   <span

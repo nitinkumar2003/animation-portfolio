@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaQuoteLeft, FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import SectionHeading from "./ui/SectionHeading";
-import { useTheme } from "../pages/Home";
+import { useTheme } from "../context/ThemeContext";
 
 const testimonials = [
   {

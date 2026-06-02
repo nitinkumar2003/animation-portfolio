@@ -27,10 +27,11 @@ html {
 }
 
 body {
-  font-family: "Inter", sans-serif;
-  background-color: #0d0d1a;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  background-color: #0d0d1a; /* default dark — ThemeProvider overrides via JS */
   color: #e2e8f0;
   cursor: none;
+  overflow-x: hidden;
 }
 
 .dark body {

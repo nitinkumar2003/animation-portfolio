@@ -7,7 +7,7 @@ import { IoLogoWhatsapp } from "react-icons/io";
 import { RiInstagramFill } from "react-icons/ri";
 import { FaTelegramPlane } from "react-icons/fa";
 import { personalDataObj } from "../data/data";
-import { useTheme } from "../pages/Home";
+import { useTheme } from "../context/ThemeContext";
 import { navItems } from "../data/Constant";
 
 const socialLinks = [

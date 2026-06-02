@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { personalDataObj } from "../data/data";
 import SectionHeading from "./ui/SectionHeading";
-import { useTheme } from "../pages/Home";
+import { useTheme } from "../context/ThemeContext";
 import resumePDF from "../assets/Resume.pdf";
 import { FiDownload } from "react-icons/fi";
 

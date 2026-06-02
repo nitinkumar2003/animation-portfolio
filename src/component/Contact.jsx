@@ -10,7 +10,7 @@ import { SiLeetcode } from "react-icons/si";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { HiMail, HiLocationMarker } from "react-icons/hi";
 import SectionHeading from "./ui/SectionHeading";
-import { useTheme } from "../pages/Home";
+import { useTheme } from "../context/ThemeContext";
 import { personalDataObj } from "../data/data";
 
 export const _emailConfig = {

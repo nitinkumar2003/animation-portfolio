@@ -2,35 +2,39 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { RxExternalLink } from "react-icons/rx";
 import { AiOutlineGithub } from "react-icons/ai";
-import { useTheme } from "../../pages/Home";
+import { useTheme } from "../../context/ThemeContext";
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
+/* ─── constants ────────────────────────────────────────────── */
+const IMG_H = 208; // px — every card image uses this exact height
 
 const ProjectCard = ({ project, onDetails }) => {
   const { dark } = useTheme();
   const [hovered, setHovered] = useState(false);
 
   return (
-    <motion.div
-      variants={cardVariants}
-      className="project-card-hover rounded-2xl overflow-hidden flex flex-col h-full"
+    <div
+      className="project-card-hover rounded-2xl overflow-hidden flex flex-col w-full"
+      /* h-full lets the parent (carousel slot or grid cell) control total height */
       style={{
+        height: "100%",
         background: dark ? "rgba(255,255,255,0.04)" : "#fff",
-        border: dark ? "1px solid rgba(255,255,255,0.07)" : "1px solid rgba(0,0,0,0.07)",
+        border: dark
+          ? "1px solid rgba(255,255,255,0.07)"
+          : "1px solid rgba(0,0,0,0.07)",
         boxShadow: hovered
           ? dark
-            ? "0 20px 60px rgba(99,102,241,0.2)"
+            ? "0 20px 60px rgba(99,102,241,0.22)"
             : "0 20px 60px rgba(0,0,0,0.12)"
           : "none",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Image */}
-      <div className="relative h-52 overflow-hidden flex-shrink-0">
+      {/* ── IMAGE — fixed height, never shrinks ── */}
+      <div
+        className="relative overflow-hidden flex-shrink-0"
+        style={{ height: IMG_H }}
+      >
         <motion.img
           src={project.img}
           alt={project.title}
@@ -38,14 +42,18 @@ const ProjectCard = ({ project, onDetails }) => {
           animate={{ scale: hovered ? 1.08 : 1 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
         />
-        {/* Hover overlay */}
+
+        {/* hover overlay */}
         <motion.div
           className="absolute inset-0 flex flex-col items-center justify-center gap-3"
           animate={{ opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-          style={{ background: "rgba(13,13,26,0.85)", backdropFilter: "blur(4px)" }}
+          transition={{ duration: 0.25 }}
+          style={{
+            background: "rgba(13,13,26,0.85)",
+            backdropFilter: "blur(4px)",
+          }}
         >
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             {project.link && project.link !== "#" && (
               <a
                 href={project.link}
@@ -56,7 +64,7 @@ const ProjectCard = ({ project, onDetails }) => {
                 className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold"
                 style={{ background: "rgba(99,102,241,0.9)", color: "#fff" }}
               >
-                <RxExternalLink size={14} /> Live
+                <RxExternalLink size={13} /> Live
               </a>
             )}
             {project.git && project.git !== "#" && (
@@ -73,7 +81,7 @@ const ProjectCard = ({ project, onDetails }) => {
                   color: "#fff",
                 }}
               >
-                <AiOutlineGithub size={14} /> Code
+                <AiOutlineGithub size={13} /> Code
               </a>
             )}
           </div>
@@ -87,8 +95,8 @@ const ProjectCard = ({ project, onDetails }) => {
           </button>
         </motion.div>
 
-        {/* Category badge */}
-        <div
+        {/* category badge */}
+        <span
           className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold"
           style={{
             background: "rgba(99,102,241,0.9)",
@@ -97,35 +105,54 @@ const ProjectCard = ({ project, onDetails }) => {
           }}
         >
           {project.category}
-        </div>
+        </span>
       </div>
 
-      {/* Card body */}
-      <div className="p-5 flex flex-col gap-3 flex-1">
+      {/* ── BODY — grows to fill remaining card height ── */}
+      <div className="flex flex-col flex-1 p-5" style={{ gap: 12 }}>
+        {/* title — 1 line max */}
         <h3
-          className="font-bold text-lg"
+          className="font-bold leading-snug"
           style={{
             fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: "1rem",
             color: dark ? "#f1f5f9" : "#0f172a",
+            display: "-webkit-box",
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
           }}
         >
           {project.title}
         </h3>
+
+        {/* description — 2 lines, fills remaining space */}
         <p
-          className="text-sm leading-relaxed line-clamp-2"
-          style={{ color: dark ? "#94a3b8" : "#64748b" }}
+          className="text-sm leading-relaxed flex-1"
+          style={{
+            color: dark ? "#94a3b8" : "#64748b",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
         >
           {project.shortDesc}
         </p>
 
-        {/* Tech pills */}
-        <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
-          {project.tech?.slice(0, 4).map((t, i) => (
+        {/* tech pills — single row, overflow hidden */}
+        <div
+          className="flex gap-1.5"
+          style={{ overflow: "hidden", flexWrap: "nowrap" }}
+        >
+          {project.tech?.slice(0, 3).map((t, i) => (
             <span
               key={i}
-              className="text-xs px-2.5 py-1 rounded-full"
+              className="text-xs px-2.5 py-1 rounded-full flex-shrink-0"
               style={{
-                background: dark ? "rgba(99,102,241,0.1)" : "rgba(99,102,241,0.08)",
+                background: dark
+                  ? "rgba(99,102,241,0.1)"
+                  : "rgba(99,102,241,0.08)",
                 color: "#6366f1",
                 border: "1px solid rgba(99,102,241,0.2)",
               }}
@@ -133,20 +160,22 @@ const ProjectCard = ({ project, onDetails }) => {
               {t}
             </span>
           ))}
-          {project.tech?.length > 4 && (
+          {project.tech?.length > 3 && (
             <span
-              className="text-xs px-2.5 py-1 rounded-full"
+              className="text-xs px-2.5 py-1 rounded-full flex-shrink-0"
               style={{
-                background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
+                background: dark
+                  ? "rgba(255,255,255,0.05)"
+                  : "rgba(0,0,0,0.04)",
                 color: dark ? "#64748b" : "#94a3b8",
               }}
             >
-              +{project.tech.length - 4}
+              +{project.tech.length - 3}
             </span>
           )}
         </div>
 
-        {/* Bottom row */}
+        {/* bottom row — always at the bottom */}
         <div
           className="flex items-center justify-between pt-3"
           style={{
@@ -155,7 +184,7 @@ const ProjectCard = ({ project, onDetails }) => {
               : "1px solid rgba(0,0,0,0.06)",
           }}
         >
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             {project.link && project.link !== "#" && (
               <a
                 href={project.link}
@@ -169,7 +198,7 @@ const ProjectCard = ({ project, onDetails }) => {
                   (e.currentTarget.style.color = dark ? "#64748b" : "#94a3b8")
                 }
               >
-                <RxExternalLink size={16} />
+                <RxExternalLink size={15} />
               </a>
             )}
             {project.git && project.git !== "#" && (
@@ -185,10 +214,11 @@ const ProjectCard = ({ project, onDetails }) => {
                   (e.currentTarget.style.color = dark ? "#64748b" : "#94a3b8")
                 }
               >
-                <AiOutlineGithub size={16} />
+                <AiOutlineGithub size={15} />
               </a>
             )}
           </div>
+
           <button
             onClick={onDetails}
             data-cursor-hover
@@ -199,7 +229,7 @@ const ProjectCard = ({ project, onDetails }) => {
               border: "1px solid rgba(99,102,241,0.2)",
             }}
             onMouseEnter={(e) =>
-              (e.currentTarget.style.background = "rgba(99,102,241,0.2)")
+              (e.currentTarget.style.background = "rgba(99,102,241,0.22)")
             }
             onMouseLeave={(e) =>
               (e.currentTarget.style.background = "rgba(99,102,241,0.1)")
@@ -209,7 +239,7 @@ const ProjectCard = ({ project, onDetails }) => {
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
