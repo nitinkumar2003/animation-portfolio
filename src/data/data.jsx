@@ -22,11 +22,11 @@ export const personalDataObj = {
 
   experience: [
     {
-      profile: "React Js Developer",
+      profile: "Full Stack Developer",
       company: "iByte Infomatics",
       time: "November 2024 - Present",
       description:
-        "Lead development of dynamic and reusable UI components using React.js, TypeScript, and Tailwind CSS. Integrate scalable RESTful APIs, manage global state using Redux Toolkit with Redux Persist, and build reusable hooks and HOCs to enhance modularity. Focus on performance optimization through lazy loading, code-splitting, and memoization.",
+        "Lead development of dynamic and reusable UI components using React.js, TypeScript, and Tailwind CSS across multiple projects. Architected scalable RESTful APIs with Node.js, Express, and NestJS. Manage global state with Redux Toolkit and Redux Persist, build custom hooks and HOCs for enhanced modularity. Developed cross-platform mobile applications using React Native and Expo. Built AI-powered SaaS web applications with Next.js and integrated OpenAI/Gemini APIs. Implemented performance optimization strategies including lazy loading, code-splitting, memoization, and advanced render optimizations. Created common utility functions, authentication systems, and reusable component libraries to streamline development workflows.",
     },
     {
       profile: "React Js Developer",
