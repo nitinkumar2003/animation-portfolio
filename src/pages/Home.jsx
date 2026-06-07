@@ -24,11 +24,11 @@ const Home = () => (
     <Hero />
     <About />
     <Skills />
-    <Project />
+    {/* <Project /> */}
     <Resume />
-    <Services />
-    <Testimonials />
-    <GithubStats />
+    {/* <Services /> */}
+    {/* <Testimonials /> */}
+    {/* <GithubStats /> */}
     <Contact />
     <Footer />
   </div>
