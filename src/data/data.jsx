@@ -3,7 +3,7 @@ export const personalDataObj = {
   role: "Full Stack Developer",
   email: "nitinkumarja2003@gmail.com",
   phone: "+91 7078216535",
-  location: "Delhi, India",
+  location: "Noida, India",
   github: "https://github.com/nitinkumar2003",
   linkedin: "https://www.linkedin.com/in/nitin-kumar-42026421b",
   leetcode: "https://leetcode.com/u/Nitinjanmeda/",
@@ -15,9 +15,9 @@ export const personalDataObj = {
 
   stats: [
     { value: "4+", label: "Years Experience" },
-    { value: "13+", label: "Projects Completed" },
+    // { value: "13+", label: "Projects Completed" },
     { value: "2", label: "Companies Worked" },
-    { value: "100%", label: "Client Satisfaction" },
+    // { value: "100%", label: "Client Satisfaction" },
   ],
 
   experience: [
