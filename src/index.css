@@ -4205,7 +4205,9 @@ html.light ::-webkit-scrollbar-track {
 }
 
 .nkos-window-settings,
-.nkos-window-resume {
+.nkos-window-resume,
+.nkos-window-browser,
+.nkos-window-editor {
   width: min(1140px, calc(100% - 170px));
 }
 
@@ -4349,6 +4351,78 @@ html.light ::-webkit-scrollbar-track {
   font-size: 9px;
 }
 
+.nkos-wallpaper-upload {
+  position: relative;
+  margin-top: 11px;
+  border: 1px dashed rgba(91, 188, 255, 0.3);
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(91, 188, 255, 0.035);
+}
+
+.nkos-wallpaper-upload > input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nkos-wallpaper-upload > button:first-of-type {
+  min-width: 0;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 9px;
+  color: #aebfc4;
+  text-align: left;
+}
+
+.nkos-wallpaper-upload > button:first-of-type > svg {
+  width: 22px;
+  height: 22px;
+  color: var(--os-blue);
+}
+
+.nkos-wallpaper-upload b,
+.nkos-wallpaper-upload small {
+  display: block;
+}
+
+.nkos-wallpaper-upload b {
+  font-size: 9px;
+}
+
+.nkos-wallpaper-upload small,
+.nkos-wallpaper-upload > p {
+  margin-top: 4px;
+  color: #70858c;
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.nkos-wallpaper-upload > button.remove {
+  min-height: 32px;
+  border: 1px solid rgba(255, 107, 107, 0.25);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 9px;
+  color: #ff8f8f;
+  font-size: 8px;
+}
+
+.nkos-wallpaper-upload > p {
+  grid-column: 1 / -1;
+  margin: 0 9px 4px;
+}
+
 .nkos-region-options {
   margin-top: 16px;
   display: grid;
@@ -4458,8 +4532,402 @@ html.light ::-webkit-scrollbar-track {
 .nkos-language-options {
   margin-top: 15px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 8px;
+}
+
+.nkos-editor-app {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 50px minmax(0, 1fr) 28px;
+  overflow: hidden;
+  color: #b9c8cc;
+  background: #071015;
+}
+
+.nkos-editor-app > header {
+  border-bottom: 1px solid var(--os-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 12px;
+  background: #111c21;
+}
+
+.nkos-editor-app > header > div {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.nkos-editor-app > header > div:first-child > svg {
+  color: var(--os-green);
+}
+
+.nkos-editor-app > header b,
+.nkos-editor-app > header small {
+  display: block;
+}
+
+.nkos-editor-app > header b {
+  max-width: 300px;
+  overflow: hidden;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nkos-editor-app > header small,
+.nkos-editor-app > header > div:last-child > span,
+.nkos-editor-app > header em {
+  color: #657b82;
+  font-size: 7px;
+  font-style: normal;
+}
+
+.nkos-editor-app > header em {
+  color: var(--os-green);
+}
+
+.nkos-editor-app > header button {
+  min-height: 32px;
+  border: 1px solid rgba(69, 230, 176, 0.28);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  color: #06110e;
+  background: var(--os-green);
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.nkos-editor-workspace {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+}
+
+.nkos-editor-workspace > aside {
+  overflow: hidden;
+  padding: 18px 10px;
+  color: #40565e;
+  background: #0a1419;
+  font: 11px/1.75 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  text-align: right;
+  user-select: none;
+}
+
+.nkos-editor-workspace > aside span {
+  display: block;
+}
+
+.nkos-editor-workspace > textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: 0;
+  outline: 0;
+  padding: 18px;
+  color: #c4d3d6;
+  background: #071015;
+  caret-color: var(--os-green);
+  font: 12px/1.75 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.nkos-editor-app > footer {
+  border-top: 1px solid var(--os-border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  padding: 0 12px;
+  color: #647a81;
+  background: #111c21;
+  font-size: 7px;
+}
+
+.nkos-editor-app > footer span:first-child {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--os-green);
+}
+
+.nkos-browser-app {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 52px minmax(0, 1fr) 26px;
+  overflow: hidden;
+  background: #e8ecec;
+}
+
+.nkos-browser-toolbar {
+  border-bottom: 1px solid #26363d;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  background: #101b20;
+}
+
+.nkos-browser-toolbar nav {
+  display: flex;
+  gap: 3px;
+}
+
+.nkos-browser-toolbar button,
+.nkos-browser-toolbar > a {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  color: #9eb0b5;
+}
+
+.nkos-browser-toolbar button:hover,
+.nkos-browser-toolbar > a:hover {
+  color: var(--os-text);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.nkos-browser-toolbar button:disabled {
+  opacity: 0.26;
+}
+
+.nkos-browser-toolbar form {
+  height: 34px;
+  border: 1px solid #2b3b42;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: center;
+  padding: 0 8px;
+  background: #091318;
+}
+
+.nkos-browser-toolbar form:focus-within {
+  border-color: rgba(91, 188, 255, 0.65);
+}
+
+.nkos-browser-toolbar form > svg {
+  width: 12px;
+  color: var(--os-green);
+}
+
+.nkos-browser-toolbar input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #c4d0d3;
+  background: transparent;
+  font-size: 9px;
+}
+
+.nkos-browser-viewport {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.nkos-browser-viewport > iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.nkos-browser-loading {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  height: 3px;
+  overflow: hidden;
+  background: rgba(91, 188, 255, 0.15);
+}
+
+.nkos-browser-loading span {
+  width: 38%;
+  height: 100%;
+  display: block;
+  background: var(--os-blue);
+  animation: nkosBrowserLoad 1s ease-in-out infinite;
+}
+
+.nkos-browser-home {
+  height: 100%;
+  overflow-y: auto;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: 30px;
+  color: #142228;
+  background-color: #e8ecec;
+  background-image:
+    linear-gradient(rgba(19, 75, 70, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(19, 75, 70, 0.055) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.nkos-browser-mark {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  color: #0b806a;
+}
+
+.nkos-browser-mark > svg {
+  width: 64px;
+  height: 64px;
+}
+
+.nkos-browser-mark > span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #142228;
+  font-size: 10px;
+  font-weight: 950;
+}
+
+.nkos-browser-home > p {
+  margin-top: 12px;
+  color: #0b806a;
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.nkos-browser-home h2 {
+  max-width: 620px;
+  margin-top: 7px;
+  font-size: 28px;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.nkos-browser-home > form {
+  width: min(650px, 100%);
+  height: 50px;
+  margin-top: 24px;
+  border: 1px solid #aab8b9;
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 44px;
+  align-items: center;
+  padding: 0 7px 0 13px;
+  background: #fff;
+  box-shadow: 0 13px 35px rgba(17, 44, 48, 0.12);
+}
+
+.nkos-browser-home > form > svg {
+  color: #557075;
+}
+
+.nkos-browser-home > form input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #16272c;
+  background: transparent;
+  font-size: 11px;
+}
+
+.nkos-browser-home > form button {
+  width: 36px;
+  height: 36px;
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: #0b806a;
+}
+
+.nkos-browser-quick {
+  width: min(650px, 100%);
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.nkos-browser-quick > button {
+  min-height: 68px;
+  border: 1px solid #c2cccb;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 27px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 9px;
+  color: #254047;
+  background: rgba(255, 255, 255, 0.7);
+  text-align: left;
+}
+
+.nkos-browser-quick > button:hover {
+  border-color: #0b806a;
+  background: #fff;
+}
+
+.nkos-browser-quick > button > svg {
+  color: #0b806a;
+}
+
+.nkos-browser-quick b,
+.nkos-browser-quick small {
+  display: block;
+}
+
+.nkos-browser-quick b {
+  font-size: 8px;
+}
+
+.nkos-browser-quick small {
+  margin-top: 3px;
+  color: #738589;
+  font-size: 7px;
+  line-height: 1.3;
+}
+
+.nkos-browser-app > footer {
+  border-top: 1px solid #28383e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 10px;
+  color: #71858c;
+  background: #101b20;
+  font-size: 7px;
+}
+
+.nkos-browser-app > footer span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nkos-browser-app > footer i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--os-green);
+}
+
+.nkos-browser-app > footer i.loading {
+  background: var(--os-yellow);
+}
+
+@keyframes nkosBrowserLoad {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(300%); }
 }
 
 .nkos-resume-app {
@@ -4994,7 +5462,9 @@ html.light ::-webkit-scrollbar-track {
 
 @media (max-width: 900px) {
   .nkos-window-settings,
-  .nkos-window-resume {
+  .nkos-window-resume,
+  .nkos-window-browser,
+  .nkos-window-editor {
     width: calc(100% - 36px);
   }
 
@@ -5003,6 +5473,10 @@ html.light ::-webkit-scrollbar-track {
   }
 
   .nkos-region-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .nkos-language-options {
     grid-template-columns: repeat(3, 1fr);
   }
 
@@ -5046,13 +5520,24 @@ html.light ::-webkit-scrollbar-track {
     padding: 16px;
   }
 
-  .nkos-wallpaper-options,
-  .nkos-language-options {
+  .nkos-wallpaper-options {
     grid-template-columns: 1fr;
+  }
+
+  .nkos-language-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .nkos-wallpaper-options > button > span {
     height: 86px;
+  }
+
+  .nkos-wallpaper-upload {
+    grid-template-columns: 1fr;
+  }
+
+  .nkos-wallpaper-upload > button.remove {
+    justify-self: start;
   }
 
   .nkos-region-options {
@@ -5146,6 +5631,62 @@ html.light ::-webkit-scrollbar-track {
 
   .nkos-bin-app > header > button {
     min-width: 76px;
+  }
+
+  .nkos-browser-toolbar {
+    grid-template-columns: auto minmax(0, 1fr) 30px;
+    gap: 5px;
+    padding: 0 5px;
+  }
+
+  .nkos-browser-toolbar nav button:nth-child(4) {
+    display: none;
+  }
+
+  .nkos-browser-toolbar button,
+  .nkos-browser-toolbar > a {
+    width: 27px;
+  }
+
+  .nkos-browser-toolbar form {
+    padding: 0 4px;
+  }
+
+  .nkos-browser-home {
+    align-content: start;
+    padding: 26px 14px;
+  }
+
+  .nkos-browser-home h2 {
+    font-size: 22px;
+  }
+
+  .nkos-browser-quick {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nkos-browser-app > footer span:last-child,
+  .nkos-editor-app > header > div:last-child > span,
+  .nkos-editor-app > header em,
+  .nkos-editor-app > footer span:not(:first-child) {
+    display: none;
+  }
+
+  .nkos-editor-app > header b {
+    max-width: 130px;
+  }
+
+  .nkos-editor-workspace {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .nkos-editor-workspace > aside {
+    padding: 14px 7px;
+  }
+
+  .nkos-editor-workspace > textarea {
+    padding: 14px 11px;
+    font-size: 11px;
   }
 
   .nkos-clock {
