@@ -27,7 +27,7 @@ const TerminalApp = ({ openApp }) => {
       help: "Commands: whoami, stack, projects, experience, contact, open <app>, clear",
       whoami: "Nitin Kumar — Full Stack Developer building React, Next.js, Node.js and AI products.",
       stack: "Frontend: React/Next/TS | Backend: Node/Nest/Express | Data: Mongo/Postgres/Supabase | AI: OpenAI/Gemini",
-      projects: "15 project systems indexed. Run: open projects",
+      projects: `${personalDataObj.projects.length} project systems indexed. Run: open projects`,
       experience: "4+ years | iByte Infomatics + Ideahelix Pvt. Ltd.",
       contact: `Email: ${personalDataObj.email}`,
     };

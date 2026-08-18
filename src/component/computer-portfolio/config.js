@@ -1,16 +1,21 @@
 import {
   FiActivity,
   FiBriefcase,
+  FiCalendar,
+  FiCloud,
   FiCompass,
   FiCode,
   FiCreditCard,
   FiDatabase,
-  FiEdit3,
+  FiEye,
   FiFileText,
   FiFolder,
   FiGitBranch,
+  FiHash,
   FiLayers,
+  FiMapPin,
   FiMail,
+  FiMessageCircle,
   FiMonitor,
   FiServer,
   FiSettings,
@@ -19,12 +24,13 @@ import {
   FiUser,
 } from "react-icons/fi";
 import { personalDataObj } from "../../data/data";
+import { nitinProfile } from "../../data/nitinProfile";
 import circuitWallpaper from "../../assets/nkos-wallpaper.jpg";
 
 export const bootSteps = [
   { label: "CPU", detail: "Developer core online" },
   { label: "MEM", detail: "4+ years indexed" },
-  { label: "DRIVE", detail: "15 projects mounted" },
+  { label: "DRIVE", detail: `${personalDataObj.projects.length} projects mounted` },
   { label: "NETWORK", detail: "Professional links connected" },
   { label: "SHELL", detail: "Nitin OS workspace ready" },
 ];
@@ -36,7 +42,7 @@ export const stackGroups = [
     color: "#45e6b0",
     summary: "Responsive web and mobile product interfaces",
     level: "PRIMARY",
-    items: ["React.js", "Next.js", "TypeScript", "JavaScript (ES6+)", "React Native", "HTML5", "CSS3", "Tailwind CSS", "Bootstrap", "Ant Design", "Framer Motion", "jQuery"],
+    items: nitinProfile.skills.frontend,
   },
   {
     title: "State, Forms & Quality",
@@ -44,7 +50,7 @@ export const stackGroups = [
     color: "#5bbcff",
     summary: "Predictable state, validation and reusable systems",
     level: "STRONG",
-    items: ["Redux Toolkit", "Redux Persist", "React Query", "React Hook Form", "Zustand", "Zod", "Yup", "Custom Hooks", "HOCs", "ESLint"],
+    items: nitinProfile.skills.stateAndForms,
   },
   {
     title: "Backend & Realtime",
@@ -52,7 +58,7 @@ export const stackGroups = [
     color: "#ffc857",
     summary: "Secure APIs, authentication and live systems",
     level: "STRONG",
-    items: ["Node.js", "Express.js", "NestJS", "RESTful APIs", "Socket.IO", "JWT", "Authentication", "Multi-role RBAC"],
+    items: nitinProfile.skills.backend,
   },
   {
     title: "Data & Infrastructure",
@@ -60,7 +66,7 @@ export const stackGroups = [
     color: "#ff8f70",
     summary: "Product data, caching and managed backends",
     level: "PRODUCTION",
-    items: ["MongoDB", "SQL", "PostgreSQL", "Supabase", "Firebase", "Redis"],
+    items: nitinProfile.skills.database,
   },
   {
     title: "AI & Payments",
@@ -68,7 +74,7 @@ export const stackGroups = [
     color: "#b9a7ff",
     summary: "Commercial AI products, checkout and subscriptions",
     level: "INTEGRATIONS",
-    items: ["OpenAI", "Gemini", "Groq", "DeepSeek", "Venice AI", "AI SaaS", "Stripe", "Razorpay", "PayPal", "Cybersource"],
+    items: [...nitinProfile.skills.ai, ...nitinProfile.skills.payments],
   },
   {
     title: "Delivery & Practices",
@@ -76,7 +82,7 @@ export const stackGroups = [
     color: "#62d7ff",
     summary: "Maintainable delivery from repository to production",
     level: "END TO END",
-    items: ["Git", "GitHub", "Vite", "Agile", "Code Reviews", "Performance Optimization", "Lazy Loading", "Code Splitting", "Deployment"],
+    items: nitinProfile.skills.delivery,
   },
 ];
 
@@ -88,6 +94,7 @@ export const productDomains = [
   "AI ChatGPT-like SaaS", "E-commerce", "Invoice Management", "Food Delivery", "Real Estate", "Live Streaming",
   "CRM & Admin Dashboards", "Multi-role Authentication", "Property Management", "AI Data Platforms",
   "Business Analytics", "Booking & Enquiry Management",
+  "Mobile Applications", "Scalable Project Foundations",
 ];
 
 export const deliveryCapabilities = [
@@ -108,10 +115,15 @@ export const projectFilters = ["All", "Full Stack", "AI / SaaS", "Dashboard", "F
 export const appCatalog = [
   { id: "about", label: "About Nitin", file: "README.md", icon: FiUser, color: "#45e6b0", keywords: "profile bio full stack developer" },
   { id: "projects", label: "Project Explorer", file: "Projects", icon: FiFolder, color: "#ffc857", keywords: "work case studies apps code client" },
+  { id: "assistant", label: "Ask Nitin", file: "Ask Nitin.app", icon: FiMessageCircle, color: "#73e0bc", keywords: "ai assistant profile recruiter hiring questions openai" },
   { id: "stack", label: "System Architecture", file: "Tech Stack.app", icon: FiLayers, color: "#5bbcff", keywords: "skills html css javascript typescript bootstrap tailwind jquery react next react native ant design framer motion redux react query zustand zod yup node express nest rest socket jwt mongodb sql postgres firebase supabase redis openai gemini groq deepseek venice stripe razorpay paypal cybersource git github vite eslint deployment" },
   { id: "journey", label: "Career Timeline", file: "Experience.log", icon: FiBriefcase, color: "#ff8f70", keywords: "experience education career ibyte ideahelix" },
+  { id: "calendar", label: "Calendar", file: "Calendar.app", icon: FiCalendar, color: "#ff6961", keywords: "calendar events schedule meetings manage planner" },
+  { id: "weather", label: "Weather", file: "Weather.app", icon: FiCloud, color: "#62d7ff", keywords: "live weather forecast city location temperature" },
+  { id: "calculator", label: "Calculator", file: "Calculator.app", icon: FiHash, color: "#f2a65a", keywords: "calculator maths arithmetic memory" },
+  { id: "maps", label: "Maps", file: "Maps.app", icon: FiMapPin, color: "#69d174", keywords: "google maps noida location directions global search" },
   { id: "terminal", label: "Developer Terminal", file: "Terminal", icon: FiTerminal, color: "#b9a7ff", keywords: "command line console cli" },
-  { id: "editor", label: "Code & Notes Editor", file: "Workspace.nk", icon: FiEdit3, color: "#7fe0c2", keywords: "edit notes text file code workspace save" },
+  { id: "editor", label: "Quick Look", file: "Quick Look.app", icon: FiEye, color: "#7fe0c2", keywords: "preview inspect read only file code workspace" },
   { id: "browser", label: "Nitin Browser", file: "Browser.app", icon: FiCompass, color: "#65c7ff", keywords: "browser web internet search google navigation" },
   { id: "resume", label: "Resume", file: "NitinKumar.pdf", icon: FiFileText, color: "#ff6b6b", keywords: "cv resume download pdf" },
   { id: "contact", label: "Contact", file: "Connect.link", icon: FiMail, color: "#62d7ff", keywords: "email linkedin github hire collaboration" },
@@ -119,11 +131,12 @@ export const appCatalog = [
   { id: "bin", label: "Recycle Bin", file: "Recycle Bin", icon: FiTrash2, color: "#d7e3e7", keywords: "deleted files restore trash bin" },
 ];
 
-export const protectedDesktopIds = new Set(["editor", "browser", "settings", "bin"]);
-export const nonEditableDesktopIds = new Set(["browser", "settings", "bin"]);
+export const protectedDesktopIds = new Set(["assistant", "calendar", "weather", "calculator", "maps", "editor", "browser", "settings", "bin"]);
+export const nonPreviewableDesktopIds = new Set(["assistant", "calendar", "weather", "calculator", "maps", "browser", "settings", "bin", "editor"]);
 
 export const windowOffsets = {
-  about: { x: 90, y: 52 }, projects: { x: 52, y: 28 }, stack: { x: 120, y: 42 }, journey: { x: 145, y: 34 },
+  about: { x: 90, y: 52 }, projects: { x: 52, y: 28 }, assistant: { x: 88, y: 32 }, stack: { x: 120, y: 42 }, journey: { x: 145, y: 34 },
+  calendar: { x: 105, y: 36 }, weather: { x: 150, y: 48 }, calculator: { x: 230, y: 70 }, maps: { x: 82, y: 34 },
   terminal: { x: 180, y: 80 }, editor: { x: 118, y: 48 }, browser: { x: 58, y: 22 }, resume: { x: 135, y: 24 },
   contact: { x: 200, y: 74 }, settings: { x: 110, y: 38 }, bin: { x: 170, y: 58 },
 };
@@ -180,8 +193,13 @@ export const initialFileContents = {
   projects: personalDataObj.projects.map((project, index) => `${String(index + 1).padStart(2, "0")}. ${project.title} | ${project.category} | ${project.tech.join(", ")}`).join("\n"),
   stack: stackGroups.map((group) => `${group.title}\n${group.items.join(" · ")}`).join("\n\n"),
   journey: personalDataObj.experience.map((item) => `${item.time} | ${item.profile} at ${item.company}\n${item.description}`).join("\n\n"),
+  assistant: "Ask Nitin uses the verified resume and portfolio profile as its only professional knowledge source.",
+  calendar: "Calendar events are managed locally on this device.",
+  weather: "Live global weather powered by Open-Meteo.",
+  calculator: "A focused arithmetic calculator with memory controls.",
+  maps: "Nitin Kumar is professionally based in Noida, Uttar Pradesh, India and available for remote collaboration worldwide.",
   terminal: "# Terminal profile\nUse `help` inside Terminal to inspect available commands.",
-  editor: "# Workspace Notes\n\nSelect any portfolio file, open its context menu and choose Edit file.\n\nChanges are saved inside this browser and remain available after reload.",
+  editor: "# Quick Look\n\nSelect a portfolio file and press Space, or open its shortcut menu and choose Quick Look.\n\nPortfolio content is protected and cannot be edited.",
   resume: "Nitin Kumar — Full Stack Developer\nOpen this file normally to view the complete live resume or download the verified two-page PDF.",
   contact: `Nitin Kumar\nNoida, Uttar Pradesh, India\n${personalDataObj.email}\n${personalDataObj.github}\n${personalDataObj.linkedin}`,
 };

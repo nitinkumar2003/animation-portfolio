@@ -25,7 +25,7 @@ export const AboutApp = ({ onOpenProjects, t }) => (
           <div className="nkos-action-row"><button type="button" className="nkos-primary-action" onClick={onOpenProjects}><FiFolder /> Explore work</button><a href={`mailto:${personalDataObj.email}`} className="nkos-secondary-action"><FiMail /> Contact</a></div>
         </div>
       </div>
-      <div className="nkos-proof-strip"><div><strong>15</strong><span>Project systems</span></div><div><strong>4+</strong><span>Years building</span></div><div><strong>{skillInventory.length}</strong><span>Skills indexed</span></div><div><strong>Full</strong><span>Product ownership</span></div></div>
+      <div className="nkos-proof-strip"><div><strong>{personalDataObj.projects.length}</strong><span>Project systems</span></div><div><strong>4+</strong><span>Years building</span></div><div><strong>{skillInventory.length}</strong><span>Skills indexed</span></div><div><strong>Full</strong><span>Product ownership</span></div></div>
       <div className="nkos-capability-line"><span>PRODUCT UI</span><FiChevronRight /><span>API ARCHITECTURE</span><FiChevronRight /><span>DATA</span><FiChevronRight /><span>AI WORKFLOWS</span></div>
       <div className="nkos-availability-line"><FiCheck /><span>Open to freelance, remote, contract and long-term collaboration.</span></div>
     </article>

@@ -1622,7 +1622,7 @@ html.light ::-webkit-scrollbar-track {
   height: 36px;
   border-bottom: 1px solid var(--os-border);
   display: grid;
-  grid-template-columns: 1fr minmax(220px, 380px) 1fr;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   padding: 0 10px;
   background: rgba(7, 16, 20, 0.9);
@@ -1675,24 +1675,20 @@ html.light ::-webkit-scrollbar-track {
 }
 
 .nkos-menu-search {
-  width: 100%;
-  height: 26px;
-  border: 1px solid var(--os-border) !important;
+  width: 30px;
+  height: 28px;
+  border: 0 !important;
   border-radius: 5px;
-  display: grid;
-  grid-template-columns: 18px 1fr auto;
-  align-items: center;
-  gap: 6px;
-  padding: 0 8px;
-  color: #91a5ac;
-  background: rgba(255, 255, 255, 0.045);
-  text-align: left;
+  display: grid !important;
+  place-items: center;
+  padding: 0 !important;
+  color: #bdcbd0 !important;
+  background: transparent !important;
 }
 
-.nkos-menu-search kbd {
-  color: #71878f;
-  font-family: inherit;
-  font-size: 9px;
+.nkos-menu-search:hover {
+  color: var(--os-text) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
 }
 
 .nkos-menu-right {
@@ -1754,10 +1750,19 @@ html.light ::-webkit-scrollbar-track {
 }
 
 .nkos-desktop-files > button:hover,
-.nkos-desktop-files > button:focus-visible {
+.nkos-desktop-files > button:focus-visible,
+.nkos-desktop-files > button.selected {
   border-color: rgba(91, 188, 255, 0.35);
   background: rgba(91, 188, 255, 0.1);
   outline: 0;
+}
+
+.nkos-desktop-files > button.selected small {
+  border-radius: 3px;
+  padding: 2px 4px;
+  color: #fff;
+  background: #1768d4;
+  text-shadow: none;
 }
 
 .nkos-file-icon {
@@ -3661,20 +3666,13 @@ html.light ::-webkit-scrollbar-track {
 
 @media (max-width: 900px) {
   .nkos-menu-bar {
-    grid-template-columns: 1fr 220px 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .nkos-menu-left > button:not(.nkos-brand-button),
   .nkos-menu-left > b,
-  .nkos-menu-search span,
-  .nkos-menu-search kbd,
   .nkos-system-tray svg:nth-child(2) {
     display: none;
-  }
-
-  .nkos-menu-search {
-    grid-template-columns: 1fr;
-    place-items: center;
   }
 
   .nkos-window {
@@ -3791,13 +3789,12 @@ html.light ::-webkit-scrollbar-track {
 
   .nkos-menu-bar {
     height: 40px;
-    grid-template-columns: 1fr 40px 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
     padding: 0 7px;
   }
 
   .nkos-menu-search {
-    width: 32px;
-    justify-self: center;
+    width: 30px;
   }
 
   .nkos-menu-right > button:first-child,
@@ -4110,6 +4107,879 @@ html.light ::-webkit-scrollbar-track {
   .nkos-notification {
     right: 8px;
     bottom: 70px;
+  }
+}
+
+/* Nitin OS 3.0 system apps */
+.nkos-window-assistant,
+.nkos-window-calendar,
+.nkos-window-weather,
+.nkos-window-maps {
+  width: min(1120px, calc(100% - 180px));
+}
+
+.nkos-window-calculator {
+  width: min(410px, calc(100% - 36px));
+  height: min(650px, calc(100% - 70px));
+  min-width: 360px;
+  min-height: 560px;
+}
+
+.nkos-calendar-app {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  overflow: hidden;
+  background: var(--os-panel);
+}
+
+.nkos-calendar-main {
+  min-width: 0;
+  border-right: 1px solid var(--os-border);
+  padding: clamp(18px, 3vw, 30px);
+}
+
+.nkos-calendar-main > header,
+.nkos-calendar-agenda > header,
+.nkos-calendar-main > header > div,
+.nkos-calendar-main > header nav {
+  display: flex;
+  align-items: center;
+}
+
+.nkos-calendar-main > header {
+  min-height: 48px;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nkos-calendar-main > header > div {
+  gap: 11px;
+}
+
+.nkos-calendar-main > header > div > svg {
+  width: 28px;
+  height: 28px;
+  color: #ff6961;
+}
+
+.nkos-calendar-main b,
+.nkos-calendar-main small {
+  display: block;
+}
+
+.nkos-calendar-main b {
+  font-size: 20px;
+  text-transform: capitalize;
+}
+
+.nkos-calendar-main small {
+  margin-top: 3px;
+  color: var(--os-muted);
+  font-size: 8px;
+}
+
+.nkos-calendar-main > header nav {
+  gap: 5px;
+}
+
+.nkos-calendar-main > header button,
+.nkos-calendar-agenda > header > button {
+  min-width: 34px;
+  height: 34px;
+  border: 1px solid var(--os-border);
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  padding: 0 9px;
+  color: var(--os-text);
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 9px;
+}
+
+.nkos-calendar-weekdays,
+.nkos-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.nkos-calendar-weekdays {
+  margin-top: 20px;
+}
+
+.nkos-calendar-weekdays span {
+  min-height: 30px;
+  display: grid;
+  place-items: center;
+  color: var(--os-muted);
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.nkos-calendar-grid {
+  height: calc(100% - 98px);
+  min-height: 330px;
+  border: 1px solid var(--os-border);
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.nkos-calendar-grid > button,
+.nkos-calendar-grid > span {
+  position: relative;
+  min-width: 0;
+  min-height: 54px;
+  border-right: 1px solid var(--os-border);
+  border-bottom: 1px solid var(--os-border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 8px;
+  color: var(--os-text);
+  background: rgba(255, 255, 255, 0.012);
+  font-size: 9px;
+}
+
+.nkos-calendar-grid > button:nth-child(7n),
+.nkos-calendar-grid > span:nth-child(7n) {
+  border-right: 0;
+}
+
+.nkos-calendar-grid > :nth-last-child(-n + 7) {
+  border-bottom: 0;
+}
+
+.nkos-calendar-grid > button:hover,
+.nkos-calendar-grid > button.selected {
+  background: rgba(91, 188, 255, 0.08);
+}
+
+.nkos-calendar-grid > button.selected {
+  box-shadow: inset 0 0 0 1px var(--os-blue);
+}
+
+.nkos-calendar-grid > button.today > span {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #07110f;
+  background: var(--os-green);
+  font-weight: 900;
+}
+
+.nkos-calendar-grid > button i {
+  min-width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: #d64e4e;
+  font-size: 7px;
+  font-style: normal;
+}
+
+.nkos-calendar-agenda {
+  min-width: 0;
+  padding: 25px 18px;
+  overflow-y: auto;
+  background: #0c161b;
+}
+
+.nkos-calendar-agenda > header {
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nkos-calendar-agenda header small {
+  color: #ff8881;
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.nkos-calendar-agenda header h2 {
+  margin-top: 5px;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.nkos-calendar-agenda > header > button {
+  flex: 0 0 auto;
+  color: #07110f;
+  background: var(--os-green);
+}
+
+.nkos-agenda-list {
+  margin-top: 18px;
+  display: grid;
+  gap: 9px;
+}
+
+.nkos-agenda-list article {
+  position: relative;
+  border: 1px solid var(--os-border);
+  border-left: 3px solid var(--os-blue);
+  border-radius: 6px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.nkos-agenda-list article[data-category="interview"] { border-left-color: #ff6961; }
+.nkos-agenda-list article[data-category="project"] { border-left-color: var(--os-yellow); }
+.nkos-agenda-list article[data-category="personal"] { border-left-color: var(--os-purple); }
+
+.nkos-agenda-list time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--os-blue);
+  font-size: 8px;
+}
+
+.nkos-agenda-list h3 {
+  margin-top: 7px;
+  padding-right: 55px;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.nkos-agenda-list article > span {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--os-muted);
+  font-size: 7px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.nkos-agenda-list article > p {
+  margin-top: 7px;
+  color: var(--os-muted);
+  font-size: 8px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.nkos-agenda-list article footer {
+  position: absolute;
+  top: 9px;
+  right: 8px;
+  display: flex;
+  gap: 3px;
+}
+
+.nkos-agenda-list article footer button {
+  width: 25px;
+  height: 25px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  color: var(--os-muted);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nkos-agenda-list article footer button:last-child:hover { color: var(--os-red); }
+
+.nkos-calendar-empty {
+  min-height: 250px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 9px;
+  color: var(--os-muted);
+  font-size: 9px;
+}
+
+.nkos-calendar-empty svg {
+  width: 34px;
+  height: 34px;
+  opacity: 0.55;
+}
+
+.nkos-calendar-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(3, 8, 10, 0.68);
+  backdrop-filter: blur(8px);
+}
+
+.nkos-calendar-modal form {
+  width: min(440px, 100%);
+  border: 1px solid var(--os-border-strong);
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  background: #111c21;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+}
+
+.nkos-calendar-modal form > header,
+.nkos-calendar-modal form > footer,
+.nkos-calendar-modal form > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.nkos-calendar-modal header small {
+  color: var(--os-green);
+  font-size: 8px;
+}
+
+.nkos-calendar-modal header h3 {
+  max-width: 340px;
+  margin-top: 4px;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.nkos-calendar-modal header button {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  color: var(--os-muted);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nkos-calendar-modal label {
+  flex: 1;
+  display: grid;
+  gap: 5px;
+  color: var(--os-muted);
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.nkos-calendar-modal input,
+.nkos-calendar-modal select,
+.nkos-calendar-modal textarea {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--os-border);
+  border-radius: 5px;
+  outline: 0;
+  padding: 8px 9px;
+  color: var(--os-text);
+  background: #081217;
+  font: inherit;
+  font-size: 10px;
+  resize: vertical;
+}
+
+.nkos-calendar-modal input:focus,
+.nkos-calendar-modal select:focus,
+.nkos-calendar-modal textarea:focus { border-color: var(--os-green); }
+
+.nkos-calendar-modal form > footer {
+  justify-content: flex-end;
+}
+
+.nkos-calendar-modal footer button {
+  min-height: 34px;
+  border: 1px solid var(--os-border);
+  border-radius: 5px;
+  padding: 0 11px;
+  color: var(--os-muted);
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.nkos-calendar-modal footer button[type="submit"] {
+  border-color: transparent;
+  color: #06110e;
+  background: var(--os-green);
+}
+
+.nkos-calculator-app {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 42px 150px minmax(0, 1fr);
+  padding: 14px;
+  background: #11171a;
+}
+
+.nkos-calculator-memory {
+  display: grid;
+  grid-template-columns: repeat(4, 36px) 1fr;
+  align-items: center;
+  gap: 4px;
+}
+
+.nkos-calculator-memory button {
+  height: 30px;
+  border-radius: 4px;
+  color: var(--os-green);
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.nkos-calculator-memory span {
+  justify-self: end;
+  color: var(--os-muted);
+  font-size: 7px;
+}
+
+.nkos-calculator-display {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--os-border);
+  border-radius: 7px;
+  display: grid;
+  align-content: end;
+  justify-items: end;
+  padding: 17px;
+  overflow: hidden;
+  background: #080d10;
+}
+
+.nkos-calculator-display small {
+  min-height: 14px;
+  color: #65777e;
+  font-size: 9px;
+}
+
+.nkos-calculator-display output {
+  width: 100%;
+  margin-top: 10px;
+  color: #f4f8f8;
+  font-size: clamp(34px, 6vh, 56px);
+  line-height: 1;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nkos-calculator-display button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 27px;
+  height: 27px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  color: var(--os-muted);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nkos-calculator-grid {
+  min-height: 0;
+  margin-top: 9px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(5, minmax(56px, 1fr));
+  gap: 7px;
+}
+
+.nkos-calculator-grid button {
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.045);
+  border-radius: 7px;
+  color: #edf4f5;
+  background: #252d31;
+  font-size: 18px;
+  transition: transform 100ms ease, background 100ms ease;
+}
+
+.nkos-calculator-grid button:hover { background: #333d42; }
+.nkos-calculator-grid button:active { transform: scale(0.96); }
+.nkos-calculator-grid button.utility { color: #07100e; background: #b9c4c7; }
+.nkos-calculator-grid button.operator { color: #07100e; background: #f2a65a; font-size: 21px; }
+.nkos-calculator-grid button.zero { grid-column: span 2; }
+
+.nkos-weather-app {
+  height: 100%;
+  overflow-y: auto;
+  background: #0b151a;
+}
+
+.nkos-weather-app > header {
+  min-height: 58px;
+  border-bottom: 1px solid var(--os-border);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 36px 36px;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  background: #101b20;
+}
+
+.nkos-weather-app > header form {
+  height: 38px;
+  border: 1px solid var(--os-border);
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  padding-left: 10px;
+  background: #081217;
+}
+
+.nkos-weather-app > header input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: var(--os-text);
+  background: transparent;
+  font-size: 10px;
+}
+
+.nkos-weather-app > header form button,
+.nkos-weather-app > header > button {
+  height: 36px;
+  border: 1px solid var(--os-border);
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  padding: 0 12px;
+  color: var(--os-text);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.nkos-weather-content {
+  min-height: calc(100% - 58px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 12px;
+}
+
+.nkos-weather-now,
+.nkos-weather-forecast,
+.nkos-weather-sun {
+  border: 1px solid var(--os-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.nkos-weather-now {
+  position: relative;
+  min-height: 390px;
+  display: grid;
+  align-content: space-between;
+  padding: clamp(24px, 5vw, 52px);
+  color: #eef8fa;
+  background: linear-gradient(145deg, #176480, #174a60 52%, #102d3a);
+}
+
+.nkos-weather-now.night { background: linear-gradient(145deg, #26334c, #141e33 52%, #0b1425); }
+
+.nkos-weather-now::after {
+  content: "";
+  position: absolute;
+  right: -70px;
+  top: -70px;
+  width: 240px;
+  height: 240px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 50%;
+}
+
+.nkos-weather-location,
+.nkos-weather-temperature,
+.nkos-weather-metrics,
+.nkos-weather-metrics span,
+.nkos-weather-sun span {
+  display: flex;
+  align-items: center;
+}
+
+.nkos-weather-location { gap: 9px; }
+.nkos-weather-location b, .nkos-weather-location small { display: block; }
+.nkos-weather-location b { font-size: 12px; }
+.nkos-weather-location small { margin-top: 3px; color: rgba(255,255,255,0.62); font-size: 8px; }
+
+.nkos-weather-temperature { gap: 22px; }
+.nkos-weather-temperature > svg { width: clamp(72px, 10vw, 112px); height: clamp(72px, 10vw, 112px); stroke-width: 1; }
+.nkos-weather-temperature strong, .nkos-weather-temperature b, .nkos-weather-temperature small { display: block; }
+.nkos-weather-temperature strong { font-size: clamp(64px, 9vw, 112px); line-height: 0.85; }
+.nkos-weather-temperature b { margin-top: 10px; font-size: 14px; }
+.nkos-weather-temperature small { margin-top: 4px; color: rgba(255,255,255,0.65); font-size: 9px; }
+
+.nkos-weather-metrics {
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding-top: 20px;
+}
+
+.nkos-weather-metrics span {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 2px 7px;
+}
+
+.nkos-weather-metrics svg { grid-row: 1 / span 2; color: #a7e4f2; }
+.nkos-weather-metrics b { font-size: 11px; }
+.nkos-weather-metrics small { color: rgba(255,255,255,0.6); font-size: 7px; }
+
+.nkos-weather-forecast {
+  min-height: 390px;
+  padding: 20px;
+  background: rgba(255,255,255,0.025);
+}
+
+.nkos-weather-forecast > header {
+  display: flex;
+  justify-content: space-between;
+  color: var(--os-muted);
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.nkos-weather-forecast > div { margin-top: 12px; }
+.nkos-weather-forecast article {
+  min-height: 62px;
+  border-top: 1px solid var(--os-border);
+  display: grid;
+  grid-template-columns: 62px 30px 1fr 38px;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+}
+.nkos-weather-forecast article:first-child { border-top: 0; }
+.nkos-weather-forecast article > svg { width: 21px; height: 21px; color: var(--os-blue); }
+.nkos-weather-forecast article span { display: flex; gap: 7px; }
+.nkos-weather-forecast article small { color: var(--os-muted); }
+.nkos-weather-forecast article em { color: var(--os-blue); font-size: 8px; font-style: normal; }
+
+.nkos-weather-sun {
+  min-height: 76px;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr minmax(80px, 2fr) 1fr;
+  align-items: center;
+  padding: 12px 20px;
+  background: rgba(255,255,255,0.025);
+}
+.nkos-weather-sun i { height: 1px; background: linear-gradient(90deg, var(--os-yellow), var(--os-blue)); }
+.nkos-weather-sun span { gap: 9px; }
+.nkos-weather-sun span:last-child { justify-content: flex-end; }
+.nkos-weather-sun svg { color: var(--os-yellow); }
+.nkos-weather-sun small { color: var(--os-muted); font-size: 8px; }
+.nkos-weather-sun b { font-size: 10px; }
+.nkos-weather-credit { grid-column: 1 / -1; justify-self: end; color: var(--os-muted); font-size: 7px; }
+
+.nkos-weather-loading,
+.nkos-weather-error {
+  height: calc(100% - 58px);
+  min-height: 360px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  color: var(--os-muted);
+  text-align: center;
+  font-size: 9px;
+}
+.nkos-weather-loading > span { width: 30px; height: 30px; border: 2px solid var(--os-border); border-top-color: var(--os-blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
+.nkos-weather-error > svg { width: 48px; height: 48px; color: var(--os-blue); }
+.nkos-weather-error h3 { color: var(--os-text); font-size: 18px; }
+.nkos-weather-error button { min-height: 34px; border: 1px solid var(--os-border); border-radius: 5px; padding: 0 11px; color: var(--os-blue); background: rgba(91,188,255,0.06); font-size: 9px; }
+
+.nkos-maps-app {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 58px minmax(0, 1fr) 88px;
+  background: #0a1419;
+}
+
+.nkos-maps-app > header {
+  border-bottom: 1px solid var(--os-border);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  background: #101b20;
+}
+
+.nkos-maps-app form {
+  height: 38px;
+  border: 1px solid var(--os-border);
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  padding-left: 10px;
+  background: #081217;
+}
+.nkos-maps-app input { min-width: 0; border: 0; outline: 0; color: var(--os-text); background: transparent; font-size: 10px; }
+.nkos-maps-app header button, .nkos-maps-app footer a { min-height: 36px; border: 1px solid var(--os-border); border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 11px; color: var(--os-text); background: rgba(255,255,255,0.04); font-size: 9px; font-weight: 800; }
+.nkos-maps-canvas { min-height: 0; background: #d8dddc; }
+.nkos-maps-canvas iframe { width: 100%; height: 100%; border: 0; filter: saturate(0.78) contrast(1.02); }
+.nkos-maps-app > footer { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 16px; }
+.nkos-maps-app footer > div, .nkos-maps-app footer nav { display: flex; align-items: center; gap: 9px; }
+.nkos-maps-app footer > div > span { width: 36px; height: 36px; border-radius: 6px; display: grid; place-items: center; color: #07100e; background: #69d174; }
+.nkos-maps-app footer p > * { display: block; }
+.nkos-maps-app footer p small { color: #69d174; font-size: 7px; font-weight: 900; }
+.nkos-maps-app footer p b { margin-top: 3px; font-size: 10px; }
+.nkos-maps-app footer p em { margin-top: 2px; color: var(--os-muted); font-size: 8px; font-style: normal; }
+
+.nkos-assistant-app {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 235px minmax(0, 1fr);
+  overflow: hidden;
+  background: var(--os-panel);
+}
+
+.nkos-assistant-app > aside {
+  border-right: 1px solid var(--os-border);
+  display: flex;
+  flex-direction: column;
+  padding: 26px 18px 18px;
+  background: #0b151a;
+}
+
+.nkos-assistant-profile { text-align: center; }
+.nkos-assistant-profile > span { position: relative; width: 78px; height: 78px; margin: 0 auto; display: block; }
+.nkos-assistant-profile img { width: 78px; height: 78px; border: 2px solid var(--os-green); border-radius: 50%; object-fit: cover; object-position: center 18%; }
+.nkos-assistant-profile i { position: absolute; right: 3px; bottom: 5px; width: 13px; height: 13px; border: 3px solid #0b151a; border-radius: 50%; background: var(--os-green); }
+.nkos-assistant-profile h2 { margin-top: 12px; font-size: 21px; }
+.nkos-assistant-profile p { margin-top: 5px; color: var(--os-green); font-size: 7px; font-weight: 900; }
+
+.nkos-assistant-status { margin-top: 27px; border-top: 1px solid var(--os-border); padding-top: 15px; display: grid; gap: 8px; }
+.nkos-assistant-status > span { min-height: 55px; border: 1px solid var(--os-border); border-radius: 6px; display: grid; grid-template-columns: 26px 1fr; align-items: center; gap: 2px 7px; padding: 9px; background: rgba(255,255,255,0.025); }
+.nkos-assistant-status svg { grid-row: 1 / span 2; color: var(--os-green); }
+.nkos-assistant-status b, .nkos-assistant-status small { display: block; }
+.nkos-assistant-status b { font-size: 9px; }
+.nkos-assistant-status small { color: var(--os-muted); font-size: 7px; }
+.nkos-assistant-app > aside > button { min-height: 36px; margin-top: auto; border: 1px solid var(--os-border); border-radius: 5px; display: flex; align-items: center; justify-content: center; gap: 7px; color: var(--os-muted); background: rgba(255,255,255,0.03); font-size: 8px; font-weight: 800; }
+
+.nkos-assistant-app > main { min-width: 0; min-height: 0; display: grid; grid-template-rows: 55px minmax(0, 1fr) auto auto; background: #0e181d; }
+.nkos-assistant-app > main > header { border-bottom: 1px solid var(--os-border); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+.nkos-assistant-app > main > header > span { display: grid; grid-template-columns: 28px 1fr; align-items: center; gap: 1px 8px; }
+.nkos-assistant-app > main > header svg { grid-row: 1 / span 2; color: var(--os-green); }
+.nkos-assistant-app > main > header b, .nkos-assistant-app > main > header small { display: block; }
+.nkos-assistant-app > main > header b { font-size: 10px; }
+.nkos-assistant-app > main > header small { color: var(--os-muted); font-size: 7px; }
+.nkos-assistant-app > main > header em { display: flex; align-items: center; gap: 6px; color: var(--os-green); font-size: 7px; font-style: normal; font-weight: 900; }
+.nkos-assistant-app > main > header em i { width: 6px; height: 6px; border-radius: 50%; background: var(--os-green); box-shadow: 0 0 8px var(--os-green); }
+
+.nkos-assistant-messages { min-height: 0; overflow-y: auto; padding: 20px; }
+.nkos-assistant-messages article { max-width: min(680px, 88%); margin-bottom: 13px; display: grid; grid-template-columns: 29px minmax(0, 1fr); gap: 8px; align-items: start; }
+.nkos-assistant-messages article.user { margin-left: auto; grid-template-columns: minmax(0, 1fr) 29px; }
+.nkos-assistant-messages article > span { width: 29px; height: 29px; border-radius: 5px; display: grid; place-items: center; color: #06110e; background: var(--os-green); font-size: 7px; font-weight: 900; }
+.nkos-assistant-messages article.user > span { grid-column: 2; grid-row: 1; color: #eff7f8; background: #2f6d86; }
+.nkos-assistant-messages article p { border: 1px solid var(--os-border); border-radius: 7px; padding: 11px 12px; color: #c0ced2; background: rgba(255,255,255,0.035); font-size: 10px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.nkos-assistant-messages article.user p { grid-column: 1; grid-row: 1; background: rgba(47,109,134,0.25); }
+.nkos-assistant-messages article.error p { border-color: rgba(255,107,107,0.3); color: #ffaaaa; }
+.nkos-assistant-messages article.loading p { width: 58px; display: flex; gap: 4px; }
+.nkos-assistant-messages article.loading p i { width: 5px; height: 5px; border-radius: 50%; background: var(--os-green); animation: nkosTyping 0.9s ease-in-out infinite alternate; }
+.nkos-assistant-messages article.loading p i:nth-child(2) { animation-delay: 0.18s; }
+.nkos-assistant-messages article.loading p i:nth-child(3) { animation-delay: 0.36s; }
+@keyframes nkosTyping { to { opacity: 0.25; transform: translateY(-3px); } }
+
+.nkos-assistant-suggestions { border-top: 1px solid var(--os-border); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 10px 14px; }
+.nkos-assistant-suggestions button { min-height: 38px; border: 1px solid var(--os-border); border-radius: 5px; padding: 7px 9px; color: var(--os-muted); background: rgba(255,255,255,0.025); font-size: 8px; line-height: 1.35; text-align: left; }
+.nkos-assistant-suggestions button:hover { border-color: rgba(69,230,176,0.35); color: var(--os-text); }
+
+.nkos-assistant-app > main > form { min-height: 65px; border-top: 1px solid var(--os-border); display: grid; grid-template-columns: minmax(0, 1fr) auto 38px; align-items: center; gap: 8px; padding: 10px 14px; background: #0b151a; }
+.nkos-assistant-app textarea { min-width: 0; max-height: 72px; border: 1px solid var(--os-border); border-radius: 6px; outline: 0; padding: 10px; color: var(--os-text); background: #071116; font-family: inherit; font-size: 9px; line-height: 1.4; resize: none; }
+.nkos-assistant-app textarea:focus { border-color: var(--os-green); }
+.nkos-assistant-app > main > form > span { color: var(--os-muted); font-size: 7px; }
+.nkos-assistant-app > main > form > button { width: 38px; height: 38px; border-radius: 6px; display: grid; place-items: center; color: #06110e; background: var(--os-green); }
+.nkos-assistant-app > main > form > button:disabled { color: var(--os-muted); background: #263238; cursor: not-allowed; }
+
+.nkos-root.theme-light :is(.nkos-calendar-app, .nkos-weather-app, .nkos-maps-app, .nkos-assistant-app) { background: #f7fafb; }
+.nkos-root.theme-light :is(.nkos-calendar-agenda, .nkos-assistant-app > aside, .nkos-assistant-app > main, .nkos-assistant-app > main > form, .nkos-weather-app > header, .nkos-maps-app > header) { background: #edf2f4; }
+.nkos-root.theme-light :is(.nkos-calendar-modal form, .nkos-calendar-modal input, .nkos-calendar-modal select, .nkos-calendar-modal textarea, .nkos-weather-app > header form, .nkos-maps-app form, .nkos-assistant-app textarea) { color: var(--os-text); background: #fff; }
+.nkos-root.theme-light .nkos-calculator-app { background: #e8edef; }
+.nkos-root.theme-light .nkos-calculator-display { background: #f9fbfb; }
+.nkos-root.theme-light .nkos-calculator-display output { color: #17272e; }
+.nkos-root.theme-light .nkos-calculator-grid button { color: #17272e; background: #d9e0e2; }
+.nkos-root.theme-light .nkos-calculator-grid button.utility { background: #aebabc; }
+.nkos-root.theme-light .nkos-calculator-grid button.operator { background: #f2a65a; }
+.nkos-root.theme-light .nkos-assistant-messages article p { color: #354a52; background: #fff; }
+.nkos-root.theme-light .nkos-assistant-messages article.user p { background: #dcecf2; }
+
+.nkos-dock {
+  width: max-content;
+  max-width: calc(100% - 16px);
+  overflow: visible;
+}
+
+.nkos-start-menu { max-height: calc(100% - 96px); overflow-y: auto; }
+
+@media (max-width: 900px) {
+  .nkos-window-assistant,
+  .nkos-window-calendar,
+  .nkos-window-weather,
+  .nkos-window-maps { width: calc(100% - 36px); }
+  .nkos-calendar-app { grid-template-columns: minmax(0, 1fr) 270px; }
+  .nkos-weather-content { grid-template-columns: 1fr; }
+  .nkos-weather-sun, .nkos-weather-credit { grid-column: 1; }
+  .nkos-weather-now, .nkos-weather-forecast { min-height: 360px; }
+}
+
+@media (max-width: 760px) {
+  .nkos-window-calculator { width: 100%; height: 100%; min-width: 0; min-height: 0; }
+  .nkos-calendar-app { display: block; overflow-y: auto; }
+  .nkos-calendar-main { min-height: 570px; border-right: 0; border-bottom: 1px solid var(--os-border); padding: 14px; }
+  .nkos-calendar-main b { font-size: 15px; }
+  .nkos-calendar-grid { height: 430px; min-height: 430px; }
+  .nkos-calendar-grid > button, .nkos-calendar-grid > span { min-height: 60px; padding: 5px; }
+  .nkos-calendar-agenda { min-height: 340px; overflow: visible; }
+  .nkos-calendar-modal { position: fixed; z-index: 400; overflow-y: auto; }
+  .nkos-calendar-modal form > div { display: grid; grid-template-columns: 1fr 1fr; }
+  .nkos-calculator-app { grid-template-rows: 38px 125px minmax(0, 1fr); padding: 10px; }
+  .nkos-calculator-grid { grid-template-rows: repeat(5, minmax(50px, 1fr)); }
+  .nkos-weather-content { display: block; padding: 8px; }
+  .nkos-weather-now, .nkos-weather-forecast, .nkos-weather-sun { margin-bottom: 8px; }
+  .nkos-weather-now { min-height: 365px; padding: 24px; }
+  .nkos-weather-temperature { gap: 12px; }
+  .nkos-weather-metrics { gap: 8px; }
+  .nkos-weather-metrics span { grid-template-columns: 18px 1fr; gap: 2px 4px; }
+  .nkos-weather-sun { grid-template-columns: 1fr 40px 1fr; }
+  .nkos-maps-app { grid-template-rows: auto minmax(380px, 1fr) auto; overflow-y: auto; }
+  .nkos-maps-app > header { grid-template-columns: 1fr; }
+  .nkos-maps-app > footer { align-items: flex-start; display: grid; }
+  .nkos-maps-app footer nav { width: 100%; }
+  .nkos-maps-app footer nav a { flex: 1; }
+  .nkos-assistant-app { display: block; overflow-y: auto; }
+  .nkos-assistant-app > aside { min-height: 148px; border-right: 0; border-bottom: 1px solid var(--os-border); display: grid; grid-template-columns: 90px 1fr; padding: 14px; }
+  .nkos-assistant-profile > span { width: 56px; height: 56px; }
+  .nkos-assistant-profile img { width: 56px; height: 56px; }
+  .nkos-assistant-profile h2 { margin-top: 7px; font-size: 15px; }
+  .nkos-assistant-status { margin-top: 0; border-top: 0; padding-top: 0; }
+  .nkos-assistant-status > span { min-height: 48px; }
+  .nkos-assistant-app > aside > button { display: none; }
+  .nkos-assistant-app > main { height: calc(100% - 148px); min-height: 500px; }
+  .nkos-assistant-suggestions { grid-template-columns: 1fr; }
+  .nkos-assistant-messages { padding: 14px 10px; }
+  .nkos-assistant-messages article { max-width: 96%; }
+  .nkos-dock { gap: 2px; padding: 5px; }
+  .nkos-dock > button { width: 30px; height: 40px; }
+  .nkos-dock > button svg { width: 17px; height: 17px; }
+  .nkos-dock > i { margin: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nkos-root *, .nkos-root *::before, .nkos-root *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
@@ -4609,7 +5479,15 @@ html.light ::-webkit-scrollbar-track {
 }
 
 .nkos-editor-app > header em {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   color: var(--os-green);
+}
+
+.nkos-editor-app > header em svg {
+  width: 11px;
+  height: 11px;
 }
 
 .nkos-editor-app > header button {
@@ -4646,17 +5524,20 @@ html.light ::-webkit-scrollbar-track {
   display: block;
 }
 
-.nkos-editor-workspace > textarea {
+.nkos-editor-workspace > pre {
   width: 100%;
   height: 100%;
-  resize: none;
+  margin: 0;
+  overflow: auto;
   border: 0;
   outline: 0;
   padding: 18px;
   color: #c4d3d6;
   background: #071015;
-  caret-color: var(--os-green);
   font: 12px/1.75 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
 }
 
 .nkos-editor-app > footer {
@@ -5743,7 +6624,7 @@ html.light ::-webkit-scrollbar-track {
     padding: 14px 7px;
   }
 
-  .nkos-editor-workspace > textarea {
+  .nkos-editor-workspace > pre {
     padding: 14px 11px;
     font-size: 11px;
   }

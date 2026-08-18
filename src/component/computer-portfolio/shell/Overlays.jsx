@@ -36,7 +36,7 @@ export const StartMenu = ({ onOpen, onClose, preferences }) => {
     <div className="nkos-start-profile"><img src={profileImg.src} alt="" /><span><b>Nitin Kumar</b><small>Full Stack Developer</small></span><button type="button" onClick={onClose} aria-label="Close menu"><FiX /></button></div>
     <div className="nkos-start-heading"><span>PINNED</span><small>{formatTime(now, preferences)}</small></div>
     <div className="nkos-start-grid">{appCatalog.map((app) => { const Icon = app.icon; return <button type="button" key={app.id} onClick={() => onOpen(app.id)}><span style={{ "--app-color": app.color }}><Icon /></span><small>{app.label}</small></button>; })}</div>
-    <div className="nkos-start-recent"><span>FEATURED WORK</span>{personalDataObj.projects.slice(13, 15).map((project) => <button type="button" key={project.id} onClick={() => onOpen("projects", project)}><img src={project.img} alt="" /><span><b>{project.title}</b><small>{project.category}</small></span><FiChevronRight /></button>)}</div>
+    <div className="nkos-start-recent"><span>FEATURED WORK</span>{personalDataObj.projects.slice(-2).map((project) => <button type="button" key={project.id} onClick={() => onOpen("projects", project)}><img src={project.img} alt="" /><span><b>{project.title}</b><small>{project.category}</small></span><FiChevronRight /></button>)}</div>
   </motion.div>;
 };
 

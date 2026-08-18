@@ -50,6 +50,9 @@ export const WindowFrame = ({
     >
       <header
         className="nkos-window-bar"
+        onDoubleClick={(event) => {
+          if (!event.target.closest(".nkos-window-controls")) onMaximize();
+        }}
         onPointerDown={(event) => {
           if (!maximized && !compact) dragControls.start(event);
         }}
