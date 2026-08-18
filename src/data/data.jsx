@@ -11,7 +11,7 @@ export const personalDataObj = {
   instagram: "https://www.instagram.com/n_k__0_3?igsh=Z3ZldHE2bjJ0aWFr",
 
   about:
-    "I'm a passionate Full Stack Developer with 4+ years of experience building modern, scalable web applications. I specialize in React.js, Next.js, Node.js, and AI integrations. I love crafting pixel-perfect UIs and robust backend architectures that deliver exceptional user experiences.",
+    "Full Stack Developer with 4+ years of experience building scalable web and mobile applications, AI-powered SaaS platforms, admin systems, realtime products, and payment-enabled workflows. I work across product UI, APIs, authentication, AI integrations, data design, deployment, and performance optimization.",
 
   stats: [
     { value: "4+", label: "Years Experience" },

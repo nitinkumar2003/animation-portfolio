@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { personalDataObj } from "../data/data";
 import SectionHeading from "./ui/SectionHeading";
 import { useTheme } from "../context/ThemeContext";
-import resumePDF from "../assets/Resume.pdf";
+import resumePDF from "../../NitinKumar.pdf";
 import { FiDownload } from "react-icons/fi";
 
 const tabs = ["Experience", "Education", "Certificate"];

@@ -8,7 +8,7 @@ import { FaPlay } from "react-icons/fa";
 import { TypeAnimation } from "react-type-animation";
 import { personalDataObj } from "../data/data";
 import { useTheme } from "../context/ThemeContext";
-import resumePDF from "../assets/Resume.pdf";
+import resumePDF from "../../NitinKumar.pdf";
 import profileImg from "../assets/image_01.jpg";
 
 const socialLinks = [

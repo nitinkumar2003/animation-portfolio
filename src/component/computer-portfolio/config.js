@@ -2,10 +2,13 @@ import {
   FiActivity,
   FiBriefcase,
   FiCompass,
+  FiCode,
+  FiCreditCard,
   FiDatabase,
   FiEdit3,
   FiFileText,
   FiFolder,
+  FiGitBranch,
   FiLayers,
   FiMail,
   FiMonitor,
@@ -28,33 +31,76 @@ export const bootSteps = [
 
 export const stackGroups = [
   {
-    title: "Interface Layer",
+    title: "Frontend Engineering",
     icon: FiMonitor,
     color: "#45e6b0",
-    summary: "Fast, responsive product interfaces",
-    items: ["React.js", "Next.js", "TypeScript", "Tailwind CSS", "Redux Toolkit", "Framer Motion"],
+    summary: "Responsive web and mobile product interfaces",
+    level: "PRIMARY",
+    items: ["React.js", "Next.js", "TypeScript", "JavaScript (ES6+)", "React Native", "HTML5", "CSS3", "Tailwind CSS", "Bootstrap", "Ant Design", "Framer Motion", "jQuery"],
   },
   {
-    title: "Service Layer",
-    icon: FiServer,
+    title: "State, Forms & Quality",
+    icon: FiCode,
     color: "#5bbcff",
-    summary: "Scalable APIs and realtime systems",
-    items: ["Node.js", "Express.js", "NestJS", "REST APIs", "Socket.io", "JWT / Auth"],
+    summary: "Predictable state, validation and reusable systems",
+    level: "STRONG",
+    items: ["Redux Toolkit", "Redux Persist", "React Query", "React Hook Form", "Zustand", "Zod", "Yup", "Custom Hooks", "HOCs", "ESLint"],
   },
   {
-    title: "Data Layer",
-    icon: FiDatabase,
+    title: "Backend & Realtime",
+    icon: FiServer,
     color: "#ffc857",
-    summary: "Reliable product data and state",
-    items: ["MongoDB", "PostgreSQL", "Supabase", "Firebase", "Redis", "SQL"],
+    summary: "Secure APIs, authentication and live systems",
+    level: "STRONG",
+    items: ["Node.js", "Express.js", "NestJS", "RESTful APIs", "Socket.IO", "JWT", "Authentication", "Multi-role RBAC"],
   },
   {
-    title: "Intelligence Layer",
-    icon: FiActivity,
-    color: "#ff6b6b",
-    summary: "AI workflows, SaaS and payments",
-    items: ["OpenAI", "Gemini", "Groq", "AI SaaS", "Stripe", "Razorpay"],
+    title: "Data & Infrastructure",
+    icon: FiDatabase,
+    color: "#ff8f70",
+    summary: "Product data, caching and managed backends",
+    level: "PRODUCTION",
+    items: ["MongoDB", "SQL", "PostgreSQL", "Supabase", "Firebase", "Redis"],
   },
+  {
+    title: "AI & Payments",
+    icon: FiCreditCard,
+    color: "#b9a7ff",
+    summary: "Commercial AI products, checkout and subscriptions",
+    level: "INTEGRATIONS",
+    items: ["OpenAI", "Gemini", "Groq", "DeepSeek", "Venice AI", "AI SaaS", "Stripe", "Razorpay", "PayPal", "Cybersource"],
+  },
+  {
+    title: "Delivery & Practices",
+    icon: FiGitBranch,
+    color: "#62d7ff",
+    summary: "Maintainable delivery from repository to production",
+    level: "END TO END",
+    items: ["Git", "GitHub", "Vite", "Agile", "Code Reviews", "Performance Optimization", "Lazy Loading", "Code Splitting", "Deployment"],
+  },
+];
+
+export const skillInventory = stackGroups.flatMap((group) => (
+  group.items.map((name) => ({ name, group: group.title, color: group.color, icon: group.icon, level: group.level }))
+));
+
+export const productDomains = [
+  "AI ChatGPT-like SaaS", "E-commerce", "Invoice Management", "Food Delivery", "Real Estate", "Live Streaming",
+  "CRM & Admin Dashboards", "Multi-role Authentication", "Property Management", "AI Data Platforms",
+  "Business Analytics", "Booking & Enquiry Management",
+];
+
+export const deliveryCapabilities = [
+  "Product UI", "Backend APIs", "Authentication", "Payment Integration", "AI Integration", "Database Design",
+  "Realtime Features", "Deployment", "Performance Optimization", "Team Mentoring",
+];
+
+export const resumeHighlights = [
+  "Delivered reusable React, Next.js and TypeScript interfaces across 8+ client projects.",
+  "Integrated 40+ REST APIs and built secure authentication and realtime Socket.IO workflows.",
+  "Shipped AI SaaS experiences using OpenAI, Gemini and Venice AI with production payment flows.",
+  "Improved bundle size by 30% and load times by 40% through code splitting, lazy loading and memoization.",
+  "Led code reviews and mentored 6 junior developers across product teams.",
 ];
 
 export const projectFilters = ["All", "Full Stack", "AI / SaaS", "Dashboard", "Frontend"];
@@ -62,7 +108,7 @@ export const projectFilters = ["All", "Full Stack", "AI / SaaS", "Dashboard", "F
 export const appCatalog = [
   { id: "about", label: "About Nitin", file: "README.md", icon: FiUser, color: "#45e6b0", keywords: "profile bio full stack developer" },
   { id: "projects", label: "Project Explorer", file: "Projects", icon: FiFolder, color: "#ffc857", keywords: "work case studies apps code client" },
-  { id: "stack", label: "System Architecture", file: "Tech Stack.app", icon: FiLayers, color: "#5bbcff", keywords: "skills react next node typescript ai database" },
+  { id: "stack", label: "System Architecture", file: "Tech Stack.app", icon: FiLayers, color: "#5bbcff", keywords: "skills html css javascript typescript bootstrap tailwind jquery react next react native ant design framer motion redux react query zustand zod yup node express nest rest socket jwt mongodb sql postgres firebase supabase redis openai gemini groq deepseek venice stripe razorpay paypal cybersource git github vite eslint deployment" },
   { id: "journey", label: "Career Timeline", file: "Experience.log", icon: FiBriefcase, color: "#ff8f70", keywords: "experience education career ibyte ideahelix" },
   { id: "terminal", label: "Developer Terminal", file: "Terminal", icon: FiTerminal, color: "#b9a7ff", keywords: "command line console cli" },
   { id: "editor", label: "Code & Notes Editor", file: "Workspace.nk", icon: FiEdit3, color: "#7fe0c2", keywords: "edit notes text file code workspace save" },
@@ -119,6 +165,7 @@ export const wallpapers = [
 ];
 
 export const defaultPreferences = {
+  theme: "dark",
   wallpaper: "circuit",
   region: "IN",
   timezone: "Asia/Kolkata",
@@ -129,12 +176,12 @@ export const defaultPreferences = {
 };
 
 export const initialFileContents = {
-  about: `# Nitin Kumar\n\nFull Stack Developer with 4+ years of experience building modern, scalable web products.\n\nCore stack: React.js, Next.js, Node.js, TypeScript, MongoDB, PostgreSQL and AI integrations.`,
+  about: `# Nitin Kumar\n\nFull Stack Developer with 4+ years of experience building scalable web applications, SaaS platforms, admin dashboards, AI systems and realtime products.\n\nAvailable for freelance projects, remote work, contract roles and long-term collaboration.`,
   projects: personalDataObj.projects.map((project, index) => `${String(index + 1).padStart(2, "0")}. ${project.title} | ${project.category} | ${project.tech.join(", ")}`).join("\n"),
   stack: stackGroups.map((group) => `${group.title}\n${group.items.join(" · ")}`).join("\n\n"),
   journey: personalDataObj.experience.map((item) => `${item.time} | ${item.profile} at ${item.company}\n${item.description}`).join("\n\n"),
   terminal: "# Terminal profile\nUse `help` inside Terminal to inspect available commands.",
   editor: "# Workspace Notes\n\nSelect any portfolio file, open its context menu and choose Edit file.\n\nChanges are saved inside this browser and remain available after reload.",
-  resume: "Nitin Kumar — Full Stack Developer\nOpen this file normally to view the complete live resume and save it as PDF.",
+  resume: "Nitin Kumar — Full Stack Developer\nOpen this file normally to view the complete live resume or download the verified two-page PDF.",
   contact: `Nitin Kumar\nNoida, Uttar Pradesh, India\n${personalDataObj.email}\n${personalDataObj.github}\n${personalDataObj.linkedin}`,
 };
