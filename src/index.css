@@ -3011,7 +3011,8 @@ html.light ::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
 }
 
-.nkos-resume-app object {
+.nkos-resume-app object,
+.nkos-resume-app iframe {
   width: 100%;
   height: 100%;
 }
@@ -4977,6 +4978,36 @@ html.light ::-webkit-scrollbar-track {
   font-size: 9px;
 }
 
+.nkos-document-name {
+  min-width: 0;
+  color: var(--os-text);
+}
+
+.nkos-document-name > svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  color: var(--os-red);
+}
+
+.nkos-document-name b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+}
+
+.nkos-document-name small {
+  color: var(--os-muted);
+  font-size: 8px;
+}
+
+.nkos-pdf-viewer {
+  min-width: 0;
+  border: 0;
+  background: #3f4549;
+}
+
 .nkos-live-resume {
   width: min(880px, calc(100% - 28px));
   margin: 18px auto;
@@ -5583,6 +5614,14 @@ html.light ::-webkit-scrollbar-track {
     white-space: nowrap;
   }
 
+  .nkos-document-name b {
+    max-width: 122px;
+  }
+
+  .nkos-document-name small {
+    display: none;
+  }
+
   .nkos-document-toolbar button span,
   .nkos-document-toolbar a span {
     display: none;
@@ -5831,6 +5870,51 @@ html.light .premium-input:focus {
   0%   { width: 0%; }
   60%  { width: 72%; }
   100% { width: 100%; }
+}
+
+.nkos-next-loading,
+.nkos-route-message {
+  width: 100%;
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  color: #eef7f8;
+  background: #05090c;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+}
+
+.nkos-next-loading > span,
+.nkos-route-message > span {
+  width: 54px;
+  height: 54px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  color: #04100d;
+  background: #45e6b0;
+  font-weight: 900;
+}
+
+.nkos-next-loading p,
+.nkos-route-message p {
+  color: #8fa5ad;
+  font-size: 12px;
+}
+
+.nkos-route-message h1 {
+  font-size: 34px;
+}
+
+.nkos-route-message a {
+  min-height: 38px;
+  border: 1px solid rgba(69, 230, 176, 0.4);
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 13px;
+  color: #45e6b0;
 }
 
 /* Nitin OS 2.2: appearance, movable desktop and system status */

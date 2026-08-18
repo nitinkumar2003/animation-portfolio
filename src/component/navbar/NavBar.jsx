@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate, useLocation } from "react-router-dom";
+import { usePathname, useRouter } from "next/navigation";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
 import { HiSun, HiMoon } from "react-icons/hi";
@@ -10,8 +10,8 @@ import { useTheme } from "../../context/ThemeContext";
 
 const NavBar = () => {
   const { dark, toggleDark } = useTheme();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const isHome = pathname === "/";
 
   const [isOpen, setIsOpen] = useState(false);
@@ -50,7 +50,7 @@ const NavBar = () => {
       const el = document.getElementById(id);
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
-      navigate("/");
+      router.push(`/#${id}`);
     }
   };
 
@@ -60,7 +60,7 @@ const NavBar = () => {
     if (isHome) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      navigate("/");
+      router.push("/");
     }
   };
 

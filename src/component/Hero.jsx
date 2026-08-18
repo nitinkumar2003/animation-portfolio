@@ -8,8 +8,9 @@ import { FaPlay } from "react-icons/fa";
 import { TypeAnimation } from "react-type-animation";
 import { personalDataObj } from "../data/data";
 import { useTheme } from "../context/ThemeContext";
-import resumePDF from "../../NitinKumar.pdf";
-import profileImg from "../assets/image_01.jpg";
+import profileImg from "../assets/images.jpg";
+
+const resumePDF = "/NitinKumar.pdf";
 
 const socialLinks = [
   { name: "GitHub", url: "https://github.com/nitinkumar2003", icon: AiFillGithub },
@@ -283,7 +284,7 @@ const Hero = () => {
               }}
             >
               <img
-                src={profileImg}
+                src={profileImg.src}
                 alt="Nitin Kumar"
                 className="w-full h-full object-cover object-top"
               />

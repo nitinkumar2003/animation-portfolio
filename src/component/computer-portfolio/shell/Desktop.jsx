@@ -73,8 +73,9 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff }) => 
     const storedItems = loadStoredValue("nkos-desktop-items", []);
     return appCatalog.map((app) => {
       const stored = storedItems.find((item) => item.id === app.id);
+      const storedName = app.id === "resume" && stored?.name === "Nitin_Kumar.pdf" ? app.file : stored?.name;
       return stored
-        ? { ...stored, name: stored.name || app.file, content: stored.content ?? initialFileContents[app.id] ?? "" }
+        ? { ...stored, name: storedName || app.file, content: stored.content ?? initialFileContents[app.id] ?? "" }
         : { id: app.id, name: app.file, content: initialFileContents[app.id] ?? "", deleted: false, deletedAt: null };
     });
   });
@@ -252,14 +253,14 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff }) => 
       </div>
 
       <AnimatePresence>
-        {searchOpen && <SearchPanel query={searchQuery} setQuery={setSearchQuery} results={searchResults} indexedCount={appCatalog.length + personalDataObj.projects.length + skillInventory.length + productDomains.length} onSelect={(item) => openApp(item.app, item.project)} onClose={() => setSearchOpen(false)} t={t} />}
-        {startOpen && <StartMenu onOpen={openApp} onClose={() => setStartOpen(false)} preferences={preferences} />}
-        {quickOpen && <QuickSettings focusMode={focusMode} setFocusMode={setFocusMode} soundOn={soundOn} setSoundOn={setSoundOn} battery={battery} preferences={preferences} setPreferences={setPreferences} resolvedTheme={resolvedTheme} onOpenSettings={() => openApp("settings")} t={t} />}
-        {notification && <motion.div className="nkos-notification" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 30 }}><span><FiCheck /></span><div><b>Nitin OS</b><p>{notification}</p></div><button type="button" onClick={() => setNotification("")} aria-label="Dismiss notification"><FiX /></button></motion.div>}
-        {contextMenu && <motion.div className="nkos-context-menu" style={{ left: contextMenu.x, top: contextMenu.y }} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} onClick={(event) => event.stopPropagation()}>
+        {searchOpen && <SearchPanel key="search" query={searchQuery} setQuery={setSearchQuery} results={searchResults} indexedCount={appCatalog.length + personalDataObj.projects.length + skillInventory.length + productDomains.length} onSelect={(item) => openApp(item.app, item.project)} onClose={() => setSearchOpen(false)} t={t} />}
+        {startOpen && <StartMenu key="start" onOpen={openApp} onClose={() => setStartOpen(false)} preferences={preferences} />}
+        {quickOpen && <QuickSettings key="quick-settings" focusMode={focusMode} setFocusMode={setFocusMode} soundOn={soundOn} setSoundOn={setSoundOn} battery={battery} preferences={preferences} setPreferences={setPreferences} resolvedTheme={resolvedTheme} onOpenSettings={() => openApp("settings")} t={t} />}
+        {notification && <motion.div key="notification" className="nkos-notification" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 30 }}><span><FiCheck /></span><div><b>Nitin OS</b><p>{notification}</p></div><button type="button" onClick={() => setNotification("")} aria-label="Dismiss notification"><FiX /></button></motion.div>}
+        {contextMenu && <motion.div key="context-menu" className="nkos-context-menu" style={{ left: contextMenu.x, top: contextMenu.y }} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} onClick={(event) => event.stopPropagation()}>
           {contextMenu.type === "file" ? <><button type="button" onClick={() => openApp(contextMenu.id)}><FiFolder /> {t("open")}</button>{!nonEditableDesktopIds.has(contextMenu.id) && <button type="button" onClick={() => openEditor(contextMenu.id)}><FiEdit3 /> {t("edit")}</button>}{!protectedDesktopIds.has(contextMenu.id) && <button type="button" onClick={() => { const item = desktopItems.find((entry) => entry.id === contextMenu.id); setRenameItem({ id: contextMenu.id, value: item?.name || "" }); setContextMenu(null); }}><FiEdit3 /> {t("rename")}</button>}{!protectedDesktopIds.has(contextMenu.id) && <button type="button" className="danger" onClick={() => deleteDesktopItem(contextMenu.id)}><FiTrash2 /> {t("delete")}</button>}</> : <><button type="button" onClick={() => openApp("about")}><FiUser /> Open profile</button><button type="button" onClick={() => openApp("terminal")}><FiTerminal /> Open terminal</button><button type="button" onClick={() => openApp("settings")}><FiSettings /> {t("settings")}</button><button type="button" onClick={resetIconLayout}><FiGrid /> Arrange icons</button><button type="button" onClick={() => { pushNotification("Desktop refreshed · all files are current"); setContextMenu(null); }}><FiRefreshCw /> Refresh</button><span /><button type="button" onClick={onPowerOff}><FiPower /> Power off</button></>}
         </motion.div>}
-        {renameItem && <RenameDialog item={renameItem} onChange={setRenameItem} onCancel={() => setRenameItem(null)} onSave={saveRenamedItem} t={t} />}
+        {renameItem && <RenameDialog key="rename" item={renameItem} onChange={setRenameItem} onCancel={() => setRenameItem(null)} onSave={saveRenamedItem} t={t} />}
       </AnimatePresence>
 
       <nav className="nkos-dock" aria-label="Running apps">

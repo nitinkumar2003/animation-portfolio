@@ -113,7 +113,7 @@ export const appCatalog = [
   { id: "terminal", label: "Developer Terminal", file: "Terminal", icon: FiTerminal, color: "#b9a7ff", keywords: "command line console cli" },
   { id: "editor", label: "Code & Notes Editor", file: "Workspace.nk", icon: FiEdit3, color: "#7fe0c2", keywords: "edit notes text file code workspace save" },
   { id: "browser", label: "Nitin Browser", file: "Browser.app", icon: FiCompass, color: "#65c7ff", keywords: "browser web internet search google navigation" },
-  { id: "resume", label: "Resume", file: "Nitin_Kumar.pdf", icon: FiFileText, color: "#ff6b6b", keywords: "cv resume download pdf" },
+  { id: "resume", label: "Resume", file: "NitinKumar.pdf", icon: FiFileText, color: "#ff6b6b", keywords: "cv resume download pdf" },
   { id: "contact", label: "Contact", file: "Connect.link", icon: FiMail, color: "#62d7ff", keywords: "email linkedin github hire collaboration" },
   { id: "settings", label: "Settings", file: "Settings.app", icon: FiSettings, color: "#8fa5ad", keywords: "wallpaper timezone region date time language preferences" },
   { id: "bin", label: "Recycle Bin", file: "Recycle Bin", icon: FiTrash2, color: "#d7e3e7", keywords: "deleted files restore trash bin" },
@@ -159,7 +159,7 @@ export const languages = [
 ];
 
 export const wallpapers = [
-  { id: "circuit", name: "Circuit Architecture", image: circuitWallpaper },
+  { id: "circuit", name: "Circuit Architecture", image: circuitWallpaper.src },
   { id: "project", name: "Alysei Lab", image: personalDataObj.projects[13].img },
   { id: "grid", name: "Midnight Grid", image: null },
 ];

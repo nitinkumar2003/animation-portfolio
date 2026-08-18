@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FiBattery, FiBatteryCharging, FiCheck, FiChevronRight, FiEdit3, FiMonitor, FiMoon, FiSave, FiSearch, FiSettings, FiSun, FiVolume2, FiVolumeX, FiWifi, FiX } from "react-icons/fi";
 import { personalDataObj } from "../../../data/data";
-import profileImg from "../../../assets/image_01.jpg";
+import profileImg from "../../../assets/images.jpg";
 import { appCatalog } from "../config";
 import { useClock } from "../lib/hooks";
 import { formatTime } from "../lib/osUtils";
@@ -33,7 +33,7 @@ export const SearchPanel = ({ query, setQuery, results, indexedCount, onSelect, 
 export const StartMenu = ({ onOpen, onClose, preferences }) => {
   const now = useClock();
   return <motion.div className="nkos-start-menu" data-testid="start-menu" initial={{ opacity: 0, y: 16, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12, scale: 0.97 }}>
-    <div className="nkos-start-profile"><img src={profileImg} alt="" /><span><b>Nitin Kumar</b><small>Full Stack Developer</small></span><button type="button" onClick={onClose} aria-label="Close menu"><FiX /></button></div>
+    <div className="nkos-start-profile"><img src={profileImg.src} alt="" /><span><b>Nitin Kumar</b><small>Full Stack Developer</small></span><button type="button" onClick={onClose} aria-label="Close menu"><FiX /></button></div>
     <div className="nkos-start-heading"><span>PINNED</span><small>{formatTime(now, preferences)}</small></div>
     <div className="nkos-start-grid">{appCatalog.map((app) => { const Icon = app.icon; return <button type="button" key={app.id} onClick={() => onOpen(app.id)}><span style={{ "--app-color": app.color }}><Icon /></span><small>{app.label}</small></button>; })}</div>
     <div className="nkos-start-recent"><span>FEATURED WORK</span>{personalDataObj.projects.slice(13, 15).map((project) => <button type="button" key={project.id} onClick={() => onOpen("projects", project)}><img src={project.img} alt="" /><span><b>{project.title}</b><small>{project.category}</small></span><FiChevronRight /></button>)}</div>

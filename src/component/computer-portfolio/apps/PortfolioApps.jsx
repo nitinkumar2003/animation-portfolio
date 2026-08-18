@@ -5,7 +5,7 @@ import {
   FiFileText, FiFolder, FiGithub, FiHardDrive, FiHome, FiMail, FiMonitor, FiSearch, FiServer, FiUser, FiZap,
 } from "react-icons/fi";
 import { personalDataObj } from "../../../data/data";
-import profileImg from "../../../assets/image_01.jpg";
+import profileImg from "../../../assets/images.jpg";
 import { deliveryCapabilities, productDomains, projectFilters, skillInventory, stackGroups } from "../config";
 import { StatusTag } from "../ui/OsPrimitives";
 
@@ -19,7 +19,7 @@ export const AboutApp = ({ onOpenProjects, t }) => (
     <article className="nkos-readme">
       <div className="nkos-readme-path"><FiFileText /> Nitin / Profile / README.md</div>
       <div className="nkos-profile-hero">
-        <div className="nkos-profile-photo"><img src={profileImg} alt="Nitin Kumar" /><span>NK</span></div>
+        <div className="nkos-profile-photo"><img src={profileImg.src} alt="Nitin Kumar" /><span>NK</span></div>
         <div>
           <StatusTag>{t("available")}</StatusTag><p className="nkos-kicker">FULL STACK DEVELOPER · 4+ YEARS</p><h1>{t("heroTitle")}</h1><p className="nkos-about-copy">{t("heroCopy")}</p>
           <div className="nkos-action-row"><button type="button" className="nkos-primary-action" onClick={onOpenProjects}><FiFolder /> Explore work</button><a href={`mailto:${personalDataObj.email}`} className="nkos-secondary-action"><FiMail /> Contact</a></div>

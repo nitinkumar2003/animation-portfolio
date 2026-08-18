@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiCpu, FiHardDrive, FiPower, FiWifi, FiZap } from "react-icons/fi";
 import { personalDataObj } from "../../../data/data";
-import profileImg from "../../../assets/image_01.jpg";
+import profileImg from "../../../assets/images.jpg";
 import { bootSteps } from "../config";
 import { useClock } from "../lib/hooks";
 import { formatDate, formatTime } from "../lib/osUtils";
@@ -50,7 +50,7 @@ export const LoginScreen = ({ preferences, onEnter, onPowerOff }) => {
     <div className="nkos-login-top"><span>NITIN OS</span><button type="button" onClick={onPowerOff} aria-label="Power off"><FiPower /></button></div>
     <div className="nkos-lock-time"><strong>{formatTime(now, preferences)}</strong><span>{formatDate(now, preferences)}</span></div>
     <div className="nkos-login-card">
-      <img src={profileImg} alt="Nitin Kumar" />
+      <img src={profileImg.src} alt="Nitin Kumar" />
       <div><StatusTag>Available for work</StatusTag><h1>{personalDataObj.name}</h1><p>{personalDataObj.role} · Noida, India</p></div>
       <button type="button" className="nkos-enter-button" onClick={onEnter}>Enter workspace <FiArrowRight /></button>
     </div>

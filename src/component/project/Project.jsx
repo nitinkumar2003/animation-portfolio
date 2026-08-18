@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { FiChevronLeft, FiChevronRight, FiArrowRight } from "react-icons/fi";
 import { personalDataObj } from "../../data/data";
 import ProjectCard from "./ProjectCard";
@@ -71,7 +71,7 @@ const NavArrow = ({ onClick, disabled, dark, children }) => (
 /* ─── Project component ──────────────────────────────────── */
 const Project = () => {
   const { dark } = useTheme();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const [filter, setFilter]         = useState("All");
   const [startIdx, setStartIdx]     = useState(0);
@@ -310,7 +310,7 @@ const Project = () => {
 
           {/* View All Projects */}
           <motion.button
-            onClick={() => navigate("/projects")}
+            onClick={() => router.push("/projects")}
             data-cursor-hover
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}

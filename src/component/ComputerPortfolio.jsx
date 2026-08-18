@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { bootSteps, defaultPreferences } from "./computer-portfolio/config";
