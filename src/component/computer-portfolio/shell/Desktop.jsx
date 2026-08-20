@@ -2,18 +2,20 @@ import React, { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useStat
 import { AnimatePresence, motion } from "framer-motion";
 import {
   FiActivity, FiArrowUpRight, FiBattery, FiBatteryCharging, FiBell, FiCheck, FiCode, FiEdit3, FiEye, FiFile, FiFolder, FiGrid, FiPower,
-  FiRefreshCw, FiSearch, FiSettings, FiTerminal, FiTrash2, FiUser, FiVolume2, FiWifi, FiX,
+  FiLogOut, FiMic, FiRefreshCw, FiSearch, FiSettings, FiTerminal, FiTrash2, FiUser, FiVolume2, FiWifi, FiX,
 } from "react-icons/fi";
 import { personalDataObj } from "../../../data/data";
 import {
-  appCatalog, initialFileContents, nonPreviewableDesktopIds, productDomains, protectedDesktopIds, skillInventory, wallpapers,
+  appCatalog, featuredProject, initialFileContents, nonPreviewableDesktopIds, productDomains, protectedDesktopIds, skillInventory, wallpapers,
 } from "../config";
 import { translate } from "../lib/i18n";
 import { useBatteryStatus, useClock, useCompactLayout, useViewportSize } from "../lib/hooks";
 import { formatDate, formatTime, loadStoredValue, persistStoredValue } from "../lib/osUtils";
 import { WindowFrame } from "../ui/OsPrimitives";
+import { leaveOs } from "../screens/SystemScreens";
 import { AboutApp, JourneyApp, ProjectsApp, StackApp } from "../apps/PortfolioApps";
 import { QuickSettings, RenameDialog, SearchPanel, StartMenu } from "./Overlays";
+import NitinVoice from "./NitinVoice";
 
 const TerminalApp = lazy(() => import("../apps/TerminalApp"));
 const QuickLookApp = lazy(() => import("../apps/QuickLookApp"));
@@ -57,7 +59,8 @@ const getDefaultIconPosition = (index, compact, viewportWidth, viewportHeight) =
   };
 };
 
-const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff }) => {
+const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff, onExit }) => {
+  const exitToPortfolio = leaveOs(onExit);
   const workspaceRef = useRef(null);
   const draggingIconRef = useRef(false);
   const compact = useCompactLayout();
@@ -66,14 +69,15 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff }) => 
   const BatteryIcon = battery.charging ? FiBatteryCharging : FiBattery;
   const layoutKey = compact ? "mobile" : "desktop";
   const t = useCallback((key) => translate(preferences.language, key), [preferences.language]);
-  const [openWindows, setOpenWindows] = useState(["about"]);
-  const [activeWindow, setActiveWindow] = useState("about");
+  const [openWindows, setOpenWindows] = useState(() => (compact ? [] : ["about"]));
+  const [activeWindow, setActiveWindow] = useState(() => (compact ? "" : "about"));
   const [windowState, setWindowState] = useState({});
-  const [selectedProject, setSelectedProject] = useState(personalDataObj.projects[13]);
+  const [selectedProject, setSelectedProject] = useState(featuredProject);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [startOpen, setStartOpen] = useState(false);
   const [quickOpen, setQuickOpen] = useState(false);
+  const [voiceOpen, setVoiceOpen] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [notification, setNotification] = useState(`Workspace ready · ${personalDataObj.projects.length} project files indexed`);
@@ -169,13 +173,18 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff }) => 
       const isTyping = target instanceof HTMLElement
         && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
 
+      if (modifier && event.key.toLowerCase() === "j") {
+        event.preventDefault();
+        setVoiceOpen(true); setSearchOpen(false); setStartOpen(false); setQuickOpen(false);
+        return;
+      }
       if (modifier && (event.code === "Space" || event.key.toLowerCase() === "k")) {
         event.preventDefault();
         setSearchOpen(true); setStartOpen(false); setQuickOpen(false); setContextMenu(null);
         return;
       }
       if (event.key === "Escape") {
-        setSearchOpen(false); setStartOpen(false); setQuickOpen(false); setContextMenu(null); setRenameItem(null);
+        setSearchOpen(false); setStartOpen(false); setQuickOpen(false); setContextMenu(null); setRenameItem(null); setVoiceOpen(false);
         return;
       }
       if (isTyping || !selectedDesktopId) return;
@@ -250,7 +259,7 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff }) => 
   }, [searchQuery, desktopItems]);
 
   const renderApp = (id) => ({
-    about: <AboutApp onOpenProjects={() => openApp("projects")} t={t} />,
+    about: <AboutApp onOpenProjects={() => openApp("projects")} onOpenApp={openApp} t={t} />,
     projects: <ProjectsApp selectedProject={selectedProject} setSelectedProject={setSelectedProject} />,
     assistant: <AskNitinApp />,
     stack: <StackApp />,
@@ -262,7 +271,7 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff }) => 
     terminal: <TerminalApp openApp={openApp} />,
     editor: <QuickLookApp item={desktopItems.find((item) => item.id === quickLookTargetId)} />,
     browser: <BrowserApp onOpenApp={openApp} />,
-    resume: <ResumeApp />,
+    resume: <ResumeApp preferences={preferences} resolvedTheme={resolvedTheme} />,
     contact: <ContactApp t={t} />,
     settings: <SettingsApp preferences={preferences} setPreferences={setPreferences} t={t} />,
     bin: <BinApp deletedItems={deletedItems} onRestore={restoreDesktopItem} onRestoreAll={restoreAllDesktopItems} preferences={preferences} t={t} />,
@@ -286,7 +295,7 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff }) => 
     <motion.section className={`nkos-desktop wallpaper-${activeWallpaper.id} ${activeWallpaper.image ? "has-wallpaper" : ""} ${focusMode ? "focus-mode" : ""}`} style={activeWallpaper.image ? { "--nkos-wallpaper": `url(${activeWallpaper.image})` } : undefined} initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => { setContextMenu(null); setSelectedDesktopId(null); }} onContextMenu={handleDesktopContext}>
       <header className="nkos-menu-bar">
         <div className="nkos-menu-left"><button type="button" className="nkos-brand-button" onClick={() => setStartOpen((value) => !value)} aria-label="Open Nitin OS menu"><span>NK</span></button><b>{activeAppName}</b><button type="button" onClick={() => openApp("projects")}>{t("file")}</button><button type="button" onClick={() => selectedDesktopId ? openQuickLook(selectedDesktopId) : setQuickOpen(true)}>{t("view")}</button><button type="button" onClick={() => openApp("browser")}>{t("go")}</button><button type="button" onClick={() => activeWindow ? toggleMaximize(activeWindow) : openApp("about")}>{t("window")}</button><button type="button" onClick={() => openApp("contact")}>{t("help")}</button></div>
-        <div className="nkos-menu-right"><button type="button" className="nkos-menu-search" onClick={() => setSearchOpen(true)} aria-label={t("search")} title={`${t("search")} · ⌘ Space`}><FiSearch /></button><button type="button" aria-label="Notifications" onClick={() => pushNotification("No pending notifications · system is clear")}><FiBell /></button><button type="button" className="nkos-system-tray" onClick={() => setQuickOpen((value) => !value)} aria-label={`Open quick settings, battery ${battery.level}%`}><FiWifi /><FiVolume2 /><BatteryIcon /><span className="nkos-battery-percent">{battery.level}%</span></button><MenuClock preferences={preferences} onToggle={() => setQuickOpen((value) => !value)} /></div>
+        <div className="nkos-menu-right"><button type="button" className="nkos-menu-voice" onClick={() => setVoiceOpen(true)} aria-label="Open Nitin Voice" title="Nitin Voice · ⌘ J"><FiMic /></button><button type="button" className="nkos-menu-search" onClick={() => setSearchOpen(true)} aria-label={t("search")} title={`${t("search")} · ⌘ Space`}><FiSearch /></button><button type="button" aria-label="Notifications" onClick={() => pushNotification("No pending notifications · system is clear")}><FiBell /></button><button type="button" className="nkos-system-tray" onClick={() => setQuickOpen((value) => !value)} aria-label={`Open quick settings, battery ${battery.level}%`}><FiWifi /><FiVolume2 /><BatteryIcon /><span className="nkos-battery-percent">{battery.level}%</span></button><MenuClock preferences={preferences} onToggle={() => setQuickOpen((value) => !value)} /></div>
       </header>
 
       <div className="nkos-workspace" ref={workspaceRef}>
@@ -295,7 +304,7 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff }) => 
         </nav>
         <aside className="nkos-desktop-widgets">
           <div className="nkos-role-widget"><div><span className="nkos-live-dot" /> {t("available")}</div><h1>Full Stack<br />Developer</h1><p>React · Next.js · Node.js · AI</p></div>
-          <button type="button" className="nkos-featured-widget" onClick={() => openApp("projects", personalDataObj.projects[13])}><img src={personalDataObj.projects[13].img} alt="" /><span><small>{t("featured")}</small><b>{personalDataObj.projects[13].title}</b><em>{t("openProject")} <FiArrowUpRight /></em></span></button>
+          <button type="button" className="nkos-featured-widget" onClick={() => openApp("projects", featuredProject)}><img src={featuredProject.img} alt="" /><span><small>{t("featured")}</small><b>{featuredProject.title}</b><em>{t("openProject")} <FiArrowUpRight /></em></span></button>
           <div className="nkos-metrics-widget"><span><FiActivity /> {t("systemCapacity")}</span><div><b>{personalDataObj.projects.length}</b><small>{t("projects")}</small></div><div><b>4+</b><small>{t("years")}</small></div><div><b>4</b><small>{t("layers")}</small></div></div>
         </aside>
         <AnimatePresence>{openWindows.map((id, index) => { const baseApp = appCatalog.find((item) => item.id === id); const desktopItem = desktopItems.find((item) => item.id === id); const app = baseApp ? { ...baseApp, file: desktopItem?.name || baseApp.file } : null; if (!app) return null; return <WindowFrame key={id} app={app} active={activeWindow === id} index={index} minimized={windowState[id]?.minimized} maximized={windowState[id]?.maximized} compact={compact} workspaceRef={workspaceRef} onFocus={() => focusApp(id)} onClose={() => closeApp(id)} onMinimize={() => minimizeApp(id)} onMaximize={() => toggleMaximize(id)}><Suspense fallback={<AppLoading />}>{renderApp(id)}</Suspense></WindowFrame>; })}</AnimatePresence>
@@ -303,19 +312,30 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff }) => 
 
       <AnimatePresence>
         {searchOpen && <SearchPanel key="search" query={searchQuery} setQuery={setSearchQuery} results={searchResults} indexedCount={appCatalog.length + personalDataObj.projects.length + skillInventory.length + productDomains.length} onSelect={(item) => openApp(item.app, item.project)} onClose={() => setSearchOpen(false)} t={t} />}
-        {startOpen && <StartMenu key="start" onOpen={openApp} onClose={() => setStartOpen(false)} preferences={preferences} />}
+        {startOpen && <StartMenu key="start" onOpen={openApp} onClose={() => setStartOpen(false)} preferences={preferences} onExit={exitToPortfolio} />}
         {quickOpen && <QuickSettings key="quick-settings" focusMode={focusMode} setFocusMode={setFocusMode} soundOn={soundOn} setSoundOn={setSoundOn} battery={battery} preferences={preferences} setPreferences={setPreferences} resolvedTheme={resolvedTheme} onOpenSettings={() => openApp("settings")} t={t} />}
         {notification && <motion.div key="notification" className="nkos-notification" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 30 }}><span><FiCheck /></span><div><b>Nitin OS</b><p>{notification}</p></div><button type="button" onClick={() => setNotification("")} aria-label="Dismiss notification"><FiX /></button></motion.div>}
         {contextMenu && <motion.div key="context-menu" className="nkos-context-menu" style={{ left: contextMenu.x, top: contextMenu.y }} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} onClick={(event) => event.stopPropagation()}>
-          {contextMenu.type === "file" ? <><button type="button" onClick={() => openApp(contextMenu.id)}><FiFolder /> {t("open")}</button>{!nonPreviewableDesktopIds.has(contextMenu.id) && <button type="button" onClick={() => openQuickLook(contextMenu.id)}><FiEye /> {t("quickLook")}</button>}{!protectedDesktopIds.has(contextMenu.id) && <button type="button" onClick={() => { const item = desktopItems.find((entry) => entry.id === contextMenu.id); setRenameItem({ id: contextMenu.id, value: item?.name || "" }); setContextMenu(null); }}><FiEdit3 /> {t("rename")}</button>}{!protectedDesktopIds.has(contextMenu.id) && <button type="button" className="danger" onClick={() => deleteDesktopItem(contextMenu.id)}><FiTrash2 /> {t("delete")}</button>}</> : <><button type="button" onClick={() => openApp("about")}><FiUser /> Open profile</button><button type="button" onClick={() => openApp("terminal")}><FiTerminal /> Open terminal</button><button type="button" onClick={() => openApp("settings")}><FiSettings /> {t("settings")}</button><button type="button" onClick={resetIconLayout}><FiGrid /> Clean Up</button><button type="button" onClick={() => { pushNotification("Desktop refreshed · all files are current"); setContextMenu(null); }}><FiRefreshCw /> Refresh</button><span /><button type="button" onClick={onPowerOff}><FiPower /> Power off</button></>}
+          {contextMenu.type === "file" ? <><button type="button" onClick={() => openApp(contextMenu.id)}><FiFolder /> {t("open")}</button>{!nonPreviewableDesktopIds.has(contextMenu.id) && <button type="button" onClick={() => openQuickLook(contextMenu.id)}><FiEye /> {t("quickLook")}</button>}{!protectedDesktopIds.has(contextMenu.id) && <button type="button" onClick={() => { const item = desktopItems.find((entry) => entry.id === contextMenu.id); setRenameItem({ id: contextMenu.id, value: item?.name || "" }); setContextMenu(null); }}><FiEdit3 /> {t("rename")}</button>}{!protectedDesktopIds.has(contextMenu.id) && <button type="button" className="danger" onClick={() => deleteDesktopItem(contextMenu.id)}><FiTrash2 /> {t("delete")}</button>}</> : <><button type="button" onClick={() => openApp("about")}><FiUser /> Open profile</button><button type="button" onClick={() => openApp("terminal")}><FiTerminal /> Open terminal</button><button type="button" onClick={() => openApp("settings")}><FiSettings /> {t("settings")}</button><button type="button" onClick={resetIconLayout}><FiGrid /> Clean Up</button><button type="button" onClick={() => { pushNotification("Desktop refreshed · all files are current"); setContextMenu(null); }}><FiRefreshCw /> Refresh</button><span /><button type="button" onClick={exitToPortfolio}><FiLogOut /> Exit to portfolio</button><button type="button" onClick={onPowerOff}><FiPower /> Power off</button></>}
         </motion.div>}
+        {voiceOpen && <NitinVoice key="voice" onClose={() => setVoiceOpen(false)} openApp={openApp} setPreferences={setPreferences} preferences={preferences} pushNotification={pushNotification} />}
         {renameItem && <RenameDialog key="rename" item={renameItem} onChange={setRenameItem} onCancel={() => setRenameItem(null)} onSave={saveRenamedItem} t={t} />}
       </AnimatePresence>
+
+      {compact && (
+        <nav className="nkos-mobile-bar" aria-label="Phone controls">
+          <button type="button" onClick={() => setVoiceOpen(true)} aria-label="Open Nitin Voice"><FiMic /></button>
+          <button type="button" className="nkos-mobile-home" onClick={() => { setOpenWindows([]); setActiveWindow(""); setStartOpen(false); }} aria-label="Home">
+            <span />
+          </button>
+          <button type="button" onClick={exitToPortfolio} aria-label="Exit to written portfolio"><FiLogOut /></button>
+        </nav>
+      )}
 
       <nav className="nkos-dock" aria-label="Running apps">
         <button type="button" className={`nkos-launcher ${startOpen ? "active" : ""}`} onClick={() => setStartOpen((value) => !value)} aria-label="Open app launcher"><FiGrid /></button><i />
         {appCatalog.filter((app) => dockPinnedIds.has(app.id) || openWindows.includes(app.id)).map((app) => { const Icon = app.icon; const isOpen = openWindows.includes(app.id); return <button type="button" key={app.id} className={`${activeWindow === app.id ? "active" : ""} ${isOpen ? "running" : ""}`} onClick={() => openApp(app.id)} title={app.label} aria-label={app.label} style={{ "--app-color": app.color }}><Icon /><span>{app.id === "settings" ? t("settings") : app.id === "bin" ? t("recycleBin") : app.label}</span></button>; })}
-        <i /><button type="button" onClick={onPowerOff} aria-label="Power off" title="Power off"><FiPower /></button>
+        <i /><button type="button" className="nkos-dock-exit" onClick={exitToPortfolio} aria-label="Exit to written portfolio" title="Exit to written portfolio"><FiLogOut /><span>Portfolio</span></button><button type="button" onClick={onPowerOff} aria-label="Power off" title="Power off"><FiPower /></button>
       </nav>
     </motion.section>
   );

@@ -1,0 +1,42 @@
+/* Global baseline shared by every route.
+   The 7k-line Nitin OS stylesheet (src/index.css) is imported by /os alone, so
+   marketing pages no longer download ~26 KB gzip of desktop-shell CSS. */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  color-scheme: dark;
+}
+
+body {
+  background-color: #05070a;
+  color: #e9eff3;
+  font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; border: 0; background: none; cursor: pointer; }
+img, svg, video { display: block; max-width: 100%; }
+input, textarea, select { font: inherit; }
+
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: #05070a; }
+::-webkit-scrollbar-thumb { border: 2px solid #05070a; border-radius: 6px; background: #263039; }
+::-webkit-scrollbar-thumb:hover { background: #35434e; }
+
+::selection { background: rgba(69, 230, 176, 0.28); color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

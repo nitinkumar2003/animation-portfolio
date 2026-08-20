@@ -1,7 +1,13 @@
+import { SITE_URL } from "../lib/seo";
+
 export default function robots() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   return {
-    rules: { userAgent: "*", allow: "/", disallow: "/api/" },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    rules: [
+      { userAgent: "*", allow: "/", disallow: ["/api/"] },
+      // AI crawlers are welcome — this profile is meant to be discoverable by assistants too.
+      { userAgent: ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended"], allow: "/" },
+    ],
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

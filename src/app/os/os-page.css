@@ -1,0 +1,43 @@
+/* The /os route: pre-boot intro (server-rendered) plus a persistent exit affordance. */
+
+.nkos-page { position: relative; }
+
+/* Visible before the OS bundle mounts, then covered by the full-viewport OS. */
+.nkos-page__intro {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: clamp(2rem, 7vw, 6rem);
+  background: #05070a;
+  color: #97a6b2;
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+}
+.nkos-page__intro h1 {
+  max-width: 20ch;
+  color: #e9eff3;
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+.nkos-page__intro p { max-width: 56ch; font-size: 0.95rem; line-height: 1.7; }
+.nkos-page__hint { color: #6a7b88; font-size: 0.87rem; }
+.nkos-page__hint a { color: #45e6b0; text-decoration: underline; text-underline-offset: 3px; }
+.nkos-page__back {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #45e6b0;
+  font-size: 0.85rem;
+}
+
+/* The OS itself paints over the intro once mounted. */
+.nkos-page .nkos-root { position: relative; z-index: 1; }
+
+/* The exit lives in the OS dock and Start menu; nothing floats over the dock. */

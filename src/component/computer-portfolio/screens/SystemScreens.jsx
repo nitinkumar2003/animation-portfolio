@@ -1,23 +1,30 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FiArrowRight, FiCpu, FiHardDrive, FiPower, FiWifi, FiZap } from "react-icons/fi";
+import { FiArrowRight, FiCpu, FiFileText, FiHardDrive, FiPower, FiWifi, FiZap } from "react-icons/fi";
 import { personalDataObj } from "../../../data/data";
 import profileImg from "../../../assets/images.jpg";
 import { bootSteps } from "../config";
+import { positioning, systemInfo } from "../../../data/content";
 import { useClock } from "../lib/hooks";
 import { formatDate, formatTime } from "../lib/osUtils";
 import { StatusTag } from "../ui/OsPrimitives";
 
-export const PowerScreen = ({ onPower }) => (
+export const leaveOs = (onExit) => () => {
+  if (onExit) onExit();
+  else if (typeof window !== "undefined") window.location.href = "/";
+};
+
+export const PowerScreen = ({ onPower, onExit }) => (
   <motion.section className="nkos-power-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
     <div className="nkos-hardware-label"><span>NK / 03</span><span>FULL STACK WORKSTATION</span></div>
     <div className="nkos-power-center">
       <div className="nkos-power-identity"><span>NITIN</span><strong>OS</strong></div>
-      <p>React · Next.js · Node.js · AI</p>
+      <p>{positioning.descriptors.slice(0, 4).join(" · ")}</p>
       <button type="button" className="nkos-power-button" onClick={onPower} aria-label="Power on Nitin OS"><FiPower /></button>
       <button type="button" className="nkos-power-copy" onClick={onPower}>Power on portfolio</button>
+      <button type="button" className="nkos-power-alt" onClick={leaveOs(onExit)}><FiFileText /> Read the written portfolio instead</button>
     </div>
-    <div className="nkos-power-footer"><span>NOIDA, INDIA</span><span>BUILD 2026.08</span></div>
+    <div className="nkos-power-footer"><span>{positioning.location.toUpperCase()}</span><span>BUILD {systemInfo.buildStamp}</span></div>
   </motion.section>
 );
 
@@ -44,16 +51,17 @@ export const BootScreen = ({ bootIndex, onSkip }) => {
   );
 };
 
-export const LoginScreen = ({ preferences, onEnter, onPowerOff }) => {
+export const LoginScreen = ({ preferences, onEnter, onPowerOff, onExit }) => {
   const now = useClock();
   return <motion.section className="nkos-login-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
     <div className="nkos-login-top"><span>NITIN OS</span><button type="button" onClick={onPowerOff} aria-label="Power off"><FiPower /></button></div>
     <div className="nkos-lock-time"><strong>{formatTime(now, preferences)}</strong><span>{formatDate(now, preferences)}</span></div>
     <div className="nkos-login-card">
       <img src={profileImg.src} alt="Nitin Kumar" />
-      <div><StatusTag>Available for work</StatusTag><h1>{personalDataObj.name}</h1><p>{personalDataObj.role} · Noida, India</p></div>
+      <div><StatusTag>Available for work</StatusTag><h1>{personalDataObj.name}</h1><p>{positioning.role} · {positioning.location}</p></div>
       <button type="button" className="nkos-enter-button" onClick={onEnter}>Enter workspace <FiArrowRight /></button>
     </div>
+    <button type="button" className="nkos-login-alt" onClick={leaveOs(onExit)}><FiFileText /> Skip to the written portfolio</button>
     <div className="nkos-login-network"><FiWifi /> Secure professional network connected</div>
   </motion.section>;
 };

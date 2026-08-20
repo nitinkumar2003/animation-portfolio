@@ -1,0 +1,354 @@
+/* ==========================================================================
+   Ask Nitin — floating conversational assistant (ChatGPT-style launcher)
+   ========================================================================== */
+
+.nkc {
+  --nkc-bg: #0b0e13;
+  --nkc-surface: #10151c;
+  --nkc-raise: rgba(255, 255, 255, 0.045);
+  --nkc-line: rgba(255, 255, 255, 0.09);
+  --nkc-text: #e9eff3;
+  --nkc-dim: #94a3ae;
+  --nkc-faint: #6f818d;
+  --nkc-mint: #45e6b0;
+  --nkc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: fixed;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: 9000;
+  font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+  color: var(--nkc-text);
+}
+
+.nkc *, .nkc *::before, .nkc *::after { box-sizing: border-box; }
+.nkc button { font: inherit; border: 0; cursor: pointer; }
+
+/* --- Launcher ------------------------------------------------------------- */
+.nkc-launcher {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #14b88a, #45e6b0);
+  color: #04120d;
+  box-shadow: 0 10px 34px -8px rgba(69, 230, 176, 0.6), 0 2px 10px rgba(0, 0, 0, 0.45);
+  transition: transform 0.28s var(--nkc-ease), box-shadow 0.28s;
+}
+.nkc-launcher:hover { transform: scale(1.06) translateY(-2px); box-shadow: 0 16px 44px -10px rgba(69, 230, 176, 0.75); }
+.nkc-launcher:active { transform: scale(0.97); }
+.nkc-launcher svg { width: 25px; height: 25px; transition: transform 0.3s var(--nkc-ease), opacity 0.2s; }
+.nkc-launcher__close { position: absolute; opacity: 0; transform: rotate(-90deg) scale(0.6); }
+.nkc[data-open="true"] .nkc-launcher { background: var(--nkc-surface); color: var(--nkc-text); box-shadow: 0 8px 26px rgba(0, 0, 0, 0.5); border: 1px solid var(--nkc-line); }
+.nkc[data-open="true"] .nkc-launcher__open { opacity: 0; transform: rotate(90deg) scale(0.6); }
+.nkc[data-open="true"] .nkc-launcher__close { opacity: 1; transform: none; }
+
+/* Attention ring — fires once, then rests */
+.nkc-launcher__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--nkc-mint);
+  opacity: 0;
+  pointer-events: none;
+  animation: nkcPing 3.4s ease-out 2.5s 3;
+}
+.nkc[data-open="true"] .nkc-launcher__ring { animation: none; }
+@keyframes nkcPing {
+  0%   { transform: scale(1); opacity: 0.65; }
+  70%  { transform: scale(1.55); opacity: 0; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* Idle tooltip prompt */
+.nkc-nudge {
+  position: absolute;
+  right: calc(100% + 0.85rem);
+  bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.62rem 0.95rem;
+  border: 1px solid var(--nkc-line);
+  border-radius: 13px 13px 3px 13px;
+  background: var(--nkc-surface);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: var(--nkc-text);
+  font-size: 0.82rem;
+  white-space: nowrap;
+  animation: nkcNudgeIn 0.5s var(--nkc-ease) both;
+}
+.nkc-nudge b { color: var(--nkc-mint); font-weight: 600; }
+.nkc-nudge__dismiss {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 0.2rem;
+  border-radius: 50%;
+  background: var(--nkc-raise);
+  color: var(--nkc-faint);
+}
+.nkc-nudge__dismiss:hover { color: var(--nkc-text); }
+.nkc-nudge__dismiss svg { width: 11px; height: 11px; }
+@keyframes nkcNudgeIn {
+  from { opacity: 0; transform: translateX(12px) scale(0.92); }
+  to   { opacity: 1; transform: none; }
+}
+@media (max-width: 560px) { .nkc-nudge { display: none; } }
+
+/* --- Panel ---------------------------------------------------------------- */
+.nkc-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.9rem);
+  width: min(400px, calc(100vw - 2.5rem));
+  height: min(620px, calc(100vh - 8rem));
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  border: 1px solid var(--nkc-line);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--nkc-bg);
+  box-shadow: 0 30px 70px -18px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 0, 0, 0.3);
+  transform-origin: bottom right;
+  animation: nkcPanelIn 0.34s var(--nkc-ease) both;
+}
+@keyframes nkcPanelIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.94); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (max-width: 560px) {
+  .nkc { right: 0; bottom: 0; left: 0; }
+  .nkc-launcher { position: absolute; right: 1.1rem; bottom: max(1.1rem, env(safe-area-inset-bottom)); }
+  .nkc-panel {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    animation-name: nkcSheetIn;
+  }
+  @keyframes nkcSheetIn {
+    from { opacity: 0; transform: translateY(3%); }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
+/* Header */
+.nkc-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 0.9rem 0.85rem 1rem;
+  border-bottom: 1px solid var(--nkc-line);
+  background: var(--nkc-surface);
+}
+.nkc-head__avatar { position: relative; width: 36px; height: 36px; flex-shrink: 0; }
+.nkc-head__avatar img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; object-position: center 18%; }
+.nkc-head__avatar i {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 11px;
+  height: 11px;
+  border: 2.5px solid var(--nkc-surface);
+  border-radius: 50%;
+  background: var(--nkc-mint);
+}
+.nkc-head__id { display: grid; gap: 0.1rem; min-width: 0; margin-right: auto; }
+.nkc-head__id b { font-size: 0.9rem; font-weight: 600; letter-spacing: -0.01em; }
+.nkc-head__id span { display: flex; align-items: center; gap: 0.35rem; color: var(--nkc-faint); font-size: 0.7rem; }
+.nkc-head__id span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--nkc-mint); }
+.nkc-head button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--nkc-faint);
+  transition: background 0.2s, color 0.2s;
+}
+.nkc-head button:hover { background: var(--nkc-raise); color: var(--nkc-text); }
+.nkc-head button svg { width: 15px; height: 15px; }
+
+/* Message stream */
+.nkc-stream { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 1.1rem 1rem 0.5rem; scroll-behavior: smooth; }
+.nkc-stream::-webkit-scrollbar { width: 6px; }
+.nkc-stream::-webkit-scrollbar-thumb { border-radius: 3px; background: rgba(255, 255, 255, 0.11); }
+
+.nkc-msg { display: grid; gap: 0.5rem; margin-bottom: 1.15rem; animation: nkcMsgIn 0.28s var(--nkc-ease) both; }
+@keyframes nkcMsgIn {
+  from { opacity: 0; transform: translateY(7px); }
+  to   { opacity: 1; transform: none; }
+}
+.nkc-msg--assistant { grid-template-columns: 26px minmax(0, 1fr); }
+.nkc-msg--user { justify-items: end; }
+
+.nkc-msg__avatar {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: linear-gradient(140deg, #14b88a, #45e6b0);
+  color: #04120d;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.nkc-msg__text { font-size: 0.885rem; line-height: 1.62; overflow-wrap: anywhere; }
+.nkc-msg--assistant .nkc-msg__text { color: #cdd9df; padding-top: 0.15rem; }
+.nkc-msg--user .nkc-msg__text {
+  max-width: 88%;
+  padding: 0.62rem 0.9rem;
+  border-radius: 15px 15px 4px 15px;
+  background: var(--nkc-raise);
+  border: 1px solid var(--nkc-line);
+  color: var(--nkc-text);
+}
+.nkc-msg--error .nkc-msg__text { color: #ff9b9b; }
+.nkc-msg__text p { margin: 0; }
+.nkc-msg__text p + p { margin-top: 0.7rem; }
+.nkc-msg__text strong { color: var(--nkc-text); font-weight: 600; }
+
+/* Streaming caret */
+.nkc-caret {
+  display: inline-block;
+  width: 0.42em;
+  height: 1em;
+  margin-left: 1px;
+  border-radius: 1px;
+  background: var(--nkc-mint);
+  vertical-align: text-bottom;
+  animation: nkcBlink 1s steps(2) infinite;
+}
+@keyframes nkcBlink { 50% { opacity: 0; } }
+
+/* Thinking dots */
+.nkc-thinking { display: inline-flex; gap: 4px; padding-top: 0.5rem; }
+.nkc-thinking i { width: 5px; height: 5px; border-radius: 50%; background: var(--nkc-mint); animation: nkcBounce 1.1s ease-in-out infinite; }
+.nkc-thinking i:nth-child(2) { animation-delay: 0.15s; }
+.nkc-thinking i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes nkcBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+  30%           { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Empty state */
+.nkc-intro { padding: 0.3rem 0.1rem 0.9rem; text-align: center; }
+.nkc-intro__mark {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin: 0.4rem auto 0;
+  border-radius: 14px;
+  background: linear-gradient(140deg, #14b88a, #45e6b0);
+  color: #04120d;
+}
+.nkc-intro__mark svg { width: 22px; height: 22px; }
+.nkc-intro h3 { margin: 0.9rem 0 0; font-size: 1.05rem; font-weight: 600; letter-spacing: -0.02em; }
+.nkc-intro p { margin: 0.5rem auto 0; max-width: 20rem; color: var(--nkc-dim); font-size: 0.83rem; line-height: 1.6; }
+
+.nkc-suggestions { display: grid; gap: 0.45rem; margin-top: 1.1rem; }
+.nkc-suggestions button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.72rem 0.85rem;
+  border: 1px solid var(--nkc-line);
+  border-radius: 11px;
+  background: var(--nkc-raise);
+  color: var(--nkc-dim);
+  font-size: 0.815rem;
+  line-height: 1.4;
+  text-align: left;
+  transition: border-color 0.2s, color 0.2s, transform 0.2s var(--nkc-ease);
+}
+.nkc-suggestions button:hover { border-color: rgba(69, 230, 176, 0.4); color: var(--nkc-text); transform: translateX(2px); }
+.nkc-suggestions svg { width: 13px; height: 13px; flex-shrink: 0; color: var(--nkc-mint); opacity: 0; transition: opacity 0.2s; }
+.nkc-suggestions button:hover svg { opacity: 1; }
+
+/* Follow-up chips */
+.nkc-followups { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0 1rem 0.7rem; }
+.nkc-followups button {
+  padding: 0.4rem 0.72rem;
+  border: 1px solid var(--nkc-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--nkc-dim);
+  font-size: 0.755rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+.nkc-followups button:hover { border-color: var(--nkc-mint); color: var(--nkc-mint); }
+
+/* Composer */
+.nkc-composer { border-top: 1px solid var(--nkc-line); padding: 0.75rem 0.85rem 0.55rem; background: var(--nkc-surface); }
+.nkc-composer__field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.5rem;
+  padding: 0.45rem 0.45rem 0.45rem 0.9rem;
+  border: 1px solid var(--nkc-line);
+  border-radius: 15px;
+  background: var(--nkc-bg);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.nkc-composer__field:focus-within { border-color: rgba(69, 230, 176, 0.45); box-shadow: 0 0 0 3px rgba(69, 230, 176, 0.09); }
+.nkc-composer textarea {
+  width: 100%;
+  max-height: 7.5rem;
+  padding: 0.42rem 0;
+  border: 0;
+  outline: 0;
+  resize: none;
+  background: transparent;
+  color: var(--nkc-text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.nkc-composer textarea::placeholder { color: var(--nkc-faint); }
+.nkc-send {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--nkc-mint);
+  color: #04120d;
+  transition: opacity 0.2s, transform 0.2s var(--nkc-ease), background 0.2s;
+}
+.nkc-send svg { width: 15px; height: 15px; }
+.nkc-send:disabled { opacity: 0.3; cursor: not-allowed; }
+.nkc-send:not(:disabled):hover { transform: scale(1.07); }
+.nkc-send--stop { background: var(--nkc-raise); color: var(--nkc-text); border: 1px solid var(--nkc-line); }
+
+.nkc-composer__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.5rem 0.3rem 0.1rem;
+  color: var(--nkc-faint);
+  font-size: 0.68rem;
+}
+.nkc-composer__foot a { color: var(--nkc-faint); text-decoration: underline; text-underline-offset: 2px; }
+.nkc-composer__foot a:hover { color: var(--nkc-mint); }
+
+@media (prefers-reduced-motion: reduce) {
+  .nkc *, .nkc *::before, .nkc *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .nkc-stream { scroll-behavior: auto; }
+}

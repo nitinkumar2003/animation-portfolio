@@ -7,8 +7,9 @@ import { loadStoredValue, persistStoredValue } from "./computer-portfolio/lib/os
 import { useResolvedTheme } from "./computer-portfolio/lib/hooks";
 import { BootScreen, LoginScreen, PowerScreen } from "./computer-portfolio/screens/SystemScreens";
 import Desktop from "./computer-portfolio/shell/Desktop";
+import "../index.css";
 
-const ComputerPortfolio = () => {
+const ComputerPortfolio = ({ onExit }) => {
   const [stage, setStage] = useState("power");
   const [bootIndex, setBootIndex] = useState(0);
   const [preferences, setPreferences] = useState(() => ({
@@ -39,10 +40,10 @@ const ComputerPortfolio = () => {
   return (
     <main className={`nkos-root theme-${resolvedTheme}`} lang={preferences.language} dir={preferences.language === "ar" ? "rtl" : "ltr"} data-theme={resolvedTheme}>
       <AnimatePresence mode="wait">
-        {stage === "power" && <PowerScreen key="power" onPower={() => setStage("boot")} />}
+        {stage === "power" && <PowerScreen key="power" onPower={() => setStage("boot")} onExit={onExit} />}
         {stage === "boot" && <BootScreen key="boot" bootIndex={bootIndex} onSkip={() => setStage("login")} />}
-        {stage === "login" && <LoginScreen key="login" preferences={preferences} onEnter={() => setStage("desktop")} onPowerOff={() => setStage("power")} />}
-        {stage === "desktop" && <Desktop key="desktop" preferences={preferences} setPreferences={setPreferences} resolvedTheme={resolvedTheme} onPowerOff={() => setStage("power")} />}
+        {stage === "login" && <LoginScreen key="login" preferences={preferences} onEnter={() => setStage("desktop")} onPowerOff={() => setStage("power")} onExit={onExit} />}
+        {stage === "desktop" && <Desktop key="desktop" preferences={preferences} setPreferences={setPreferences} resolvedTheme={resolvedTheme} onPowerOff={() => setStage("power")} onExit={onExit} />}
       </AnimatePresence>
     </main>
   );

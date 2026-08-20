@@ -1,0 +1,233 @@
+/* ==========================================================================
+   Résumé document — self-contained, theme-switchable, direction-aware.
+   Used by both /resume and the Résumé app inside Nitin OS.
+   ========================================================================== */
+
+.nkr {
+  --r-bg: #080b10;
+  --r-surface: rgba(255, 255, 255, 0.03);
+  --r-line: rgba(255, 255, 255, 0.1);
+  --r-text: #e9eff3;
+  --r-dim: #a3b1bc;
+  --r-faint: #7c8b97;
+  --r-accent: #45e6b0;
+
+  container-type: inline-size;
+  max-width: 54rem;
+  margin-inline: auto;
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  border: 1px solid var(--r-line);
+  border-radius: 16px;
+  background: var(--r-bg);
+  color: var(--r-text);
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.62;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.nkr[data-resume-theme="light"] {
+  --r-bg: #ffffff;
+  --r-surface: #f5f7f9;
+  --r-line: #dfe5ea;
+  --r-text: #10171d;
+  --r-dim: #3f4d59;
+  --r-faint: #5e6d7a;
+  --r-accent: #0d8f68;
+}
+
+.nkr[dir="rtl"] { text-align: right; }
+
+.nkr a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--r-line); }
+.nkr a:hover { color: var(--r-accent); border-color: currentColor; }
+
+/* --- Header --------------------------------------------------------------- */
+.nkr__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 1.5rem 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--r-line);
+}
+.nkr__identity h1 {
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  font-size: clamp(1.7rem, 4cqi, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+.nkr__role { margin-top: 0.4rem; color: var(--r-accent); font-size: 1rem; font-weight: 600; }
+.nkr__tagline { margin-top: 0.6rem; max-width: 32ch; color: var(--r-dim); font-size: 0.9rem; }
+
+.nkr__contact { list-style: none; display: grid; gap: 0.42rem; align-content: start; }
+.nkr__contact li { display: flex; align-items: center; gap: 0.5rem; color: var(--r-dim); font-size: 0.83rem; }
+.nkr__contact svg { width: 0.95em; height: 0.95em; flex-shrink: 0; color: var(--r-accent); }
+
+.nkr__availability {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 1.15rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--r-accent) 32%, transparent);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--r-accent) 8%, transparent);
+  color: var(--r-accent);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.nkr__availability svg { width: 1em; height: 1em; }
+
+/* --- Sections ------------------------------------------------------------- */
+.nkr__section { margin-top: clamp(1.6rem, 3.5cqi, 2.3rem); }
+.nkr__section > h2 {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--r-line);
+  color: var(--r-accent);
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.nkr__lede { margin-top: 1rem; color: var(--r-dim); font-size: 0.95rem; }
+
+.nkr__metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+  gap: 0.7rem;
+  margin-top: 1.2rem;
+}
+.nkr__metrics > div { padding: 0.8rem 0.9rem; border: 1px solid var(--r-line); border-radius: 10px; background: var(--r-surface); }
+.nkr__metrics strong {
+  display: block;
+  color: var(--r-accent);
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.nkr__metrics span { display: block; margin-top: 0.2rem; color: var(--r-faint); font-size: 0.72rem; line-height: 1.35; }
+
+.nkr__skills { display: grid; gap: 0.7rem; margin-top: 1.1rem; }
+.nkr__skills > div { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1rem; }
+.nkr__skills dt { font-size: 0.85rem; font-weight: 600; }
+.nkr__skills dd { color: var(--r-dim); font-size: 0.85rem; }
+
+.nkr__entry { margin-top: 1.3rem; break-inside: avoid; }
+.nkr__entry header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+}
+.nkr__entry h3 { font-family: var(--font-space-grotesk), sans-serif; font-size: 1rem; font-weight: 600; letter-spacing: -0.015em; }
+.nkr__entry time { color: var(--r-faint); font-size: 0.8rem; white-space: nowrap; }
+.nkr__meta { margin-top: 0.2rem; color: var(--r-faint); font-size: 0.82rem; }
+.nkr__entry ul { margin-top: 0.7rem; padding-inline-start: 1.1rem; display: grid; gap: 0.45rem; }
+.nkr__entry li { color: var(--r-dim); font-size: 0.875rem; line-height: 1.6; }
+.nkr__entry li::marker { color: var(--r-accent); }
+.nkr__metric {
+  display: inline-block;
+  margin-inline-end: 0.45rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--r-accent) 16%, transparent);
+  color: var(--r-accent);
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.nkr__split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 0 2rem; }
+
+.nkr__note {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--r-line);
+  color: var(--r-faint);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+@container (max-width: 34rem) {
+  .nkr__head { grid-template-columns: minmax(0, 1fr); }
+  .nkr__skills > div { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
+}
+
+/* --- Controls bar --------------------------------------------------------- */
+.nkr-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 54rem;
+  margin: 0 auto 1.1rem;
+}
+.nkr-bar__group {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.22rem;
+  border: 1px solid var(--nk-line, rgba(255,255,255,0.1));
+  border-radius: 10px;
+  background: var(--nk-surface, rgba(255,255,255,0.03));
+}
+.nkr-bar__group button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--nk-dim, #97a6b2);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.nkr-bar__group button:hover { color: var(--nk-text, #e9eff3); }
+.nkr-bar__group button[aria-pressed="true"] { background: var(--nk-mint, #45e6b0); color: #04120d; font-weight: 600; }
+.nkr-bar__group svg { width: 0.9em; height: 0.9em; }
+
+.nkr-bar select {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--nk-line, rgba(255,255,255,0.1));
+  border-radius: 10px;
+  background: var(--nk-surface, rgba(255,255,255,0.03));
+  color: var(--nk-text, #e9eff3);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.nkr-bar select option { background: #0b0f14; color: #e9eff3; }
+.nkr-bar__spacer { margin-inline-start: auto; }
+
+/* --- Print ---------------------------------------------------------------- */
+@media print {
+  .nkr-bar, .nk-nav, .nk-footer, .nkc, .nkos-relaunch, .nk-crumbs { display: none !important; }
+  .nkr {
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    --r-bg: #fff;
+    --r-surface: #f5f7f9;
+    --r-line: #d8dee4;
+    --r-text: #000;
+    --r-dim: #222;
+    --r-faint: #444;
+    --r-accent: #0a6b4f;
+  }
+  .nkr__section { break-inside: avoid; }
+}
+
+/* Latin-script data (email, phone, tech lists) keeps its own direction inside an
+   RTL document, so "+91 7078216535" is never reordered to "7078216535 91+". */
+.nkr [dir="ltr"] { unicode-bidi: isolate; }
+.nkr[dir="rtl"] .nkr__contact li { direction: rtl; }
+.nkr[dir="rtl"] .nkr__skills dd,
+.nkr[dir="rtl"] .nkr__meta,
+.nkr[dir="rtl"] .nkr__entry h3 { unicode-bidi: plaintext; }
