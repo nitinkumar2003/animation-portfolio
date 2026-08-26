@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
-import { enrichedProjects, getProjectBySlug } from "../../../../data/content";
-import { initialsOf } from "../../../../component/site/ProjectCard";
+import { enrichedProjects, getProjectBySlug, initialsOf } from "../../../../data/content";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };

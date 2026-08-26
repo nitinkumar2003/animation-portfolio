@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FiArrowUp, FiChevronRight, FiRefreshCw, FiSquare, FiX } from "react-icons/fi";
 import profileImg from "../../assets/images.jpg";
 import { personalDataObj } from "../../data/data";
+import { usePreferences } from "../site/Preferences";
 import "../../styles/chat.css";
 
 const STORAGE_KEY = "nk-ask-nitin-thread";
@@ -55,6 +56,7 @@ const readStoredThread = () => {
 };
 
 const AskNitinWidget = () => {
+  const { t } = usePreferences();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([GREETING]);
   const [draft, setDraft] = useState("");
@@ -206,28 +208,28 @@ const AskNitinWidget = () => {
     <div className="nkc" data-open={open}>
       {!open && nudgeVisible && (
         <div className="nkc-nudge" role="status">
-          <span>Questions about <b>Nitin&apos;s experience</b>? Ask his AI.</span>
-          <button type="button" className="nkc-nudge__dismiss" onClick={dismissNudge} aria-label="Dismiss">
+          <span>{t("assistantNudge")}</span>
+          <button type="button" className="nkc-nudge__dismiss" onClick={dismissNudge} aria-label={t("close")}>
             <FiX />
           </button>
         </div>
       )}
 
       {open && (
-        <div className="nkc-panel" role="dialog" aria-modal="false" aria-label="Ask Nitin — AI profile assistant">
+        <div className="nkc-panel" role="dialog" aria-modal="false" aria-label={t("askNitin")}>
           <header className="nkc-head">
             <span className="nkc-head__avatar">
               <img src={profileImg.src} alt="" />
               <i />
             </span>
             <span className="nkc-head__id">
-              <b>Ask Nitin</b>
-              <span>Answers from his verified resume</span>
+              <b>{t("askNitin")}</b>
+              <span>{t("assistantSubtitle")}</span>
             </span>
-            <button type="button" onClick={reset} title="New conversation" aria-label="Start a new conversation">
+            <button type="button" onClick={reset} title={t("newConversation")} aria-label={t("newConversation")}>
               <FiRefreshCw />
             </button>
-            <button type="button" onClick={() => setOpen(false)} title="Close" aria-label="Close assistant">
+            <button type="button" onClick={() => setOpen(false)} title={t("close")} aria-label={t("close")}>
               <FiX />
             </button>
           </header>
@@ -236,7 +238,7 @@ const AskNitinWidget = () => {
             {isEmptyThread ? (
               <div className="nkc-intro">
                 <span className="nkc-intro__mark"><ChatMark /></span>
-                <h3>Ask about Nitin</h3>
+                <h3>{t("askNitin")}</h3>
                 <p>{GREETING.content}</p>
                 <div className="nkc-suggestions">
                   {OPENERS.map((opener) => (
@@ -293,22 +295,22 @@ const AskNitinWidget = () => {
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); send(draft); }
                 }}
-                placeholder="Ask about his experience, stack or projects…"
-                aria-label="Ask a question about Nitin"
+                placeholder={t("assistantPlaceholder")}
+                aria-label={t("assistantPlaceholder")}
               />
               {streaming ? (
-                <button type="button" className="nkc-send nkc-send--stop" onClick={stop} aria-label="Stop generating">
+                <button type="button" className="nkc-send nkc-send--stop" onClick={stop} aria-label={t("stopGenerating")}>
                   <FiSquare />
                 </button>
               ) : (
-                <button type="submit" className="nkc-send" disabled={!draft.trim()} aria-label="Send question">
+                <button type="submit" className="nkc-send" disabled={!draft.trim()} aria-label={t("send")}>
                   <FiArrowUp />
                 </button>
               )}
             </div>
             <div className="nkc-composer__foot">
-              <span>AI answers from a verified profile. Confirm details with Nitin.</span>
-              <a href={`mailto:${personalDataObj.email}`}>Email instead</a>
+              <span>{t("assistantDisclaimer")}</span>
+              <a href={`mailto:${personalDataObj.email}`}>{t("emailInstead")}</a>
             </div>
           </form>
         </div>
@@ -320,7 +322,7 @@ const AskNitinWidget = () => {
         className="nkc-launcher"
         onClick={() => { setOpen((value) => !value); dismissNudge(); }}
         aria-expanded={open}
-        aria-label={open ? "Close Ask Nitin assistant" : "Open Ask Nitin — AI profile assistant"}
+        aria-label={open ? t("close") : t("askNitin")}
       >
         {!open && <span className="nkc-launcher__ring" aria-hidden="true" />}
         <ChatMark className="nkc-launcher__open" />

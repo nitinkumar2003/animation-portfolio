@@ -76,6 +76,25 @@ Person / WebSite / ProfilePage / ItemList / FAQPage / BreadcrumbList / CreativeW
 
 Every app reads from `src/data/content.js`, so the OS and the website can never disagree.
 
+## Theme & language
+
+Every surface — site, nav, footer, chat widget, résumé and the OS — supports **dark / light /
+system** and **10 languages** (English, हिन्दी, العربية, Español, Français, Deutsch, Português,
+日本語, 한국어, 中文). Arabic switches the whole document to RTL.
+
+- Preference lives in `nk-site-prefs` and is applied by a blocking script in `<head>` *before*
+  first paint, so light mode never flashes dark.
+- `?lang=` and `?theme=` make any page shareable in a specific language:
+  `/projects?lang=hi&theme=light`.
+- **SSR always renders English + dark.** That is deliberate — it is the HTML search engines index,
+  and it means there is no hydration mismatch. Preferences apply immediately after mount.
+- Translated: navigation, headings, labels, buttons, hero, assistant chrome.
+  Not translated: project case studies, achievement bullets, FAQ answers — dense technical claims
+  drawn from the verified résumé. A `technicalNote` says so in the reader's language.
+
+Strings live in `src/data/siteI18n.js` (site) and `src/data/resumeI18n.js` (résumé + language list).
+Missing keys fall back to English automatically.
+
 ## Résumé
 
 `/resume` renders English + dark on the server (that is what gets indexed) and restores the

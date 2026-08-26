@@ -3,6 +3,7 @@ import "../styles/base.css";
 import { personalDataObj } from "../data/data";
 import { positioning } from "../data/content";
 import { SITE_URL } from "../lib/seo";
+import { themeScript } from "../component/site/Preferences";
 
 // Self-hosted at build time by next/font — no render-blocking request to Google.
 const inter = Inter({
@@ -82,7 +83,12 @@ export const viewport = {
 };
 
 const RootLayout = ({ children }) => (
-  <html lang="en" className={`dark ${inter.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
+  <html lang="en" dir="ltr" data-theme="dark" className={`${inter.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
+    <head>
+      {/* Applies the stored theme and language before first paint, so switching
+          to light never flashes the dark palette. */}
+      <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+    </head>
     <body>{children}</body>
   </html>
 );

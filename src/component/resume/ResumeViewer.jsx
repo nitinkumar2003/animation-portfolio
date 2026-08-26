@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FiDownload, FiMoon, FiPrinter, FiSun } from "react-icons/fi";
 import ResumeDocument from "./ResumeDocument";
 import { resumeLanguages, resumeText } from "../../data/resumeI18n";
+import { usePreferences } from "../site/Preferences";
 import "../../styles/resume.css";
 
 const STORAGE_KEY = "nk-resume-prefs";
@@ -16,8 +17,18 @@ const STORAGE_KEY = "nk-resume-prefs";
  * applied after mount.
  */
 const ResumeViewer = ({ initialLanguage = "en", initialTheme = "dark", compact = false }) => {
+  // The résumé follows the site preference by default, but can be overridden here
+  // (a recruiter may want the document in one language and the site in another).
+  const site = usePreferences();
   const [language, setLanguage] = useState(initialLanguage);
   const [theme, setTheme] = useState(initialTheme);
+  const [linked, setLinked] = useState(true);
+
+  useEffect(() => {
+    if (!linked) return;
+    setLanguage(site.language);
+    setTheme(site.resolvedTheme);
+  }, [linked, site.language, site.resolvedTheme]);
 
   // A ?lang= / ?theme= link wins over stored preferences, so the résumé can be
   // shared in a specific language: /resume?lang=ja&theme=light
@@ -59,15 +70,15 @@ const ResumeViewer = ({ initialLanguage = "en", initialTheme = "dark", compact =
     <div className={compact ? "nkr-wrap nkr-wrap--compact" : "nkr-wrap"}>
       <div className="nkr-bar">
         <div className="nkr-bar__group" role="group" aria-label={t("appearance")}>
-          <button type="button" aria-pressed={theme === "dark"} onClick={() => setTheme("dark")}>
+          <button type="button" aria-pressed={theme === "dark"} onClick={() => { setLinked(false); setTheme("dark"); }}>
             <FiMoon /> {t("dark")}
           </button>
-          <button type="button" aria-pressed={theme === "light"} onClick={() => setTheme("light")}>
+          <button type="button" aria-pressed={theme === "light"} onClick={() => { setLinked(false); setTheme("light"); }}>
             <FiSun /> {t("light")}
           </button>
         </div>
 
-        <select value={language} onChange={(event) => setLanguage(event.target.value)} aria-label={t("language")}>
+        <select value={language} onChange={(event) => { setLinked(false); setLanguage(event.target.value); }} aria-label={t("language")}>
           {resumeLanguages.map((item) => (
             <option key={item.id} value={item.id}>{item.code} · {item.name}</option>
           ))}

@@ -1,9 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import { FiGithub, FiLinkedin, FiMail, FiMapPin } from "react-icons/fi";
 import { personalDataObj } from "../../data/data";
 import { enrichedProjects, systemInfo } from "../../data/content";
+import { usePreferences } from "./Preferences";
 
-const SiteFooter = () => (
+const SiteFooter = () => {
+  const { t } = usePreferences();
+
+  return (
   <footer className="nk-footer">
     <div className="nk-shell">
       <div className="nk-footer__grid">
@@ -22,17 +28,17 @@ const SiteFooter = () => (
         </div>
 
         <div className="nk-footer__col">
-          <h4>Explore</h4>
+          <h4>{t("explore")}</h4>
           <ul>
-            <li><Link href="/projects">All work</Link></li>
-            <li><Link href="/experience">Experience</Link></li>
-            <li><Link href="/resume">Résumé</Link></li>
-            <li><Link href="/os">Nitin OS</Link></li>
+            <li><Link href="/projects">{t("navWork")}</Link></li>
+            <li><Link href="/experience">{t("navExperience")}</Link></li>
+            <li><Link href="/resume">{t("navResume")}</Link></li>
+            <li><Link href="/os">{t("navOs")}</Link></li>
           </ul>
         </div>
 
         <div className="nk-footer__col">
-          <h4>Selected work</h4>
+          <h4>{t("selectedWork")}</h4>
           <ul>
             {enrichedProjects.slice(0, 4).map((project) => (
               <li key={project.slug}>
@@ -43,7 +49,7 @@ const SiteFooter = () => (
         </div>
 
         <div className="nk-footer__col">
-          <h4>Connect</h4>
+          <h4>{t("connect")}</h4>
           <ul>
             <li><a href={`mailto:${personalDataObj.email}`}>Email</a></li>
             <li><a href={personalDataObj.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>
@@ -54,7 +60,7 @@ const SiteFooter = () => (
       </div>
 
       <div className="nk-footer__bar">
-        <span>© {systemInfo.buildYear} {personalDataObj.name}. Built with Next.js.</span>
+        <span>© {systemInfo.buildYear} {personalDataObj.name}. {t("builtWith")}.</span>
         <span style={{ display: "inline-flex", gap: "1.4rem", flexWrap: "wrap" }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem" }}><FiMapPin /> Noida, India</span>
           <a href={`mailto:${personalDataObj.email}`} style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem" }}><FiMail /> {personalDataObj.email}</a>
@@ -64,6 +70,7 @@ const SiteFooter = () => (
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 export default SiteFooter;

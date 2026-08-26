@@ -45,7 +45,9 @@
 .nkos-overlay__exit {
   position: absolute;
   right: max(0.9rem, env(safe-area-inset-right));
-  top: 44px;
+  /* Clear of the OS menu bar and the hardware label on the power screen, and
+     above the dock on the desktop. */
+  bottom: 86px;
   z-index: 9600;
   display: inline-flex;
   align-items: center;

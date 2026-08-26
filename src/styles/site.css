@@ -945,3 +945,128 @@
   .nk-cta__actions .nk-btn,
   .nk-cta__links a { overflow-wrap: anywhere; }
 }
+
+/* ==========================================================================
+   Light theme
+   Only the tokens are redefined — every component reads through them, so the
+   whole site inverts without touching a single component rule.
+   ========================================================================== */
+html[data-theme="light"] .nk {
+  --nk-bg: #f6f8fa;
+  --nk-bg-soft: #ffffff;
+  --nk-surface: rgba(16, 23, 29, 0.028);
+  --nk-surface-hi: rgba(16, 23, 29, 0.06);
+  --nk-line: rgba(16, 23, 29, 0.1);
+  --nk-line-hi: rgba(16, 23, 29, 0.2);
+  --nk-text: #10171d;
+  --nk-dim: #47555f;
+  --nk-faint: #63727d;
+  --nk-mint: #0d8f68;
+  --nk-sky: #1d7fc4;
+  --nk-violet: #6f52c9;
+  --nk-amber: #a86c00;
+}
+
+/* The ambient mesh has to be much softer on a light ground. */
+html[data-theme="light"] .nk::before {
+  background:
+    radial-gradient(46rem 34rem at 12% -4%, rgba(13, 143, 104, 0.1), transparent 62%),
+    radial-gradient(40rem 30rem at 88% 6%, rgba(29, 127, 196, 0.09), transparent 60%),
+    radial-gradient(52rem 38rem at 62% 88%, rgba(111, 82, 201, 0.07), transparent 64%);
+}
+html[data-theme="light"] .nk::after { opacity: 0.16; }
+
+/* Elements that were tuned against a dark ground need explicit light values. */
+html[data-theme="light"] .nk-btn--primary {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0d8f68, #16a97d);
+  box-shadow: 0 8px 22px -10px rgba(13, 143, 104, 0.7);
+}
+html[data-theme="light"] .nk-brand__mark { color: #ffffff; background: linear-gradient(140deg, #0d8f68, #1d7fc4); }
+html[data-theme="light"] .nk-pill { background: rgba(13, 143, 104, 0.09); border-color: rgba(13, 143, 104, 0.32); }
+html[data-theme="light"] .nk-stats strong { background: linear-gradient(140deg, var(--nk-text), var(--nk-mint)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+html[data-theme="light"] .nk-filters a[aria-current="true"],
+html[data-theme="light"] .nk-filters button[aria-current="true"] { color: #ffffff; background: var(--nk-mint); }
+html[data-theme="light"] .nk-cta { background: radial-gradient(60rem 26rem at 50% -30%, rgba(13, 143, 104, 0.12), transparent 68%), var(--nk-bg-soft); }
+html[data-theme="light"] .nk-oslaunch { background: radial-gradient(40rem 20rem at 88% 50%, rgba(29, 127, 196, 0.1), transparent 66%), var(--nk-bg-soft); }
+html[data-theme="light"] .nk-callout { background: rgba(13, 143, 104, 0.07); border-color: rgba(13, 143, 104, 0.28); }
+html[data-theme="light"] .nk-skip { color: #ffffff; }
+
+/* Project covers keep their dark canvas so the generated art still reads. */
+html[data-theme="light"] .nk-project__cover { border-bottom-color: var(--nk-line); }
+html[data-theme="light"] .nk-portrait__tag { background: rgba(255, 255, 255, 0.86); }
+
+/* --- Theme + language controls -------------------------------------------- */
+.nk-prefs { display: flex; align-items: center; gap: 0.4rem; }
+.nk-prefs__theme {
+  display: flex;
+  gap: 0.15rem;
+  padding: 0.18rem;
+  border: 1px solid var(--nk-line);
+  border-radius: 10px;
+  background: var(--nk-surface);
+}
+.nk-prefs__theme button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 28px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--nk-faint);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.nk-prefs__theme button:hover { color: var(--nk-text); }
+.nk-prefs__theme button[aria-pressed="true"] { background: var(--nk-surface-hi); color: var(--nk-mint); }
+.nk-prefs__theme svg { width: 0.95rem; height: 0.95rem; }
+
+.nk-prefs__lang {
+  height: 34px;
+  padding: 0 0.55rem;
+  border: 1px solid var(--nk-line);
+  border-radius: 10px;
+  background: var(--nk-surface);
+  color: var(--nk-dim);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nk-prefs__lang:hover { color: var(--nk-text); border-color: var(--nk-line-hi); }
+.nk-prefs__lang option { background: var(--nk-bg-soft); color: var(--nk-text); }
+
+/* Right-to-left: mirror the few directional pieces. */
+html[dir="rtl"] .nk-eyebrow::before { order: 2; }
+html[dir="rtl"] .nk-nav__links { margin-left: 0; margin-right: auto; }
+html[dir="rtl"] .nk-role { padding-left: 0; padding-right: clamp(0px, 3vw, 2.6rem); }
+html[dir="rtl"] .nk-role__when { text-align: left; }
+html[dir="rtl"] .nk-steps li::before { text-align: right; }
+
+/* Latin-script content must not be reordered inside an RTL document.
+   `plaintext` lets each block take its direction from its own first strong
+   character, so English paragraphs read left-to-right and keep their
+   punctuation, while translated blocks stay right-to-left. */
+html[dir="rtl"] .nk :is(p, li, dd, h3, h4, b, em, time, kbd, summary),
+html[dir="rtl"] .nk-chips span,
+html[dir="rtl"] .nk-project__foot,
+html[dir="rtl"] .nk-facts b,
+html[dir="rtl"] .nk-win__metric b,
+html[dir="rtl"] .nkc-msg__text { unicode-bidi: plaintext; }
+
+@media (max-width: 620px) {
+  .nk-prefs__lang { display: none; }
+}
+
+/* Shown when the interface is translated but the technical detail is not. */
+.nk-i18n-note {
+  max-width: 46rem;
+  margin: 2.5rem auto 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--nk-line);
+  color: var(--nk-faint);
+  font-size: 0.8rem;
+  font-style: italic;
+  text-align: center;
+}

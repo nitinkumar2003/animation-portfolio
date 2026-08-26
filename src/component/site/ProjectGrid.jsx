@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { FiSearch, FiX } from "react-icons/fi";
 import ProjectCard from "./ProjectCard";
+import { usePreferences } from "./Preferences";
 
 const CATEGORIES = ["All", "AI / SaaS", "Full Stack", "Dashboard", "Frontend"];
 
@@ -11,6 +12,7 @@ const CATEGORIES = ["All", "AI / SaaS", "Full Stack", "Dashboard", "Frontend"];
  * list into the static HTML — every project stays crawlable without JavaScript.
  */
 const ProjectGrid = ({ projects }) => {
+  const { t } = usePreferences();
   const [category, setCategory] = useState("All");
   const [query, setQuery] = useState("");
 
@@ -43,7 +45,7 @@ const ProjectGrid = ({ projects }) => {
               onClick={() => setCategory(item)}
               aria-current={category === item}
             >
-              {item} <span style={{ opacity: 0.6 }}>({counts[item]})</span>
+              {item === "All" ? t("filterAll") : item} <span style={{ opacity: 0.6 }}>({counts[item]})</span>
             </button>
           ))}
         </nav>
@@ -54,8 +56,8 @@ const ProjectGrid = ({ projects }) => {
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search projects, tech, features…"
-            aria-label="Search projects"
+            placeholder={t("searchProjects")}
+            aria-label={t("searchProjects")}
           />
           {query && (
             <button type="button" onClick={() => setQuery("")} aria-label="Clear search"><FiX /></button>
@@ -69,8 +71,8 @@ const ProjectGrid = ({ projects }) => {
         </div>
       ) : (
         <p className="nk-empty">
-          No projects match “{query}”{category !== "All" ? ` in ${category}` : ""}.{" "}
-          <button type="button" onClick={() => { setQuery(""); setCategory("All"); }}>Clear filters</button>
+          {t("noMatch")} “{query}”{category !== "All" ? ` · ${category}` : ""}.{" "}
+          <button type="button" onClick={() => { setQuery(""); setCategory("All"); }}>{t("clearFilters")}</button>
         </p>
       )}
     </>

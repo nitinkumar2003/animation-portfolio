@@ -352,3 +352,34 @@
   }
   .nkc-stream { scroll-behavior: auto; }
 }
+
+/* --- Light theme ---------------------------------------------------------- */
+html[data-theme="light"] .nkc {
+  --nkc-bg: #ffffff;
+  --nkc-surface: #f3f6f8;
+  --nkc-raise: rgba(16, 23, 29, 0.045);
+  --nkc-line: rgba(16, 23, 29, 0.11);
+  --nkc-text: #10171d;
+  --nkc-dim: #47555f;
+  --nkc-faint: #616f7a;
+  --nkc-mint: #0d8f68;
+}
+html[data-theme="light"] .nkc-launcher {
+  background: linear-gradient(140deg, #0d8f68, #16a97d);
+  color: #ffffff;
+  box-shadow: 0 10px 30px -8px rgba(13, 143, 104, 0.5), 0 2px 8px rgba(16, 23, 29, 0.18);
+}
+html[data-theme="light"] .nkc[data-open="true"] .nkc-launcher { background: var(--nkc-surface); color: var(--nkc-text); }
+html[data-theme="light"] .nkc-panel { box-shadow: 0 26px 60px -18px rgba(16, 23, 29, 0.32), 0 0 0 1px rgba(16, 23, 29, 0.06); }
+html[data-theme="light"] .nkc-msg--assistant .nkc-msg__text { color: #26333c; }
+html[data-theme="light"] .nkc-msg__avatar,
+html[data-theme="light"] .nkc-intro__mark { background: linear-gradient(140deg, #0d8f68, #16a97d); color: #ffffff; }
+html[data-theme="light"] .nkc-send { background: var(--nkc-mint); color: #ffffff; }
+html[data-theme="light"] .nkc-nudge { box-shadow: 0 10px 26px rgba(16, 23, 29, 0.18); }
+html[data-theme="light"] .nkc-caret { background: var(--nkc-mint); }
+
+/* RTL: the launcher and panel move to the left edge. */
+html[dir="rtl"] .nkc { right: auto; left: max(1.25rem, env(safe-area-inset-left)); }
+html[dir="rtl"] .nkc-panel { right: auto; left: 0; transform-origin: bottom left; }
+html[dir="rtl"] .nkc-nudge { right: auto; left: calc(100% + 0.85rem); border-radius: 13px 13px 13px 3px; }
+html[dir="rtl"] .nkc-msg--user .nkc-msg__text { border-radius: 15px 15px 15px 4px; }
