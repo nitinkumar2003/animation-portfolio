@@ -1,3 +1,6 @@
+// xAI exposes an OpenAI-compatible REST surface, so the `openai` SDK is used purely
+// as a client — pointed at api.x.ai. Note that it is the Chat Completions API, not
+// OpenAI's Responses API.
 import OpenAI from "openai";
 import { createNitinKnowledgeText } from "../../../data/nitinProfile";
 import { personalDataObj } from "../../../data/data";
@@ -10,6 +13,15 @@ const RATE_LIMIT_MAX = 30;
 const MAX_QUESTION_LENGTH = 800;
 const MAX_HISTORY_ITEMS = 8;
 const MAX_HISTORY_ITEM_LENGTH = 800;
+
+const XAI_BASE_URL = "https://api.x.ai/v1";
+const DEFAULT_MODEL = "grok-4-fast";
+const MAX_ANSWER_TOKENS = 600;
+
+/** Accepts either name — people label the xAI secret both ways. */
+const getApiKey = () => process.env.XAI_API_KEY || process.env.GROK_API_KEY || "";
+
+const createClient = () => new OpenAI({ apiKey: getApiKey(), baseURL: XAI_BASE_URL });
 
 const rateLimitStore = globalThis.__nkosAskNitinRateLimit || new Map();
 globalThis.__nkosAskNitinRateLimit = rateLimitStore;
@@ -107,35 +119,51 @@ ${createNitinKnowledgeText()}`;
 const REFUSAL_OFF_TOPIC = "I am Nitin's portfolio assistant, so I can only answer questions about his work, skills, projects, experience, availability, and professional fit. Ask me about his stack, a specific project, or how to get in touch.";
 const REFUSAL_INJECTION = "I can only discuss Nitin Kumar's verified professional profile — his projects, skills, experience, availability, and contact details.";
 
+/**
+ * Turns a provider error into something actionable.
+ * xAI returns HTTP 400 for an invalid key (not 401), so the message is inspected
+ * as well as the status.
+ */
+const describeError = (error, model) => {
+  const status = Number(error?.status);
+  const message = String(error?.message || "").toLowerCase();
+
+  if (status === 429) return { status: 429, text: "The assistant is busy or has reached its usage limit. Please try again shortly." };
+  if (message.includes("api key") || message.includes("unauthorized") || status === 401 || status === 403) {
+    return { status: 503, text: "The xAI API key is missing or invalid. Please update XAI_API_KEY on the server." };
+  }
+  if (message.includes("does not exist") || message.includes("not found") || message.includes("unknown model") || status === 404) {
+    return { status: 503, text: `The model "${model}" is not available on xAI. Set XAI_MODEL to a current Grok model id.` };
+  }
+  return { status: 502, text: `Ask Nitin is temporarily unavailable. Please email ${personalDataObj.email} in the meantime.` };
+};
+
 /** Streams plain UTF-8 text chunks so the client can render tokens as they arrive. */
-const streamResponse = async (client, model, input) => {
+const streamResponse = async (client, model, messages) => {
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const events = await client.responses.create({
+        const events = await client.chat.completions.create({
           model,
-          reasoning: { effort: "low" },
-          instructions: INSTRUCTIONS,
-          input,
-          max_output_tokens: 600,
-          store: false,
+          messages,
+          max_tokens: MAX_ANSWER_TOKENS,
           stream: true,
         });
 
         let emitted = false;
-        for await (const event of events) {
-          if (event.type === "response.output_text.delta" && event.delta) {
+        for await (const chunk of events) {
+          const delta = chunk.choices?.[0]?.delta?.content;
+          if (delta) {
             emitted = true;
-            controller.enqueue(encoder.encode(event.delta));
+            controller.enqueue(encoder.encode(delta));
           }
-          if (event.type === "response.failed" || event.type === "error") break;
         }
         if (!emitted) {
           controller.enqueue(encoder.encode(`Ask Nitin could not produce an answer. Please try again, or email ${personalDataObj.email}.`));
         }
-      } catch {
-        controller.enqueue(encoder.encode(`Ask Nitin is temporarily unavailable. Please email ${personalDataObj.email} in the meantime.`));
+      } catch (error) {
+        controller.enqueue(encoder.encode(describeError(error, model).text));
       } finally {
         controller.close();
       }
@@ -180,8 +208,8 @@ export async function POST(request) {
   if (injectionTerms.some((term) => lowered.includes(term))) return guard(REFUSAL_INJECTION, 200);
   if (!isProfileQuestion(question)) return guard(REFUSAL_OFF_TOPIC, 200);
 
-  if (!process.env.OPENAI_API_KEY) {
-    return guard("Ask Nitin is ready, but OPENAI_API_KEY is not configured on the server.", 503);
+  if (!getApiKey()) {
+    return guard("Ask Nitin is ready, but XAI_API_KEY is not configured on the server.", 503);
   }
 
   const history = Array.isArray(body?.history) ? body.history.slice(-MAX_HISTORY_ITEMS) : [];
@@ -191,29 +219,30 @@ export async function POST(request) {
     return role && content ? [{ role, content }] : [];
   });
 
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  const model = process.env.OPENAI_MODEL || "gpt-5.6-luna";
-  const input = [...safeHistory, { role: "user", content: question }];
+  const client = createClient();
+  const model = process.env.XAI_MODEL || DEFAULT_MODEL;
+  // Chat Completions carries the profile context as a system message rather than
+  // the Responses API's separate `instructions` field.
+  const messages = [
+    { role: "system", content: INSTRUCTIONS },
+    ...safeHistory,
+    { role: "user", content: question },
+  ];
 
-  if (wantsStream) return streamResponse(client, model, input);
+  if (wantsStream) return streamResponse(client, model, messages);
 
   try {
-    const response = await client.responses.create({
+    const response = await client.chat.completions.create({
       model,
-      reasoning: { effort: "low" },
-      instructions: INSTRUCTIONS,
-      input,
-      max_output_tokens: 600,
-      store: false,
+      messages,
+      max_tokens: MAX_ANSWER_TOKENS,
     });
 
-    const answer = response.output_text?.trim();
+    const answer = response.choices?.[0]?.message?.content?.trim();
     if (!answer) return json({ error: "The assistant could not produce an answer. Please try again." }, 502);
     return json({ answer });
   } catch (error) {
-    const status = Number(error?.status);
-    if (status === 401) return json({ error: "The OpenAI server key is invalid. Please update OPENAI_API_KEY." }, 503);
-    if (status === 429) return json({ error: "The AI service is busy or has reached its usage limit. Please try again shortly." }, 429);
-    return json({ error: "Ask Nitin is temporarily unavailable. Please use the Contact app in the meantime." }, 502);
+    const { status, text } = describeError(error, model);
+    return json({ error: text }, status);
   }
 }

@@ -961,17 +961,17 @@ html[data-theme="light"] .nk {
   --nk-text: #10171d;
   --nk-dim: #47555f;
   --nk-faint: #63727d;
-  --nk-mint: #0d8f68;
-  --nk-sky: #1d7fc4;
+  --nk-mint: #0c825f;
+  --nk-sky: #1b77b8;
   --nk-violet: #6f52c9;
-  --nk-amber: #a86c00;
+  --nk-amber: #9f6600;
 }
 
 /* The ambient mesh has to be much softer on a light ground. */
 html[data-theme="light"] .nk::before {
   background:
-    radial-gradient(46rem 34rem at 12% -4%, rgba(13, 143, 104, 0.1), transparent 62%),
-    radial-gradient(40rem 30rem at 88% 6%, rgba(29, 127, 196, 0.09), transparent 60%),
+    radial-gradient(46rem 34rem at 12% -4%, rgba(12, 130, 95, 0.1), transparent 62%),
+    radial-gradient(40rem 30rem at 88% 6%, rgba(27, 119, 184, 0.09), transparent 60%),
     radial-gradient(52rem 38rem at 62% 88%, rgba(111, 82, 201, 0.07), transparent 64%);
 }
 html[data-theme="light"] .nk::after { opacity: 0.16; }
@@ -979,17 +979,17 @@ html[data-theme="light"] .nk::after { opacity: 0.16; }
 /* Elements that were tuned against a dark ground need explicit light values. */
 html[data-theme="light"] .nk-btn--primary {
   color: #ffffff;
-  background: linear-gradient(135deg, #0d8f68, #16a97d);
-  box-shadow: 0 8px 22px -10px rgba(13, 143, 104, 0.7);
+  background: linear-gradient(135deg, #0c825f, #12996f);
+  box-shadow: 0 8px 22px -10px rgba(12, 130, 95, 0.7);
 }
-html[data-theme="light"] .nk-brand__mark { color: #ffffff; background: linear-gradient(140deg, #0d8f68, #1d7fc4); }
-html[data-theme="light"] .nk-pill { background: rgba(13, 143, 104, 0.09); border-color: rgba(13, 143, 104, 0.32); }
+html[data-theme="light"] .nk-brand__mark { color: #ffffff; background: linear-gradient(140deg, #0c825f, #1b77b8); }
+html[data-theme="light"] .nk-pill { background: rgba(12, 130, 95, 0.09); border-color: rgba(12, 130, 95, 0.32); }
 html[data-theme="light"] .nk-stats strong { background: linear-gradient(140deg, var(--nk-text), var(--nk-mint)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 html[data-theme="light"] .nk-filters a[aria-current="true"],
 html[data-theme="light"] .nk-filters button[aria-current="true"] { color: #ffffff; background: var(--nk-mint); }
-html[data-theme="light"] .nk-cta { background: radial-gradient(60rem 26rem at 50% -30%, rgba(13, 143, 104, 0.12), transparent 68%), var(--nk-bg-soft); }
-html[data-theme="light"] .nk-oslaunch { background: radial-gradient(40rem 20rem at 88% 50%, rgba(29, 127, 196, 0.1), transparent 66%), var(--nk-bg-soft); }
-html[data-theme="light"] .nk-callout { background: rgba(13, 143, 104, 0.07); border-color: rgba(13, 143, 104, 0.28); }
+html[data-theme="light"] .nk-cta { background: radial-gradient(60rem 26rem at 50% -30%, rgba(12, 130, 95, 0.12), transparent 68%), var(--nk-bg-soft); }
+html[data-theme="light"] .nk-oslaunch { background: radial-gradient(40rem 20rem at 88% 50%, rgba(27, 119, 184, 0.1), transparent 66%), var(--nk-bg-soft); }
+html[data-theme="light"] .nk-callout { background: rgba(12, 130, 95, 0.07); border-color: rgba(12, 130, 95, 0.28); }
 html[data-theme="light"] .nk-skip { color: #ffffff; }
 
 /* Project covers keep their dark canvas so the generated art still reads. */
@@ -1069,4 +1069,209 @@ html[dir="rtl"] .nkc-msg__text { unicode-bidi: plaintext; }
   font-size: 0.8rem;
   font-style: italic;
   text-align: center;
+}
+
+/* ==========================================================================
+   Interaction layer
+   Dark and light need different depth cues: dark reads depth from glow and
+   border contrast, light reads it from soft shadows. Both are driven by the
+   same tokens so every component gets consistent hover, press and focus.
+   ========================================================================== */
+
+.nk {
+  --nk-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --nk-shadow-md: 0 10px 26px -12px rgba(0, 0, 0, 0.75);
+  --nk-shadow-lg: 0 22px 48px -20px rgba(0, 0, 0, 0.85);
+  --nk-ring: 0 0 0 1px rgba(69, 230, 176, 0.28);
+  --nk-glow: 0 0 34px -14px rgba(69, 230, 176, 0.5);
+  --nk-lift: -4px;
+}
+
+html[data-theme="light"] .nk {
+  --nk-shadow-sm: 0 1px 2px rgba(16, 23, 29, 0.08), 0 1px 1px rgba(16, 23, 29, 0.04);
+  --nk-shadow-md: 0 8px 20px -8px rgba(16, 23, 29, 0.16), 0 2px 6px -2px rgba(16, 23, 29, 0.1);
+  --nk-shadow-lg: 0 20px 40px -12px rgba(16, 23, 29, 0.22), 0 6px 14px -6px rgba(16, 23, 29, 0.12);
+  --nk-ring: 0 0 0 1px rgba(12, 130, 95, 0.3);
+  --nk-glow: 0 0 30px -16px rgba(12, 130, 95, 0.42);
+}
+
+/* Theme changes should feel like a dissolve, not a repaint — but never animate
+   transform/opacity here, or scroll-reveal fights the transition. */
+.nk :is(.nk-card, .nk-stats > div, .nk-win, .nk-facts > div, .nk-chips span,
+        .nk-btn, .nk-faq details, .nk-cta, .nk-oslaunch, .nk-search, .nk-nav) {
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.3s var(--nk-ease),
+    transform 0.32s var(--nk-ease);
+}
+
+/* --- Cards ---------------------------------------------------------------- */
+.nk-card { box-shadow: var(--nk-shadow-sm); }
+.nk-card:hover {
+  border-color: var(--nk-line-hi);
+  box-shadow: var(--nk-shadow-md);
+}
+
+/* A card that is a link gets the full lift + accent ring. */
+a.nk-card:hover,
+.nk-project:hover {
+  transform: translateY(var(--nk-lift));
+  border-color: color-mix(in srgb, var(--nk-mint) 40%, var(--nk-line-hi));
+  box-shadow: var(--nk-shadow-lg), var(--nk-ring);
+}
+a.nk-card:active,
+.nk-project:active { transform: translateY(-1px); box-shadow: var(--nk-shadow-md); }
+
+/* Capability + service cards: a quiet accent bar grows on hover. */
+.nk-cap { position: relative; }
+.nk-cap::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, var(--nk-mint), var(--nk-sky));
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.4s var(--nk-ease);
+}
+.nk-cap:hover::before { transform: scaleY(1); }
+.nk-cap:hover .nk-cap__no { color: var(--nk-mint); }
+.nk-cap__no { transition: color 0.25s ease; }
+
+/* --- Buttons -------------------------------------------------------------- */
+.nk-btn:focus-visible { box-shadow: var(--nk-shadow-md), 0 0 0 3px color-mix(in srgb, var(--nk-mint) 45%, transparent); }
+.nk-btn--primary:hover { box-shadow: var(--nk-shadow-lg), var(--nk-glow); }
+.nk-btn--ghost:hover { box-shadow: var(--nk-shadow-md); }
+.nk-btn--ghost:active,
+.nk-btn--primary:active { transform: translateY(0) scale(0.985); }
+
+/* Arrow-carrying buttons nudge their icon. */
+.nk-btn svg { transition: transform 0.28s var(--nk-ease); }
+.nk-btn:hover svg { transform: translateX(2px); }
+html[dir="rtl"] .nk-btn:hover svg { transform: translateX(-2px); }
+
+/* --- Nav links: an underline that grows from the centre -------------------- */
+.nk-nav__links a { position: relative; }
+.nk-nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0.85rem;
+  right: 0.85rem;
+  bottom: 0.3rem;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--nk-mint);
+  transform: scaleX(0);
+  transition: transform 0.28s var(--nk-ease);
+}
+.nk-nav__links a:hover::after { transform: scaleX(1); }
+
+/* Nav gains depth once the page scrolls under it. */
+.nk-nav { box-shadow: var(--nk-shadow-sm); }
+
+/* --- Chips ---------------------------------------------------------------- */
+.nk-chips span:hover {
+  border-color: color-mix(in srgb, var(--nk-mint) 45%, transparent);
+  color: var(--nk-text);
+  background: color-mix(in srgb, var(--nk-mint) 8%, transparent);
+}
+
+/* --- Stat tiles ----------------------------------------------------------- */
+.nk-stats > div { position: relative; }
+.nk-stats > div::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(80% 120% at 50% 0%, color-mix(in srgb, var(--nk-mint) 12%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.nk-stats > div:hover::after { opacity: 1; }
+
+/* --- Achievement rows ----------------------------------------------------- */
+.nk-win { position: relative; }
+.nk-win::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--nk-mint);
+  transform: scaleX(0);
+  transform-origin: inline-start;
+  transition: transform 0.28s var(--nk-ease);
+}
+.nk-win:hover::before { transform: scaleX(1); }
+.nk-win:hover { background: color-mix(in srgb, var(--nk-mint) 5%, var(--nk-bg-soft)); }
+.nk-win:hover .nk-win__body h4 { color: var(--nk-mint); }
+.nk-win__body h4 { transition: color 0.25s ease; }
+
+/* --- FAQ ------------------------------------------------------------------ */
+.nk-faq summary:hover { color: var(--nk-mint); }
+.nk-faq details:hover { border-color: var(--nk-line-hi); box-shadow: var(--nk-shadow-sm); }
+.nk-faq details[open] { box-shadow: var(--nk-shadow-md); }
+
+/* --- Filters + search ----------------------------------------------------- */
+.nk-filters button:hover:not([aria-current="true"]) { box-shadow: var(--nk-shadow-sm); transform: translateY(-1px); }
+.nk-filters button:active { transform: translateY(0); }
+.nk-filters button[aria-current="true"] { box-shadow: var(--nk-glow); }
+.nk-search:focus-within { box-shadow: var(--nk-shadow-sm), 0 0 0 3px color-mix(in srgb, var(--nk-mint) 14%, transparent); }
+
+/* --- Footer links --------------------------------------------------------- */
+.nk-footer__col a { position: relative; display: inline-block; }
+.nk-footer__col a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: inline-start;
+  transition: transform 0.26s var(--nk-ease);
+}
+.nk-footer__col a:hover::after { transform: scaleX(1); }
+
+/* --- Preference controls -------------------------------------------------- */
+.nk-prefs__theme button:active { transform: scale(0.92); }
+.nk-prefs__theme button[aria-pressed="true"] { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--nk-mint) 30%, transparent); }
+
+/* --- Case-study steps ----------------------------------------------------- */
+.nk-steps li { transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s var(--nk-ease); }
+.nk-steps li:hover {
+  border-color: color-mix(in srgb, var(--nk-mint) 35%, var(--nk-line));
+  background: color-mix(in srgb, var(--nk-mint) 5%, var(--nk-surface));
+  transform: translateX(3px);
+}
+html[dir="rtl"] .nk-steps li:hover { transform: translateX(-3px); }
+
+/* --- Portrait ------------------------------------------------------------- */
+.nk-portrait__frame { box-shadow: var(--nk-shadow-lg); transition: box-shadow 0.4s var(--nk-ease), transform 0.4s var(--nk-ease); }
+.nk-portrait:hover .nk-portrait__frame { transform: translateY(-3px); box-shadow: var(--nk-shadow-lg), var(--nk-ring); }
+
+/* --- Pointer-only refinements --------------------------------------------- */
+@media (hover: none) {
+  /* Touch devices should not keep a hover state stuck after a tap. */
+  a.nk-card:hover, .nk-project:hover, .nk-portrait:hover .nk-portrait__frame { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nk :is(.nk-card, .nk-project, .nk-steps li, .nk-portrait__frame, .nk-filters button) { transition: none; }
+  a.nk-card:hover, .nk-project:hover, .nk-steps li:hover, .nk-filters button:hover { transform: none; }
+  .nk-cap::before, .nk-win::before, .nk-nav__links a::after, .nk-footer__col a::after { transition: none; }
+}
+
+/* The light-theme primary-button rule is more specific than `.nk-btn--primary:hover`,
+   so the hover and focus shadows have to be restated at matching specificity. */
+html[data-theme="light"] .nk-btn--primary:hover { box-shadow: var(--nk-shadow-lg), var(--nk-glow); }
+html[data-theme="light"] .nk-btn--primary:focus-visible {
+  box-shadow: var(--nk-shadow-md), 0 0 0 3px color-mix(in srgb, var(--nk-mint) 45%, transparent);
 }

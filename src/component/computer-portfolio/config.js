@@ -118,7 +118,7 @@ export const projectFilters = ["All", "Full Stack", "AI / SaaS", "Dashboard", "F
 export const appCatalog = [
   { id: "about", label: "About Nitin", file: "README.md", icon: FiUser, color: "#45e6b0", keywords: "profile bio full stack developer" },
   { id: "projects", label: "Project Explorer", file: "Projects", icon: FiFolder, color: "#ffc857", keywords: "work case studies apps code client" },
-  { id: "assistant", label: "Ask Nitin", file: "Ask Nitin.app", icon: FiMessageCircle, color: "#73e0bc", keywords: "ai assistant profile recruiter hiring questions openai" },
+  { id: "assistant", label: "Ask Nitin", file: "Ask Nitin.app", icon: FiMessageCircle, color: "#73e0bc", keywords: "ai assistant profile recruiter hiring questions grok xai" },
   { id: "stack", label: "System Architecture", file: "Tech Stack.app", icon: FiLayers, color: "#5bbcff", keywords: "skills html css javascript typescript bootstrap tailwind jquery react next react native ant design framer motion redux react query zustand zod yup node express nest rest socket jwt mongodb sql postgres firebase supabase redis openai gemini groq deepseek venice stripe razorpay paypal cybersource git github vite eslint deployment" },
   { id: "journey", label: "Career Timeline", file: "Experience.log", icon: FiBriefcase, color: "#ff8f70", keywords: "experience education career ibyte ideahelix" },
   { id: "calendar", label: "Calendar", file: "Calendar.app", icon: FiCalendar, color: "#ff6961", keywords: "calendar events schedule meetings manage planner" },

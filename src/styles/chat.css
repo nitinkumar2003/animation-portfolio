@@ -362,18 +362,18 @@ html[data-theme="light"] .nkc {
   --nkc-text: #10171d;
   --nkc-dim: #47555f;
   --nkc-faint: #616f7a;
-  --nkc-mint: #0d8f68;
+  --nkc-mint: #0c825f;
 }
 html[data-theme="light"] .nkc-launcher {
-  background: linear-gradient(140deg, #0d8f68, #16a97d);
+  background: linear-gradient(140deg, #0c825f, #12996f);
   color: #ffffff;
-  box-shadow: 0 10px 30px -8px rgba(13, 143, 104, 0.5), 0 2px 8px rgba(16, 23, 29, 0.18);
+  box-shadow: 0 10px 30px -8px rgba(12, 130, 95, 0.5), 0 2px 8px rgba(16, 23, 29, 0.18);
 }
 html[data-theme="light"] .nkc[data-open="true"] .nkc-launcher { background: var(--nkc-surface); color: var(--nkc-text); }
 html[data-theme="light"] .nkc-panel { box-shadow: 0 26px 60px -18px rgba(16, 23, 29, 0.32), 0 0 0 1px rgba(16, 23, 29, 0.06); }
 html[data-theme="light"] .nkc-msg--assistant .nkc-msg__text { color: #26333c; }
 html[data-theme="light"] .nkc-msg__avatar,
-html[data-theme="light"] .nkc-intro__mark { background: linear-gradient(140deg, #0d8f68, #16a97d); color: #ffffff; }
+html[data-theme="light"] .nkc-intro__mark { background: linear-gradient(140deg, #0c825f, #12996f); color: #ffffff; }
 html[data-theme="light"] .nkc-send { background: var(--nkc-mint); color: #ffffff; }
 html[data-theme="light"] .nkc-nudge { box-shadow: 0 10px 26px rgba(16, 23, 29, 0.18); }
 html[data-theme="light"] .nkc-caret { background: var(--nkc-mint); }
@@ -383,3 +383,37 @@ html[dir="rtl"] .nkc { right: auto; left: max(1.25rem, env(safe-area-inset-left)
 html[dir="rtl"] .nkc-panel { right: auto; left: 0; transform-origin: bottom left; }
 html[dir="rtl"] .nkc-nudge { right: auto; left: calc(100% + 0.85rem); border-radius: 13px 13px 13px 3px; }
 html[dir="rtl"] .nkc-msg--user .nkc-msg__text { border-radius: 15px 15px 15px 4px; }
+
+/* --- Interaction polish (both themes) ------------------------------------- */
+.nkc-launcher:focus-visible,
+.nkc-send:focus-visible,
+.nkc-head button:focus-visible,
+.nkc-suggestions button:focus-visible,
+.nkc-followups button:focus-visible {
+  outline: 2px solid var(--nkc-mint);
+  outline-offset: 3px;
+}
+
+/* The launcher icon rotates a touch on hover — small, but it signals it is live. */
+.nkc-launcher:hover .nkc-launcher__open { transform: rotate(-8deg) scale(1.06); }
+
+.nkc-head button:active { transform: scale(0.9); }
+.nkc-send:active:not(:disabled) { transform: scale(0.92); }
+
+.nkc-suggestions button {
+  position: relative;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.22s var(--nkc-ease);
+}
+.nkc-suggestions button:hover { background: color-mix(in srgb, var(--nkc-mint) 8%, var(--nkc-raise)); }
+.nkc-suggestions button:active { transform: translateX(0) scale(0.99); }
+
+.nkc-followups button:hover { background: color-mix(in srgb, var(--nkc-mint) 10%, transparent); }
+.nkc-followups button:active { transform: scale(0.97); }
+
+/* Assistant replies get a quiet hover so long threads stay scannable. */
+.nkc-msg--assistant .nkc-msg__text { border-radius: 8px; transition: background 0.25s ease; }
+.nkc-msg--assistant:hover .nkc-msg__text { background: color-mix(in srgb, var(--nkc-mint) 5%, transparent); }
+
+html[data-theme="light"] .nkc-nudge:hover { border-color: color-mix(in srgb, var(--nkc-mint) 40%, transparent); }
+.nkc-nudge { transition: border-color 0.25s ease, transform 0.25s var(--nkc-ease); }
+.nkc-nudge:hover { transform: translateX(-2px); }

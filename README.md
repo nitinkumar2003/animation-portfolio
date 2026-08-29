@@ -35,8 +35,8 @@ npm run dev
 | Variable | Required | Notes |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | **Yes, in production** | Canonical origin, no trailing slash. Drives canonical tags, Open Graph URLs, `sitemap.xml`, `robots.txt` and every JSON-LD `@id`. If unset the deployed site advertises `http://localhost:3000`. |
-| `OPENAI_API_KEY` | For the assistant | Server-only. Never prefix with `NEXT_PUBLIC_`. |
-| `OPENAI_MODEL` | No | Defaults to `gpt-5.6-luna`. |
+| `XAI_API_KEY` | For the assistant | xAI (Grok) key from [console.x.ai](https://console.x.ai). Server-only — never prefix with `NEXT_PUBLIC_`. `GROK_API_KEY` works as an alias. |
+| `XAI_MODEL` | No | Defaults to `grok-4-fast`. Check [docs.x.ai/docs/models](https://docs.x.ai/docs/models) for current ids. |
 
 ## Content
 
@@ -57,7 +57,13 @@ Adding a project: add it to `personalDataObj.projects`, then add a matching entr
 { "question": "…", "history": [], "stream": true }  // stream:true → text/plain token stream
 ```
 
-Layered before any model call: per-IP rate limit (30 / 10 min), length caps, control-character stripping, prompt-injection term matching, and a topic gate — so off-topic and hostile input never reach the API.
+Powered by **xAI Grok**. xAI exposes an OpenAI-compatible REST surface, so the `openai` npm package
+is kept purely as a client, pointed at `https://api.x.ai/v1` — note it is the **Chat Completions**
+API, not OpenAI's Responses API, so the profile context travels as a system message.
+
+Layered before any model call: per-IP rate limit (30 / 10 min), length caps, control-character
+stripping, prompt-injection term matching, and a topic gate — so off-topic and hostile input never
+reach the API and never cost a request.
 
 ## SEO
 

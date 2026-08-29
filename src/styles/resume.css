@@ -33,7 +33,7 @@
   --r-text: #10171d;
   --r-dim: #3f4d59;
   --r-faint: #5e6d7a;
-  --r-accent: #0d8f68;
+  --r-accent: #0c825f;
 }
 
 .nkr[dir="rtl"] { text-align: right; }
@@ -231,3 +231,35 @@
 .nkr[dir="rtl"] .nkr__skills dd,
 .nkr[dir="rtl"] .nkr__meta,
 .nkr[dir="rtl"] .nkr__entry h3 { unicode-bidi: plaintext; }
+
+/* --- Interaction polish (both themes) ------------------------------------- */
+.nkr a { transition: color 0.2s ease, border-color 0.2s ease; }
+
+.nkr__metrics > div {
+  transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nkr__metrics > div:hover {
+  border-color: color-mix(in srgb, var(--r-accent) 40%, var(--r-line));
+  background: color-mix(in srgb, var(--r-accent) 6%, var(--r-surface));
+  transform: translateY(-2px);
+}
+
+.nkr__entry { transition: background 0.25s ease; border-radius: 8px; }
+.nkr__entry:hover h3 { color: var(--r-accent); }
+.nkr__entry h3 { transition: color 0.22s ease; }
+
+.nkr__contact li svg { transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1); }
+.nkr__contact li:hover svg { transform: scale(1.15); }
+
+.nkr-bar__group button:active { transform: scale(0.95); }
+.nkr-bar__group button,
+.nkr-bar select { transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.18s ease; }
+.nkr-bar select:hover { border-color: var(--nk-line-hi, rgba(255,255,255,0.2)); }
+.nkr-bar :is(button, select, a):focus-visible {
+  outline: 2px solid var(--r-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nkr__metrics > div:hover { transform: none; }
+}
