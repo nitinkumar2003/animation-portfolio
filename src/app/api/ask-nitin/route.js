@@ -34,13 +34,14 @@ const scopedTerms = [
   "education", "degree", "college", "certificate", "certification", "ibyte", "ideahelix", "background",
   // work product
   "project", "projects", "portfolio", "product", "app", "application", "platform", "built", "build", "shipped",
-  "case study", "xhat", "alysei", "blackpearl", "buyoff", "livewired", "ezytradie", "braining", "thunder",
+  "case study", "xhat", "agingoptions", "aging", "lifeplanning", "seminar", "intake", "blackpearl",
+  "buyoff", "livewired", "ezytradie", "braining", "thunder", "reel", "reels", "social", "wallet", "credit",
   // skills
   "skill", "skills", "technology", "technologies", "tech", "stack", "frontend", "front-end", "backend", "back-end",
   "full stack", "fullstack", "mobile", "react", "next", "nextjs", "node", "nestjs", "typescript", "javascript",
-  "redux", "tailwind", "expo", "database", "mongodb", "sql", "postgres", "supabase", "firebase", "redis",
+  "redux", "tailwind", "vite", "expo", "database", "mongodb", "sql", "postgres", "supabase", "firebase", "redis",
   "ai", "openai", "gemini", "groq", "deepseek", "venice", "llm",
-  "payment", "payments", "stripe", "razorpay", "paypal", "cybersource", "checkout", "subscription",
+  "payment", "payments", "stripe", "razorpay", "paypal", "cybersource", "authorize.net", "agora", "webrtc", "checkout", "subscription",
   "dashboard", "saas", "realtime", "real-time", "socket", "api", "apis", "rest", "auth", "authentication",
   "architecture", "performance", "optimization", "optimisation", "deployment", "testing", "security", "rbac",
   // hiring

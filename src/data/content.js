@@ -252,17 +252,6 @@ export const projectNarratives = {
     impact: "Live on the web plus published on Google Play and the Apple App Store — a real product with real users, not a prototype.",
     accent: ["#7c5cff", "#3ba9ff"],
   },
-  "Alysei": {
-    problem:
-      "Analysts were manually hunting through unstructured sources for information that should have surfaced in seconds. The brief was an AI layer that finds, extracts and explains data instead of just returning links.",
-    build: [
-      "Routed queries across multiple AI providers — OpenAI and Gemini — so each task hits the model that handles it best, with graceful fallback when one provider degrades.",
-      "Built automated extraction that turns unstructured source material into structured records, then an analytics dashboard that makes the result explorable rather than a wall of text.",
-      "Designed the MongoDB schema around the actual query patterns so the dashboard reads stay fast as the dataset grows.",
-    ],
-    impact: "Replaced manual research passes with an AI search and reporting layer analysts could query directly.",
-    accent: ["#45e6b0", "#3ba9ff"],
-  },
   "BlackPearl": {
     problem:
       "An enterprise shipment and quotation platform where different roles — operators, managers, clients — need genuinely different views of the same data, and where a permissions mistake is a business incident.",
@@ -329,16 +318,22 @@ export const projectNarratives = {
     impact: "Realtime order tracking across customer, restaurant and admin surfaces.",
     accent: ["#ff8f70", "#ffc857"],
   },
-  "Thunder Script": {
+  "Thunder": {
     problem:
-      "A platform needing two very different front ends — an operational admin panel and a customer-facing site — sharing one API without either compromising for the other.",
+      "Build an Instagram-scale social product — reels, feed, explore, chat, calling — where the operator can change how the product behaves without an engineer. Roles, permissions, the signup form itself, plans, gateways, currencies, integrations, even whether the site is up: all of it had to be configuration, not code.",
     build: [
-      "Split the surfaces deliberately: a React admin panel optimised for dense operational work, a Next.js customer front end optimised for load speed and SEO.",
-      "Built one Node/Express API with MongoDB serving both, with authentication and authorisation handled centrally rather than duplicated.",
-      "Added the analytics layer on top of the shared data model so admin reporting reflects exactly what customers experience.",
+      "Made the role system the spine of the product: roles and their permissions are created in the admin, and every screen, action and API response is resolved against them, so a new role type ships as configuration rather than a release.",
+      "Built the auth forms as data — signup and login fields are added, edited, reordered and marked required from the admin, and both the user panel and the API validate against the same stored schema so a form change cannot desync the backend.",
+      "Delivered the full social surface in Next.js and TypeScript — reels, posts, feed, explore, search, likes, comments, share, save and collections, profiles, follows and friend requests, blocking and reporting — with media and pagination tuned for a scroll-first audience.",
+      "Put every one of those features under the admin as well: each can be enabled, limited, moderated or scoped to a role, so the operator decides what their version of the product even includes.",
+      "Built realtime chat over WebSockets with Redis backing presence, fan-out and caching so live state survives multiple API instances instead of living in one process.",
+      "Integrated Agora for audio and video calling, metered against a credit and wallet system that debits per call and tops up through the same billing flow as subscriptions.",
+      "Built the payment layer as a driver interface rather than an integration — seven to eight gateways including Stripe, Cybersource and PayPal sit behind one contract, and the admin chooses which is live, in which currency, for which plan, without a release.",
+      "Kept the rest of commerce equally soft: subscription plans, pricing, third-party integrations and the site up / down control are all admin state, not constants.",
+      "Worked across all three surfaces rather than one: the React + Vite admin panel, the Next.js + TypeScript user panel, and the Node.js / Express API on MongoDB.",
     ],
-    impact: "Two purpose-built front ends on a single, consistent API.",
-    accent: ["#62d7ff", "#45e6b0"],
+    impact: "In active development — a social platform an operator can reshape into their own product entirely from the admin.",
+    accent: ["#62d7ff", "#7c5cff"],
   },
   "Braining": {
     problem:
@@ -353,25 +348,19 @@ export const projectNarratives = {
   },
   "AgingOptions": {
     problem:
-      "A platform for seniors and caregivers — an audience where accessibility is not a checklist item. Small targets, low contrast and dense layouts are hard blockers.",
+      "A US retirement LifePlanning company ran its whole practice — client intake, legal document production, provider referrals and paid seminars — across disconnected tools. The brief was one platform where a client, a paralegal, an attorney, an assigned agent and an administrator each see the same plan through a different, tightly scoped lens.",
     build: [
-      "Built the interface to accessible defaults from the start: generous hit targets, high contrast, clear focus states and layouts that survive browser zoom.",
-      "Delivered care planning tools, a resource directory and appointment booking against a Node/MongoDB backend.",
-      "Kept the responsive strategy simple and predictable so the experience does not reflow unexpectedly between devices.",
+      "Modelled the product as seven role-scoped modules on one shared data layer — intake, legal staff, LifePlan Owner portal, agent, AORG provider directory, seminars, and admin / super admin — so a role change is a permission decision rather than a separate application.",
+      "Built the Intake Form as the spine of the system: a long, resumable, section-by-section capture of health, family, financial and legal details plus agent authority, with per-section validation and autosave so an older user can leave and come back without losing the plan.",
+      "Delivered the legal staff workspace for paralegals and attorneys — every client record searchable and editable, estate and care documents generated server-side from the intake data, and the action that promotes a client to LifePlan Owner (LPO).",
+      "Unlocked the LPO tier behind that promotion: a secure document file cabinet, and access to the assigned agents who act on the plan.",
+      "Encoded agent authority as explicit rules — which agent is notified, when their authority activates and what they can act on — instead of leaving it to whoever happened to be looking at the record.",
+      "Built AORG, the provider directory of physicians and health, financial and legal professionals, populated by scraping and curation, with an add-to-my-plan flow that copies a vetted provider into an LPO's own account.",
+      "Shipped the seminar module end to end: event listings, seat booking, attendance and paid registration through Authorize.Net, with server-side confirmation so a seat is only held once the payment clears.",
+      "Gave admin and super admin full A-to-X control — users, roles, legal staff, agents, directory entries, seminars, documents and payments — with the destructive operations reserved for super admin.",
     ],
-    impact: "Care planning, resources and booking in one accessible platform.",
+    impact: "One platform carrying a US aging-care practice end to end: intake, legal document production, agent authority, provider referrals, seminars and payments across seven roles.",
     accent: ["#45e6b0", "#62d7ff"],
-  },
-  "Health Type": {
-    problem:
-      "Clinicians do not want a dashboard, they want the next three things they need to do. Healthcare data also carries strict access-control requirements.",
-    build: [
-      "Designed the dashboard around clinical workflow — upcoming appointments and patients needing attention first, analytics second.",
-      "Built appointment scheduling with conflict detection so double-booking is prevented at the data layer, not the UI.",
-      "Enforced token-based authentication and role separation so record access is scoped to the practitioner relationship.",
-    ],
-    impact: "A patient dashboard organised around what clinicians do next.",
-    accent: ["#3ba9ff", "#45e6b0"],
   },
   "Multiple Admin Dashboards": {
     problem:
@@ -474,6 +463,6 @@ export const enrichedProjects = personalDataObj.projects.map((project) => {
 
 export const getProjectBySlug = (slug) => enrichedProjects.find((project) => project.slug === slug);
 
-export const featuredProjects = ["xhat-ai-assistant", "alysei", "blackpearl", "livewired", "buyoff", "digital-signature-maker"]
+export const featuredProjects = ["thunder", "xhat-ai-assistant", "agingoptions", "blackpearl", "livewired", "buyoff"]
   .map((slug) => getProjectBySlug(slug))
   .filter(Boolean);
