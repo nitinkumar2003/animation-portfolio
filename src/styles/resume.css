@@ -207,7 +207,7 @@
 
 /* --- Print ---------------------------------------------------------------- */
 @media print {
-  .nkr-bar, .nk-nav, .nk-footer, .nkc, .nkos-relaunch, .nk-crumbs { display: none !important; }
+  .nkr-bar, .nk-nav, .nk-footer, .nkc, .nk-crumbs { display: none !important; }
   .nkr {
     max-width: none;
     border: 0;

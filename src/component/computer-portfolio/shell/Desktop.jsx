@@ -1,8 +1,8 @@
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  FiActivity, FiArrowUpRight, FiBattery, FiBatteryCharging, FiBell, FiCheck, FiCode, FiEdit3, FiEye, FiFile, FiFolder, FiGrid, FiPower,
-  FiLogOut, FiMic, FiRefreshCw, FiSearch, FiSettings, FiTerminal, FiTrash2, FiUser, FiVolume2, FiWifi, FiX,
+  FiActivity, FiArrowUpRight, FiBattery, FiBatteryCharging, FiBell, FiCheck, FiCode, FiCompass, FiEdit3, FiEye, FiFile, FiFolder, FiGrid, FiPower,
+  FiLogOut, FiMail, FiMapPin, FiMessageCircle, FiMic, FiMinus, FiRefreshCw, FiSearch, FiSettings, FiTerminal, FiTrash2, FiUser, FiVolume2, FiWifi, FiX,
 } from "react-icons/fi";
 import { personalDataObj } from "../../../data/data";
 import {
@@ -43,19 +43,30 @@ const MenuClock = ({ preferences, onToggle }) => {
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
+const LONG_PRESS_MS = 500;
+const LONG_PRESS_TOLERANCE = 10;
+
 const dockPinnedIds = new Set(["about", "projects", "assistant", "calendar", "browser", "resume", "contact", "settings", "bin"]);
+const menuNames = ["file", "view", "go", "window", "help"];
+
+// Row spacing has to clear the tallest an icon actually renders at (icon +
+// gap + a reserved 2-line label, see .nkos-desktop-files small in index.css)
+// or consecutive rows overlap — 100/120 measured with a few px of breathing
+// room on top of the real rendered heights (~93px desktop, ~108px compact).
+const DESKTOP_ROW_HEIGHT = 100;
+const COMPACT_ROW_HEIGHT = 120;
 
 const getDefaultIconPosition = (index, compact, viewportWidth, viewportHeight) => {
   if (!compact) {
     const maxY = Math.max(118, viewportHeight - 36 - 84 - 70);
-    const rows = Math.max(2, Math.floor((maxY - 22) / 96) + 1);
-    return { x: 18 + Math.floor(index / rows) * 90, y: 22 + (index % rows) * 96 };
+    const rows = Math.max(2, Math.floor((maxY - 22) / DESKTOP_ROW_HEIGHT) + 1);
+    return { x: 18 + Math.floor(index / rows) * 90, y: 22 + (index % rows) * DESKTOP_ROW_HEIGHT };
   }
   const usableWidth = Math.max(300, viewportWidth - 20);
   const cellWidth = usableWidth / 4;
   return {
     x: Math.round((index % 4) * cellWidth + Math.max(0, (cellWidth - 74) / 2)),
-    y: 18 + Math.floor(index / 4) * 90,
+    y: 18 + Math.floor(index / 4) * COMPACT_ROW_HEIGHT,
   };
 };
 
@@ -63,6 +74,10 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff, onExi
   const exitToPortfolio = leaveOs(onExit);
   const workspaceRef = useRef(null);
   const draggingIconRef = useRef(false);
+  const longPressTimerRef = useRef(null);
+  const longPressStartRef = useRef({ x: 0, y: 0 });
+  const longPressFiredRef = useRef(false);
+  const [openMenu, setOpenMenu] = useState(null);
   const compact = useCompactLayout();
   const viewport = useViewportSize();
   const battery = useBatteryStatus();
@@ -166,6 +181,29 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff, onExi
     openApp("editor");
   };
 
+  // Touch equivalent of right-click: hold a finger down instead of moving a mouse.
+  // Feeds the exact same context-menu handlers a synthetic event, so rename, delete,
+  // clean-up and refresh — desktop-only otherwise — work on a phone too.
+  const clearLongPress = () => {
+    if (longPressTimerRef.current) window.clearTimeout(longPressTimerRef.current);
+    longPressTimerRef.current = null;
+  };
+  const startLongPress = (event, trigger) => {
+    if (event.pointerType === "mouse") return;
+    const { clientX, clientY } = event;
+    longPressStartRef.current = { x: clientX, y: clientY };
+    clearLongPress();
+    longPressTimerRef.current = window.setTimeout(() => {
+      longPressFiredRef.current = true;
+      trigger({ clientX, clientY, preventDefault() {}, stopPropagation() {} });
+    }, LONG_PRESS_MS);
+  };
+  const moveLongPress = (event) => {
+    if (!longPressTimerRef.current) return;
+    const { x, y } = longPressStartRef.current;
+    if (Math.abs(event.clientX - x) > LONG_PRESS_TOLERANCE || Math.abs(event.clientY - y) > LONG_PRESS_TOLERANCE) clearLongPress();
+  };
+
   useEffect(() => {
     const handleKey = (event) => {
       const modifier = event.metaKey || event.ctrlKey;
@@ -184,7 +222,7 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff, onExi
         return;
       }
       if (event.key === "Escape") {
-        setSearchOpen(false); setStartOpen(false); setQuickOpen(false); setContextMenu(null); setRenameItem(null); setVoiceOpen(false);
+        setSearchOpen(false); setStartOpen(false); setQuickOpen(false); setContextMenu(null); setRenameItem(null); setVoiceOpen(false); setOpenMenu(null);
         return;
       }
       if (isTyping || !selectedDesktopId) return;
@@ -213,7 +251,7 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff, onExi
     const saved = item?.positions?.[layoutKey];
     const position = saved || fallback;
     const iconWidth = compact ? 74 : 82;
-    const iconHeight = 84;
+    const iconHeight = compact ? 108 : 93;
     const workspaceHeight = viewport.height - (compact ? 40 : 36);
     return {
       x: clamp(position.x, 0, Math.max(0, viewport.width - iconWidth)),
@@ -290,17 +328,65 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff, onExi
     setStartOpen(false); setQuickOpen(false);
   };
   const activeAppName = appCatalog.find((app) => app.id === activeWindow)?.label || "Finder";
+  const activeWindowMaximized = !!windowState[activeWindow]?.maximized;
+
+  // Real per-app dropdown menus instead of one fixed action per button — every
+  // item just calls a function already defined above, nothing new to maintain.
+  const menuBarConfig = {
+    file: [
+      { label: "Open Projects", icon: FiFolder, onSelect: () => openApp("projects") },
+      { label: "Open Terminal", icon: FiTerminal, onSelect: () => openApp("terminal") },
+      { label: "Open Settings", icon: FiSettings, onSelect: () => openApp("settings") },
+    ],
+    view: [
+      { label: "Quick Look", icon: FiEye, onSelect: () => openQuickLook(selectedDesktopId), disabled: !selectedDesktopId },
+      { label: focusMode ? "Exit Focus Mode" : "Focus Mode", icon: FiGrid, onSelect: () => setFocusMode((value) => !value) },
+      { label: "Clean Up", icon: FiGrid, onSelect: resetIconLayout },
+    ],
+    go: [
+      { label: "About", icon: FiUser, onSelect: () => openApp("about") },
+      { label: "Projects", icon: FiFolder, onSelect: () => openApp("projects") },
+      { label: "Browser", icon: FiCompass, onSelect: () => openApp("browser") },
+      { label: "Maps", icon: FiMapPin, onSelect: () => openApp("maps") },
+    ],
+    window: [
+      { label: "Minimize", icon: FiMinus, onSelect: () => minimizeApp(activeWindow), disabled: !activeWindow },
+      { label: activeWindowMaximized ? "Restore" : "Maximize", icon: FiGrid, onSelect: () => toggleMaximize(activeWindow), disabled: !activeWindow },
+      { label: "Close", icon: FiX, onSelect: () => closeApp(activeWindow), disabled: !activeWindow },
+    ],
+    help: [
+      { label: "Ask Nitin", icon: FiMessageCircle, onSelect: () => openApp("assistant") },
+      { label: "Contact", icon: FiMail, onSelect: () => openApp("contact") },
+    ],
+  };
+  const renderMenuBarItem = (name, label) => (
+    <div className="nkos-menu-item" key={name}>
+      <button type="button" className={openMenu === name ? "active" : ""} onClick={(event) => { event.stopPropagation(); setOpenMenu((current) => (current === name ? null : name)); }}>{label}</button>
+      {openMenu === name && (
+        <div className="nkos-menubar-dropdown" onClick={(event) => event.stopPropagation()}>
+          {menuBarConfig[name].map((item) => {
+            const ItemIcon = item.icon;
+            return (
+              <button type="button" key={item.label} disabled={item.disabled} onClick={() => { if (item.disabled) return; item.onSelect(); setOpenMenu(null); }}>
+                <ItemIcon /> {item.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
 
   return (
-    <motion.section className={`nkos-desktop wallpaper-${activeWallpaper.id} ${activeWallpaper.image ? "has-wallpaper" : ""} ${focusMode ? "focus-mode" : ""}`} style={activeWallpaper.image ? { "--nkos-wallpaper": `url(${activeWallpaper.image})` } : undefined} initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => { setContextMenu(null); setSelectedDesktopId(null); }} onContextMenu={handleDesktopContext}>
+    <motion.section className={`nkos-desktop wallpaper-${activeWallpaper.id} ${activeWallpaper.image ? "has-wallpaper" : ""} ${focusMode ? "focus-mode" : ""}`} style={activeWallpaper.image ? { "--nkos-wallpaper": `url(${activeWallpaper.image})` } : undefined} initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => { if (longPressFiredRef.current) { longPressFiredRef.current = false; return; } setContextMenu(null); setSelectedDesktopId(null); setActiveWindow(""); setOpenMenu(null); }} onContextMenu={handleDesktopContext} onPointerDown={(event) => startLongPress(event, handleDesktopContext)} onPointerMove={moveLongPress} onPointerUp={clearLongPress} onPointerCancel={clearLongPress}>
       <header className="nkos-menu-bar">
-        <div className="nkos-menu-left"><button type="button" className="nkos-brand-button" onClick={() => setStartOpen((value) => !value)} aria-label="Open Nitin OS menu"><span>NK</span></button><b>{activeAppName}</b><button type="button" onClick={() => openApp("projects")}>{t("file")}</button><button type="button" onClick={() => selectedDesktopId ? openQuickLook(selectedDesktopId) : setQuickOpen(true)}>{t("view")}</button><button type="button" onClick={() => openApp("browser")}>{t("go")}</button><button type="button" onClick={() => activeWindow ? toggleMaximize(activeWindow) : openApp("about")}>{t("window")}</button><button type="button" onClick={() => openApp("contact")}>{t("help")}</button></div>
+        <div className="nkos-menu-left"><button type="button" className="nkos-brand-button" onClick={() => setStartOpen((value) => !value)} aria-label="Open Nitin OS menu"><span>NK</span></button><b>{activeAppName}</b>{renderMenuBarItem("file", t("file"))}{renderMenuBarItem("view", t("view"))}{renderMenuBarItem("go", t("go"))}{renderMenuBarItem("window", t("window"))}{renderMenuBarItem("help", t("help"))}</div>
         <div className="nkos-menu-right"><button type="button" className="nkos-menu-voice" onClick={() => setVoiceOpen(true)} aria-label="Open Nitin Voice" title="Nitin Voice · ⌘ J"><FiMic /></button><button type="button" className="nkos-menu-search" onClick={() => setSearchOpen(true)} aria-label={t("search")} title={`${t("search")} · ⌘ Space`}><FiSearch /></button><button type="button" aria-label="Notifications" onClick={() => pushNotification("No pending notifications · system is clear")}><FiBell /></button><button type="button" className="nkos-system-tray" onClick={() => setQuickOpen((value) => !value)} aria-label={`Open quick settings, battery ${battery.level}%`}><FiWifi /><FiVolume2 /><BatteryIcon /><span className="nkos-battery-percent">{battery.level}%</span></button><MenuClock preferences={preferences} onToggle={() => setQuickOpen((value) => !value)} /></div>
       </header>
 
       <div className="nkos-workspace" ref={workspaceRef}>
         <nav className="nkos-desktop-files" aria-label="Desktop files">
-          {appCatalog.filter((app) => !desktopItems.find((item) => item.id === app.id)?.deleted).map((app, index) => { const Icon = app.icon; const desktopItem = desktopItems.find((item) => item.id === app.id); const position = getIconPosition(desktopItem, index); const selected = selectedDesktopId === app.id; return <motion.button type="button" key={app.id} className={selected ? "selected" : ""} aria-pressed={selected} drag dragConstraints={workspaceRef} dragMomentum={false} dragElastic={0} style={{ x: position.x, y: position.y }} whileDrag={{ scale: 1.06, opacity: 0.88, zIndex: 18 }} onDragStart={() => { draggingIconRef.current = true; setSelectedDesktopId(app.id); }} onDragEnd={(event) => handleIconDragEnd(event, app.id)} onClick={(event) => { event.stopPropagation(); if (draggingIconRef.current) return; setSelectedDesktopId(app.id); if (compact) openApp(app.id); }} onDoubleClick={(event) => { event.stopPropagation(); if (!compact) openApp(app.id); }} onContextMenu={(event) => handleFileContext(event, app.id)} title={compact ? `Open ${app.label}` : `Select or drag ${app.label}; double-click to open`}><span className="nkos-file-icon" style={{ "--app-color": app.color }}><Icon />{app.id === "bin" && deletedItems.length > 0 && <b>{deletedItems.length}</b>}</span><small>{desktopItem?.name || app.file}</small></motion.button>; })}
+          {appCatalog.filter((app) => !desktopItems.find((item) => item.id === app.id)?.deleted).map((app, index) => { const Icon = app.icon; const desktopItem = desktopItems.find((item) => item.id === app.id); const position = getIconPosition(desktopItem, index); const selected = selectedDesktopId === app.id; return <motion.button type="button" key={`${app.id}-${layoutKey}`} className={selected ? "selected" : ""} aria-pressed={selected} drag dragConstraints={workspaceRef} dragMomentum={false} dragElastic={0} style={{ x: position.x, y: position.y }} whileDrag={{ scale: 1.06, opacity: 0.88, zIndex: 18 }} onDragStart={() => { draggingIconRef.current = true; setSelectedDesktopId(app.id); }} onDragEnd={(event) => handleIconDragEnd(event, app.id)} onClick={(event) => { event.stopPropagation(); if (longPressFiredRef.current) { longPressFiredRef.current = false; return; } if (draggingIconRef.current) return; setSelectedDesktopId(app.id); if (compact) openApp(app.id); }} onDoubleClick={(event) => { event.stopPropagation(); if (!compact) openApp(app.id); }} onContextMenu={(event) => handleFileContext(event, app.id)} onPointerDown={(event) => { event.stopPropagation(); startLongPress(event, (syntheticEvent) => handleFileContext(syntheticEvent, app.id)); }} onPointerMove={(event) => { event.stopPropagation(); moveLongPress(event); }} onPointerUp={(event) => { event.stopPropagation(); clearLongPress(); }} onPointerCancel={(event) => { event.stopPropagation(); clearLongPress(); }} title={compact ? `Open ${app.label}; hold for options` : `Select or drag ${app.label}; double-click to open`}><span className="nkos-file-icon" style={{ "--app-color": app.color }}><Icon />{app.id === "bin" && deletedItems.length > 0 && <b>{deletedItems.length}</b>}</span><small>{desktopItem?.name || app.file}</small></motion.button>; })}
         </nav>
         <aside className="nkos-desktop-widgets">
           <div className="nkos-role-widget"><div><span className="nkos-live-dot" /> {t("available")}</div><h1>Full Stack<br />Developer</h1><p>React · Next.js · Node.js · AI</p></div>
@@ -329,6 +415,7 @@ const Desktop = ({ preferences, setPreferences, resolvedTheme, onPowerOff, onExi
             <span />
           </button>
           <button type="button" onClick={exitToPortfolio} aria-label="Exit to written portfolio"><FiLogOut /></button>
+          <button type="button" onClick={onPowerOff} aria-label="Power off"><FiPower /></button>
         </nav>
       )}
 

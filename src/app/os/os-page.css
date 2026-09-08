@@ -1,6 +1,6 @@
 /* The /os route: pre-boot intro (server-rendered) plus a persistent exit affordance. */
 
-.nkos-page { position: relative; }
+.nkos-page { position: relative; overflow-x: clip; }
 
 /* Visible before the OS bundle mounts, then covered by the full-viewport OS. */
 .nkos-page__intro {

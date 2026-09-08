@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { personalDataObj } from "../../../data/data";
 import { capabilityPillars, careerTimeline, enrichedProjects, positioning, systemInfo } from "../../../data/content";
 import { appCatalog } from "../config";
@@ -163,16 +164,20 @@ const TerminalApp = ({ openApp }) => {
     window.setTimeout(() => terminalRef.current?.scrollTo({ top: terminalRef.current.scrollHeight, behavior: "smooth" }), 0);
   };
 
-  // Up/down walks command history, the way a real shell does.
-  const onKeyDown = (event) => {
-    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+  // Up/down walks command history, the way a real shell does. Also reachable via
+  // on-screen buttons — a phone has no arrow keys to hold this behind.
+  const navigateHistory = (direction) => {
     if (!history.length) return;
-    event.preventDefault();
-    const nextIndex = event.key === "ArrowUp"
+    const nextIndex = direction === "up"
       ? Math.min(historyIndex + 1, history.length - 1)
       : Math.max(historyIndex - 1, -1);
     setHistoryIndex(nextIndex);
     setCommand(nextIndex === -1 ? "" : history[history.length - 1 - nextIndex]);
+  };
+  const onKeyDown = (event) => {
+    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+    event.preventDefault();
+    navigateHistory(event.key === "ArrowUp" ? "up" : "down");
   };
 
   return (
@@ -196,6 +201,10 @@ const TerminalApp = ({ openApp }) => {
           autoComplete="off"
           spellCheck="false"
         />
+        <div className="nkos-terminal-history-nav">
+          <button type="button" onClick={() => navigateHistory("up")} disabled={!history.length} aria-label="Previous command"><FiChevronUp /></button>
+          <button type="button" onClick={() => navigateHistory("down")} disabled={!history.length} aria-label="Next command"><FiChevronDown /></button>
+        </div>
       </form>
     </div>
   );

@@ -1,13 +1,12 @@
 "use client";
 
-import { FiMoon, FiMonitor, FiSun } from "react-icons/fi";
+import { FiMoon, FiSun } from "react-icons/fi";
 import { usePreferences } from "./Preferences";
 import { siteLanguages } from "../../data/siteI18n";
 
 const THEMES = [
   { id: "light", icon: FiSun, key: "light" },
   { id: "dark", icon: FiMoon, key: "dark" },
-  { id: "system", icon: FiMonitor, key: "system" },
 ];
 
 /** Theme switch + language picker, shared by the nav and the mobile menu. */

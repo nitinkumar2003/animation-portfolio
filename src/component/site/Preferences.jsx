@@ -34,20 +34,18 @@ export const usePreferences = () => useContext(PreferencesContext);
 export const themeScript = `(function(){try{
 var p=JSON.parse(localStorage.getItem(${JSON.stringify(STORAGE_KEY)})||"{}");
 var q=new URLSearchParams(location.search);
-var t=q.get("theme")||p.theme||"system";
+var t=q.get("theme")||p.theme||"dark";
+if(t!=="light"&&t!=="dark")t="dark";
 var l=q.get("lang")||p.language||"en";
-var m=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";
-var r=t==="system"?m:t;
 var e=document.documentElement;
-e.setAttribute("data-theme",r);
+e.setAttribute("data-theme",t);
 e.setAttribute("data-lang",l);
 e.setAttribute("dir",l==="ar"?"rtl":"ltr");
-e.style.colorScheme=r;
+e.style.colorScheme=t;
 }catch(e){}})();`;
 
 export const PreferencesProvider = ({ children }) => {
   const [theme, setThemeState] = useState("dark");
-  const [systemTheme, setSystemTheme] = useState("dark");
   const [language, setLanguageState] = useState("en");
 
   // Read what themeScript already applied, so provider state matches the DOM.
@@ -59,17 +57,13 @@ export const PreferencesProvider = ({ children }) => {
     const urlLang = params.get("lang");
     const urlTheme = params.get("theme");
 
-    setThemeState(urlTheme || stored.theme || "system");
+    // Only "light"/"dark" are valid themes — collapse any legacy "system" value.
+    const initialTheme = urlTheme || stored.theme || "dark";
+    setThemeState(initialTheme === "light" ? "light" : "dark");
     setLanguageState(urlLang || stored.language || "en");
-
-    const media = window.matchMedia("(prefers-color-scheme: light)");
-    const sync = () => setSystemTheme(media.matches ? "light" : "dark");
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
   }, []);
 
-  const resolvedTheme = theme === "system" ? systemTheme : theme;
+  const resolvedTheme = theme;
 
   useEffect(() => {
     const root = document.documentElement;

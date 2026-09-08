@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FiBattery, FiBatteryCharging, FiCheck, FiChevronRight, FiEdit3, FiFileText, FiLogOut, FiMonitor, FiMoon, FiSave, FiSearch, FiSettings, FiSun, FiVolume2, FiVolumeX, FiWifi, FiX } from "react-icons/fi";
+import { FiBattery, FiBatteryCharging, FiCheck, FiChevronRight, FiEdit3, FiFileText, FiLogOut, FiMoon, FiSave, FiSearch, FiSettings, FiSun, FiVolume2, FiVolumeX, FiWifi, FiX } from "react-icons/fi";
 import { personalDataObj } from "../../../data/data";
 import profileImg from "../../../assets/images.jpg";
 import { appCatalog } from "../config";
@@ -43,11 +43,9 @@ export const StartMenu = ({ onOpen, onClose, preferences, onExit }) => {
 
 export const QuickSettings = ({ focusMode, setFocusMode, soundOn, setSoundOn, battery, preferences, setPreferences, resolvedTheme, onOpenSettings, t }) => {
   const BatteryIcon = battery.charging ? FiBatteryCharging : FiBattery;
-  const ThemeIcon = preferences.theme === "system" ? FiMonitor : resolvedTheme === "light" ? FiSun : FiMoon;
-  const themeOrder = ["dark", "light", "system"];
+  const ThemeIcon = resolvedTheme === "light" ? FiSun : FiMoon;
   const cycleTheme = () => {
-    const currentIndex = themeOrder.indexOf(preferences.theme);
-    setPreferences((current) => ({ ...current, theme: themeOrder[(currentIndex + 1) % themeOrder.length] }));
+    setPreferences((current) => ({ ...current, theme: current.theme === "light" ? "dark" : "light" }));
   };
 
   return <motion.div className="nkos-quick-settings" data-testid="quick-settings" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
@@ -56,7 +54,7 @@ export const QuickSettings = ({ focusMode, setFocusMode, soundOn, setSoundOn, ba
         <button type="button" className="active"><FiWifi /><span><b>{t("network")}</b><small>{t("connected")}</small></span></button>
         <button type="button" className={focusMode ? "active" : ""} onClick={() => setFocusMode((value) => !value)}><FiMoon /><span><b>{t("focus")}</b><small>{focusMode ? t("on") : t("off")}</small></span></button>
         <button type="button" className={soundOn ? "active" : ""} onClick={() => setSoundOn((value) => !value)}>{soundOn ? <FiVolume2 /> : <FiVolumeX />}<span><b>{t("sound")}</b><small>{soundOn ? t("on") : t("muted")}</small></span></button>
-        <button type="button" className="active" onClick={cycleTheme}><ThemeIcon /><span><b>Appearance</b><small>{preferences.theme === "system" ? `System · ${resolvedTheme}` : preferences.theme}</small></span></button>
+        <button type="button" className="active" onClick={cycleTheme}><ThemeIcon /><span><b>Appearance</b><small>{preferences.theme}</small></span></button>
       </div>
       <div className="nkos-control-slider"><FiSun /><span><i /></span><b>82%</b></div>
       <div className="nkos-battery-card"><BatteryIcon /><span><b>{battery.level}% · {battery.charging ? "Power adapter" : "On battery"}</b><small>{battery.supported ? "Live system battery" : "Browser fallback · live access unavailable"}</small></span><i><span style={{ width: `${battery.level}%` }} /></i></div>

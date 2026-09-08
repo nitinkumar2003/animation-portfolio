@@ -856,6 +856,7 @@ html.light ::-webkit-scrollbar-track {
 }
 
 .nkos-menu-left > button:not(.nkos-brand-button),
+.nkos-menu-item > button,
 .nkos-menu-right button {
   min-width: 30px;
   height: 28px;
@@ -866,9 +867,50 @@ html.light ::-webkit-scrollbar-track {
 }
 
 .nkos-menu-left > button:hover,
+.nkos-menu-item > button:hover,
+.nkos-menu-item > button.active,
 .nkos-menu-right button:hover {
   color: var(--os-text);
   background: rgba(255, 255, 255, 0.08);
+}
+
+.nkos-menu-item { position: relative; }
+
+.nkos-menubar-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 260;
+  width: 190px;
+  border: 1px solid var(--os-border-strong);
+  border-radius: 8px;
+  padding: 5px;
+  background: rgba(11, 20, 25, 0.98);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.52);
+}
+
+.nkos-menubar-dropdown button {
+  width: 100%;
+  min-height: 32px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 9px;
+  color: #b7c6ca;
+  background: transparent;
+  font-size: 11px;
+  text-align: left;
+}
+
+.nkos-menubar-dropdown button:hover:not(:disabled) {
+  color: var(--os-text);
+  background: rgba(91, 188, 255, 0.1);
+}
+
+.nkos-menubar-dropdown button:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .nkos-brand-button {
@@ -934,16 +976,14 @@ html.light ::-webkit-scrollbar-track {
 
 .nkos-desktop-files {
   position: absolute;
-  top: 22px;
-  left: 18px;
+  inset: 0;
   z-index: 2;
-  width: 190px;
-  display: grid;
-  grid-template-columns: repeat(2, 82px);
-  gap: 14px 8px;
 }
 
 .nkos-desktop-files > button {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 82px;
   min-height: 82px;
   border: 1px solid transparent;
@@ -993,6 +1033,11 @@ html.light ::-webkit-scrollbar-track {
 
 .nkos-desktop-files small {
   max-width: 76px;
+  /* Reserve room for a 2-line label always, so every icon is the same total
+     height regardless of file-name length — otherwise a short name and a
+     long one land at different heights, and the fixed row spacing below them
+     was computed assuming a single, uniform height. */
+  min-height: 2.4em;
   color: #e9f3f5;
   font-size: 10px;
   line-height: 1.2;
@@ -1298,6 +1343,11 @@ html.light ::-webkit-scrollbar-track {
   color: var(--app-color, var(--os-green));
   background: rgba(255, 255, 255, 0.08);
   transform: translateY(-4px);
+}
+
+/* macOS-style magnification: the hovered icon lifts and scales up. */
+.nkos-dock > button:hover {
+  transform: scale(1.18) translateY(-10px);
 }
 
 .nkos-dock > button svg {
@@ -2191,6 +2241,39 @@ html.light ::-webkit-scrollbar-track {
   font-size: inherit;
 }
 
+/* Touch equivalent of ArrowUp/ArrowDown command-history recall. */
+.nkos-terminal-history-nav {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 2px;
+}
+
+.nkos-terminal-history-nav button {
+  width: 22px;
+  height: 15px;
+  display: grid;
+  place-items: center;
+  border-radius: 3px;
+  color: var(--os-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nkos-terminal-history-nav button:hover:not(:disabled) {
+  color: var(--os-text);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nkos-terminal-history-nav button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.nkos-terminal-history-nav svg {
+  width: 11px;
+  height: 11px;
+}
+
 .nkos-resume-app {
   height: 100%;
   display: grid;
@@ -2865,6 +2948,7 @@ html.light ::-webkit-scrollbar-track {
   }
 
   .nkos-menu-left > button:not(.nkos-brand-button),
+  .nkos-menu-item,
   .nkos-menu-left > b,
   .nkos-system-tray svg:nth-child(2) {
     display: none;
@@ -2882,13 +2966,34 @@ html.light ::-webkit-scrollbar-track {
 
   .nkos-project-app {
     grid-template-columns: 230px minmax(0, 1fr);
+    grid-template-rows: 50px auto minmax(0, 1fr);
     grid-template-areas:
       "toolbar toolbar"
+      "folders folders"
       "files preview";
   }
 
+  /* No room for a sidebar — the same filters become a horizontal chip strip. */
   .nkos-project-folders {
+    grid-area: folders;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--os-border);
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .nkos-project-folders .nkos-sidebar-label {
     display: none;
+  }
+
+  .nkos-project-folders button {
+    width: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
   }
 
   .nkos-contact-app {
@@ -3001,16 +3106,8 @@ html.light ::-webkit-scrollbar-track {
     inset: 40px 0 0;
   }
 
-  .nkos-desktop-files {
-    top: 18px;
-    left: 10px;
-    width: calc(100% - 20px);
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px 2px;
-  }
-
   .nkos-desktop-files > button {
-    width: 100%;
+    width: 74px;
     min-width: 0;
   }
 
@@ -3103,9 +3200,10 @@ html.light ::-webkit-scrollbar-track {
 
   .nkos-project-app {
     grid-template-columns: 1fr;
-    grid-template-rows: 82px minmax(160px, 38%) minmax(0, 1fr);
+    grid-template-rows: 82px auto minmax(160px, 38%) minmax(0, 1fr);
     grid-template-areas:
       "toolbar"
+      "folders"
       "files"
       "preview";
   }
@@ -6585,7 +6683,7 @@ html.light .premium-input:focus {
 /* Windows and overlays were hardcoded dark. */
 .nkos-root.theme-light .nkos-window { background: rgba(250, 252, 253, 0.99); }
 .nkos-root.theme-light .nkos-window.active { box-shadow: 0 34px 110px rgba(27, 54, 64, 0.28), 0 0 0 1px rgba(8, 127, 102, 0.2); }
-.nkos-root.theme-light :is(.nkos-notification, .nkos-context-menu, .nkos-start-menu, .nkos-quick-settings, .nkos-search-panel, .nkos-voice) {
+.nkos-root.theme-light :is(.nkos-notification, .nkos-context-menu, .nkos-menubar-dropdown, .nkos-start-menu, .nkos-quick-settings, .nkos-search-panel, .nkos-voice) {
   background: rgba(252, 253, 254, 0.98);
   box-shadow: 0 24px 70px rgba(27, 54, 64, 0.22);
 }
@@ -6650,7 +6748,7 @@ html.light .premium-input:focus {
     z-index: 60;
     height: 62px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     align-items: center;
     justify-items: center;
     padding-bottom: env(safe-area-inset-bottom);

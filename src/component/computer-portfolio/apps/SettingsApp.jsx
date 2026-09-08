@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { FiCheck, FiClock, FiGlobe, FiImage, FiMonitor, FiMoon, FiSettings, FiSun, FiTrash2, FiUploadCloud } from "react-icons/fi";
+import { FiCheck, FiClock, FiGlobe, FiImage, FiMoon, FiSettings, FiSun, FiTrash2, FiUploadCloud } from "react-icons/fi";
 import { languages, regions, timezoneOptions, wallpapers } from "../config";
 import { useClock } from "../lib/hooks";
 import { formatDate, formatTime, optimizeWallpaper } from "../lib/osUtils";
@@ -7,7 +7,6 @@ import { formatDate, formatTime, optimizeWallpaper } from "../lib/osUtils";
 const appearanceOptions = [
   { id: "dark", label: "Dark", icon: FiMoon },
   { id: "light", label: "Light", icon: FiSun },
-  { id: "system", label: "System", icon: FiMonitor },
 ];
 
 const SettingsApp = ({ preferences, setPreferences, t }) => {
@@ -46,7 +45,7 @@ const SettingsApp = ({ preferences, setPreferences, t }) => {
       <aside><div className="nkos-settings-icon"><FiSettings /></div><h2>{t("settings")}</h2><p>{t("personalize")}</p><span>{t("autoSave")}</span></aside>
       <div className="nkos-settings-content">
         <section>
-          <header><FiSun /><div><h3>Appearance</h3><p>Choose a workspace theme or follow this device.</p></div></header>
+          <header><FiSun /><div><h3>Appearance</h3><p>Choose a workspace theme.</p></div></header>
           <div className="nkos-appearance-options">
             {appearanceOptions.map((option) => { const Icon = option.icon; return <button type="button" key={option.id} className={preferences.theme === option.id ? "active" : ""} onClick={() => update({ theme: option.id })}><span><Icon /></span><b>{option.label}</b>{preferences.theme === option.id && <FiCheck />}</button>; })}
           </div>

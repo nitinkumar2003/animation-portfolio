@@ -5,5 +5,6 @@
       "Bash(curl -s -o /dev/null -w \"/ → %{http_code}\\\\n\" http://localhost:3001)",
       "Bash(curl -s -o /dev/null -w \"/projects → %{http_code}\\\\n\" http://localhost:3001/projects)"
     ]
-  }
-}
+  },
+  "remoteControlAtStartup": false
+} 

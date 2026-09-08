@@ -11,7 +11,9 @@
 }
 
 html {
-  overflow-x: hidden;
+  /* Not overflow-x: hidden here — that (or on body) breaks `position: sticky`
+     for every descendant in every browser. Horizontal-overflow protection is
+     scoped per-element instead (site.css: .nk-nav, #main, .nk-footer). */
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
   color-scheme: dark;
@@ -37,7 +39,6 @@ body {
   color: var(--page-fg);
   transition: background-color 0.25s ease, color 0.25s ease;
   font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 

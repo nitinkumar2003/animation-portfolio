@@ -12,7 +12,7 @@
   --nk-line-hi: rgba(255, 255, 255, 0.16);
   --nk-text: #e9eff3;
   --nk-dim: #97a6b2;
-  --nk-faint: #6a7b88;
+  --nk-faint: #7c8b96;
   --nk-mint: #45e6b0;
   --nk-sky: #5bbcff;
   --nk-violet: #b9a7ff;
@@ -164,7 +164,8 @@
   font-size: 0.875rem;
   transition: color 0.2s, background 0.2s;
 }
-.nk-nav__links a:hover { color: var(--nk-text); background: var(--nk-surface-hi); }
+.nk-nav__links a:hover,
+.nk-nav__links a.active { color: var(--nk-text); background: var(--nk-surface-hi); }
 .nk-nav__cta { display: flex; align-items: center; gap: 0.6rem; }
 
 @media (max-width: 900px) {
@@ -245,6 +246,24 @@
 
 /* --- Hero ----------------------------------------------------------------- */
 .nk-hero { position: relative; padding-block: clamp(3.5rem, 8vw, 7rem) clamp(3rem, 6vw, 5rem); }
+.nk-hero > .nk-shell { position: relative; z-index: 1; }
+.nk-hero__scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* Fades the scene into the page background at both edges, instead of a hard
+     rectangle butting up against the nav's frosted glass and the section
+     below — that hard edge was what read as the canvas not belonging with
+     the rest of the page. */
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+}
+.nk-hero__scene canvas { display: block; width: 100% !important; height: 100% !important; }
+@media (max-width: 900px) {
+  .nk-hero__scene { opacity: 0.7; }
+}
 .nk-hero__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
@@ -907,8 +926,15 @@
    the global `overflow-x: hidden`, clipped every section below it.
    ========================================================================== */
 
-/* Nothing inside the site may widen the page. */
-.nk { overflow-x: clip; }
+/* Horizontal-overflow protection used to live on html/body/.nk — any of
+   those being non-`visible` breaks `position: sticky` for every descendant
+   in every browser, which is exactly why the header stopped sticking and
+   scrolled away instead of staying pinned. Scoped to the two things that can
+   actually overflow instead: the nav clips itself (safe — it has no sticky
+   descendants of its own), and the content below it clips independently
+   since it isn't in `.nk-nav`'s ancestor chain either way. */
+.nk-nav { overflow-x: clip; }
+#main, .nk-footer { overflow-x: clip; }
 .nk-shell { min-width: 0; }
 .nk-hero h1,
 .nk-section-head h2,
@@ -960,7 +986,7 @@ html[data-theme="light"] .nk {
   --nk-line-hi: rgba(16, 23, 29, 0.2);
   --nk-text: #10171d;
   --nk-dim: #47555f;
-  --nk-faint: #63727d;
+  --nk-faint: #56636c;
   --nk-mint: #0c825f;
   --nk-sky: #1b77b8;
   --nk-violet: #6f52c9;
@@ -1169,7 +1195,8 @@ html[dir="rtl"] .nk-btn:hover svg { transform: translateX(-2px); }
   transform: scaleX(0);
   transition: transform 0.28s var(--nk-ease);
 }
-.nk-nav__links a:hover::after { transform: scaleX(1); }
+.nk-nav__links a:hover::after,
+.nk-nav__links a.active::after { transform: scaleX(1); }
 
 /* Nav gains depth once the page scrolls under it. */
 .nk-nav { box-shadow: var(--nk-shadow-sm); }

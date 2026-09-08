@@ -26,6 +26,32 @@ export const persistStoredValue = (key, value) => {
   }
 };
 
+// sessionStorage, not localStorage: a refresh mid-session should resume where
+// you were, but a genuinely new visit (new tab) should still boot from Power.
+export const loadSessionValue = (key, fallback) => {
+  try {
+    const stored = window.sessionStorage.getItem(key);
+    return stored ? JSON.parse(stored) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+export const persistSessionValue = (key, value) => {
+  try {
+    window.sessionStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const clearSessionValue = (key) => {
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch { /* ignore */ }
+};
+
 export const optimizeWallpaper = (file) => new Promise((resolve, reject) => {
   if (!file.type.startsWith("image/")) {
     reject(new Error("Please choose an image file."));

@@ -36,21 +36,6 @@ export const useViewportSize = () => {
   return size;
 };
 
-export const useResolvedTheme = (preference = "dark") => {
-  const [systemTheme, setSystemTheme] = useState(() => (
-    window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"
-  ));
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-color-scheme: light)");
-    const update = () => setSystemTheme(media.matches ? "light" : "dark");
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  return preference === "system" ? systemTheme : preference;
-};
-
 export const useBatteryStatus = () => {
   const [battery, setBattery] = useState({ level: 87, charging: true, supported: false });
 

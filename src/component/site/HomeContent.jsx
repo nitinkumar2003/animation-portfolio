@@ -1,15 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   FiArrowRight, FiArrowUpRight, FiCheck, FiClock, FiGithub, FiLinkedin, FiMail, FiMapPin, FiMonitor,
 } from "react-icons/fi";
 import { personalDataObj } from "../../data/data";
 import { capabilityPillars, careerTimeline, faqs, featuredProjects, positioning, services } from "../../data/content";
 import ProjectCard from "./ProjectCard";
-import OsBootOverlay from "../os/OsBootOverlay";
 import { usePreferences } from "./Preferences";
 import profileImg from "../../assets/images.jpg";
+
+// Client-only: it renders a WebGL canvas, so it has nothing useful to say
+// during SSR and would break server rendering if it ran there.
+const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
 const marqueeItems = [
   "React.js", "Next.js", "TypeScript", "Node.js", "NestJS", "React Native", "Redux Toolkit",
@@ -21,15 +25,14 @@ const marqueeItems = [
 const PROOF_KEYS = ["statYears", "statProducts", "statApis", "statStores"];
 
 const HomeContent = () => {
-  const { t, language } = usePreferences();
+  const { t, language, resolvedTheme } = usePreferences();
 
   return (
     <>
-      {/* Boots the OS over this page for real visitors. Client-only, so the
-          server-rendered content below stays complete and indexable. */}
-      <OsBootOverlay />
-
       <section className="nk-hero">
+        <div className="nk-hero__scene" aria-hidden="true">
+          <HeroScene theme={resolvedTheme} />
+        </div>
         <div className="nk-shell">
           <div className="nk-hero__grid">
             <div>
